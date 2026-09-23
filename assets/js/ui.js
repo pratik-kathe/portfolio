@@ -156,13 +156,12 @@
       '<h2 class="contact__heading" data-reveal>' + esc(c.heading) + "</h2>" +
       '<p class="contact__text" data-reveal>' + esc(c.text) + "</p>" +
       '<div class="contact__actions" data-reveal>' +
-        /* guide: one-click copy-email as the primary action (mailto kept as
-           an explicit fallback for people who want their mail client). */
+        /* guide: one-click copy-email as the primary action (the separate
+           "Send email" mailto CTA removed on request). */
         '<button type="button" class="btn btn--solid btn--copy" data-copy-email="' +
           esc(c.email) + '" title="Click to copy" aria-label="' + esc(c.email) +
           ' — copy to clipboard">' +
           '<span class="btn__copy-label">' + esc(c.email) + "</span></button>" +
-        link("mailto:" + c.email, "Send email", "btn--outline") +
         link(c.linkedin, "LinkedIn", "btn--outline") +
         link(c.resume, "View résumé", "btn--outline") +
       "</div>" +

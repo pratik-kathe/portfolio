@@ -175,15 +175,15 @@ a:hover .cta-arrow--down, a:focus-visible .cta-arrow--down { transform: translat
   padding: 22px var(--pad-x);
   display: flex; flex-wrap: wrap; row-gap: 10px; align-items: center; justify-content: space-between;
 }
-/* Brand mark: quiet-luxury treatment — upright serif, uppercase,
+/* Brand mark: quiet-luxury treatment — minimal sans, uppercase,
    wide tracking, optical indent to balance the trailing letter-space. */
 .site-nav__brand {
-  font-family: var(--font-serif); font-style: normal;
-  font-weight: 500;
+  font-family: var(--font-sans); font-style: normal;
+  font-weight: 400;
   text-transform: uppercase;
-  font-size: clamp(14px, 1.1vw, 16px);
-  letter-spacing: 0.26em;
-  text-indent: 0.26em;
+  font-size: clamp(13.5px, 1.05vw, 15.5px);
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
   color: var(--fg);
 }
 .site-nav__brand:hover { color: var(--fg); text-decoration: none; }
@@ -195,7 +195,7 @@ a:hover .cta-arrow--down, a:focus-visible .cta-arrow--down { transform: translat
 .site-nav__link--btn { color: var(--fg); border: 1px solid var(--line-4); padding: 10px 18px; }
 
 /* ---------- 5. Home ------------------------------------------------------ */
-.hero { position: relative; overflow: hidden; width: 100%; padding: clamp(60px, 9vw, 120px) var(--pad-x) clamp(50px, 7.5vw, 100px); border-bottom: 1px solid var(--line); }
+.hero { position: relative; overflow: hidden; width: 100%; padding: clamp(36px, 5vw, 72px) var(--pad-x) clamp(50px, 7.5vw, 100px); border-bottom: 1px solid var(--line); }
 .hero__inner { position: relative; }
 .hero__deco { position: absolute; top: 0; right: 0; width: 50%; height: 100%; overflow: hidden; pointer-events: none; }
 .hero__deco img { width: 100%; height: 100%; object-fit: cover; object-position: center; }

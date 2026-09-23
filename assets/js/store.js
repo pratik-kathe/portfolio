@@ -44,7 +44,7 @@
      seed — any user edit changes the hash, so edited data is never touched.
      Compute the next hash BEFORE changing seed content: open the site, run
      Store.reset(), hash localStorage[KEY], append it here first. */
-  var OLD_SEED_HASHES = ["2433b7db13797edd"];
+  var OLD_SEED_HASHES = ["2433b7db13797edd", "36e301856980357f"];
 
   function matchesOldSeed(d) {
     try {

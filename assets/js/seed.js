@@ -31,8 +31,8 @@
       eyebrow: "Senior Product Designer — Mumbai, India",
       title: "Designing accessible products people can actually use.",
       subtitle:
-        "4.5+ years shipping SaaS, fintech and consumer products — with WCAG 2.1 AA/AAA accessibility built into the system, not bolted on at the end.",
-      chips: ["Design systems", "WCAG 2.1 AA/AAA", "Figma", "SaaS · fintech · consumer"],
+        "4.5+ years shipping SaaS products — with WCAG 2.1 AA/AAA accessibility built into the system, not bolted on at the end.",
+      chips: ["Design systems", "WCAG 2.1 AA/AAA", "Figma", "SaaS"],
       primary: { label: "View all case studies", href: "work.html" },
       secondary: {
         label: "View résumé",
