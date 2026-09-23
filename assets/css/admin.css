@@ -7,6 +7,13 @@
    5. Settings cards, toast, responsive
    ========================================================================== */
 
+/* Global safety: make the `hidden` attribute actually hide things.
+   Author rules such as `.adm-login { display: flex }` outrank the browser's
+   built-in `[hidden] { display: none }`, so without this the login screen
+   (and tabs, editors, toast…) would stay on screen after being "hidden".
+   `!important` is required to beat any later display declaration. */
+[hidden] { display: none !important; }
+
 /* ---------- 1. Login ------------------------------------------------------ */
 .adm-body { min-height: 100vh; }
 
