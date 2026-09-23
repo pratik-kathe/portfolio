@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <base> makes every relative URL below resolve against the deployed site root,
+     so this page works no matter how deep the missing path is (e.g. /portfolio/a/b).
+     If the repo/site path ever changes, update this one line. -->
+<base href="https://pratik-kathe.github.io/portfolio/">
+<title>Page not found — Pratik Kathe</title>
+<meta name="description" content="That page doesn't exist — it may have been renamed, moved or removed.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/img/favicon-32.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>document.documentElement.className = "js";</script>
+</head>
+<body>
+<div class="site">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav" id="site-nav" aria-label="Primary"></nav>
+  </header>
+
+  <main id="main-content">
+
+    <section class="page-head" id="top">
+      <div class="shell">
+        <a class="page-head__back" href="index.html">
+          <span class="cta-arrow--left" aria-hidden="true">←</span> Back to home
+        </a>
+        <h1 class="page-head__title" data-hero>Nothing here (yet).</h1>
+        <p class="page-head__intro" data-hero>
+          That page doesn’t exist — it may have been renamed, moved or removed.
+        </p>
+        <p class="page-head__intro" data-reveal>
+          <a class="btn btn--outline" href="work.html">Browse all case studies
+            <span class="cta-arrow" aria-hidden="true">→</span></a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer-bar" id="footer-bar"></footer>
+</div>
+
+<script src="vendor/motion.min.js"></script>
+<script src="assets/js/seed.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/animations.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  // Render the shared nav + footer, then run the standard reveal animations.
+  document.getElementById("site-nav").innerHTML = Portfolio.UI.nav(null, false);
+  document.getElementById("footer-bar").innerHTML = Portfolio.UI.workFooter();
+
+  // Because of <base>, fragment-only links (#top, #main-content) would otherwise
+  // navigate to the site root instead of scrolling this page — pin them here.
+  Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function (a) {
+    a.setAttribute("href", location.pathname + a.getAttribute("href"));
+  });
+
+  Portfolio.Anims.init();
+</script>
+</body>
+</html>
