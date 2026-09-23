@@ -142,13 +142,13 @@
     var hb = site.hobby;
     $("hobby-inner").innerHTML =
       '<div class="hobby__grid">' +
-        '<div class="hobby__media" data-reveal>' +
-          '<img class="hobby__photo" src="' + esc(hb.image.src) + '" alt="' + esc(hb.image.alt) + '" data-parallax="' + (hb.parallaxSpeed || 0.04) + '">' +
-        "</div>" +
         "<div>" +
           '<p class="label" data-reveal>' + esc(hb.label) + "</p>" +
           '<h2 class="hobby__heading" data-reveal>' + esc(hb.heading) + "</h2>" +
           '<p class="hobby__body" data-reveal>' + esc(hb.body) + "</p>" +
+        "</div>" +
+        '<div class="hobby__media" data-reveal>' +
+          '<img class="hobby__photo" src="' + esc(hb.image.src) + '" alt="' + esc(hb.image.alt) + '" data-parallax="' + (hb.parallaxSpeed || 0.04) + '">' +
         "</div>" +
       "</div>";
   })();

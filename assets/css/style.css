@@ -256,7 +256,7 @@ a:hover .cta-arrow--down, a:focus-visible .cta-arrow--down { transform: translat
 .section--work .section-head__heading { margin-bottom: 20px; }
 .resume__heading { margin-bottom: 32px; }
 
-.hobby__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 56px; align-items: center; }
+.hobby__grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 56px; align-items: center; }
 .hobby__heading { font-size: clamp(20px, 2.36vw, 38px); line-height: 1.2; margin-bottom: 20px; max-width: 480px; }
 .hobby__body { font-size: 17px; line-height: 1.75; color: var(--body); max-width: 480px; }
 .hobby__media { width: 100%; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; overflow: hidden; }
