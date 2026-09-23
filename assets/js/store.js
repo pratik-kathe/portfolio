@@ -2,11 +2,12 @@
    store.js — single source of truth for site + case-study content
 
    Data model (localStorage key: pratik-portfolio.v1)
-     { version, auth: {salt, hash}, site: {...}, caseStudies: [...] }
+     { version, auth: {salt, hash, kdf}, site: {...}, caseStudies: [...] }
 
    First read seeds from window.SEED (seed.js). Everything — copy, sections,
    case studies — is read from here, so the admin portal can edit it live.
-   Session flag (pratik-portfolio.session) lives in sessionStorage only.
+   Session token (pratik-portfolio.session, password-derived) lives in
+   sessionStorage only.
    ========================================================================== */
 (function () {
   "use strict";
@@ -44,7 +45,7 @@
      seed — any user edit changes the hash, so edited data is never touched.
      Compute the next hash BEFORE changing seed content: open the site, run
      Store.reset(), hash localStorage[KEY], append it here first. */
-  var OLD_SEED_HASHES = ["2433b7db13797edd", "36e301856980357f", "fabea60293a76e9c"];
+  var OLD_SEED_HASHES = ["2433b7db13797edd", "36e301856980357f", "fabea60293a76e9c", "2769c408abaf22dc"];
 
   function matchesOldSeed(d) {
     try {
@@ -267,7 +268,22 @@
     return true;
   }
 
-  /* ---- auth (SHA-256 of "salt:password") ---------------------------------- */
+  /* ---- auth ---------------------------------------------------------------
+     Verifier: PBKDF2-SHA256, 600k iterations (OWASP guidance), stored in
+     auth.kdf = {iter, authSalt, sessionSalt, verifier}. The legacy
+     salt:password SHA-256 hash (auth.hash) verifies only data created before
+     the kdf existed; a successful legacy login upgrades that copy to PBKDF2.
+     Session: a per-tab token derived from the password itself (PBKDF2 over
+     sessionSalt) instead of a constant flag — a valid session cannot be
+     forged without the password. Repeated failures lock the form briefly.
+     Every failure path rejects or returns false with an accurate message —
+     never a silent failure. */
+
+  var KDF_ITER = 600000;
+  var FAILS_KEY = "pratik-portfolio.fails";
+  var LOCK_START = 5;        // failures before the first lock
+  var LOCK_BASE_SECS = 30;   // …and its length, doubling per extra failure
+  var LOCK_MAX_SECS = 300;
 
   function digest(text) {
     if (!(window.crypto && window.crypto.subtle)) {
@@ -284,36 +300,153 @@
     });
   }
 
-  function hashPw(pw) { return digest(db().auth.salt + ":" + pw); }
+  function hashPw(pw) { return digest(db().auth.salt + ":" + pw); } // legacy verifier
 
-  // true  = logged in
-  // false = wrong password
-  // rejects with a descriptive Error when the environment can't check the
-  // password at all (no crypto.subtle / broken storage) — never silently false
-  function login(pw) {
-    return hashPw(pw).then(function (h) {
-      if (h !== db().auth.hash) return false;
-      try { sessionStorage.setItem(SESSION, "1"); } catch (e) {}
-      return true;
+  function toHex(buf) {
+    return Array.prototype.map
+      .call(new Uint8Array(buf), function (b) { return b.toString(16).padStart(2, "0"); })
+      .join("");
+  }
+
+  function hexBytes(hex) {
+    var out = new Uint8Array(hex.length / 2);
+    for (var i = 0; i < out.length; i++) out[i] = parseInt(hex.substr(i * 2, 2), 16);
+    return out;
+  }
+
+  // PBKDF2(pw, saltHex, iter) → 64-hex string. Rejects with an accurate
+  // message when WebCrypto is unavailable — never resolves to a silent false.
+  function pbkdf2(pw, saltHex, iter) {
+    if (!(window.crypto && window.crypto.subtle)) {
+      return Promise.reject(new Error(
+        "This browser won't run password checks on this address. " +
+        "Open the portal at http://localhost:8077/admin.html — opening the file " +
+        "directly (file://) or via a plain IP/hostname isn't a secure connection."
+      ));
+    }
+    return crypto.subtle.importKey(
+      "raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]
+    ).then(function (key) {
+      return crypto.subtle.deriveBits(
+        { name: "PBKDF2", hash: "SHA-256", salt: hexBytes(saltHex), iterations: iter },
+        key, 256);
+    }).then(toHex);
+  }
+
+  function newKdf(pw) {
+    function rnd() {
+      var a = new Uint8Array(16);
+      crypto.getRandomValues(a);
+      return toHex(a);
+    }
+    var authSalt = rnd(), sessionSalt = rnd();
+    return pbkdf2(pw, authSalt, KDF_ITER).then(function (v) {
+      return { iter: KDF_ITER, authSalt: authSalt, sessionSalt: sessionSalt, verifier: v };
     });
   }
 
+  function verifyPw(pw) {
+    var a = db().auth;
+    if (a.kdf && a.kdf.verifier) {
+      return pbkdf2(pw, a.kdf.authSalt, a.kdf.iter).then(function (v) {
+        return v === a.kdf.verifier;
+      });
+    }
+    return hashPw(pw).then(function (h) { return h === a.hash; }); // pre-kdf copy
+  }
+
+  // after a legacy (SHA-256) login, persist a PBKDF2 verifier so the slow
+  // hash protects the password from here on
+  function ensureKdf(pw) {
+    var a = db().auth;
+    if (a.kdf && a.kdf.verifier) return Promise.resolve();
+    return newKdf(pw).then(function (k) {
+      a.kdf = k;
+      persist(db());
+    });
+  }
+
+  function sessionToken(pw) {
+    var k = db().auth.kdf;
+    return pbkdf2(pw, k.sessionSalt, k.iter);
+  }
+
+  /* failed-attempt lockout — stored per tab: a console user can clear it,
+     but the login form itself can't be brute-forced */
+  function fails() {
+    try { return JSON.parse(sessionStorage.getItem(FAILS_KEY) || '{"n":0}'); }
+    catch (e) { return { n: 0 }; }
+  }
+  function setFails(s) {
+    try { sessionStorage.setItem(FAILS_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+  function lockLeft() {
+    var s = fails();
+    return s.lockUntil && s.lockUntil > Date.now()
+      ? Math.ceil((s.lockUntil - Date.now()) / 1000)
+      : 0;
+  }
+  function noteFailure() {
+    var s = fails();
+    s.n = (s.n || 0) + 1;
+    if (s.n >= LOCK_START) {
+      var secs = Math.min(LOCK_BASE_SECS * Math.pow(2, s.n - LOCK_START), LOCK_MAX_SECS);
+      s.lockUntil = Date.now() + secs * 1000;
+    }
+    setFails(s);
+  }
+
+  // true  = logged in (password-derived session token written)
+  // false = wrong password
+  // rejects with a descriptive Error (locked out / unsupported browser) —
+  // never silently false
+  function login(pw) {
+    var wait = lockLeft();
+    if (wait > 0) {
+      return Promise.reject(new Error(
+        "Too many failed attempts — try again in " + wait + " second" +
+        (wait === 1 ? "" : "s") + "."
+      ));
+    }
+    return verifyPw(pw).then(function (ok) {
+      if (!ok) { noteFailure(); return false; }
+      setFails({ n: 0 });
+      return ensureKdf(pw).then(function () {
+        return sessionToken(pw).then(function (t) {
+          try { sessionStorage.setItem(SESSION, t); } catch (e) {}
+          return true;
+        });
+      });
+    });
+  }
+
+  // 64 hex chars = password-derived token; the old constant "1" no longer counts
   function session() {
-    try { return sessionStorage.getItem(SESSION) === "1"; } catch (e) { return false; }
+    try { return /^[0-9a-f]{64}$/.test(sessionStorage.getItem(SESSION) || ""); }
+    catch (e) { return false; }
   }
 
   function logout() {
     try { sessionStorage.removeItem(SESSION); } catch (e) {}
+    setFails({ n: 0 });
   }
 
   function changePassword(oldPw, newPw) {
-    return Promise.all([hashPw(oldPw), digest(db().auth.salt + ":" + newPw)])
-      .then(function (r) {
-        if (r[0] !== db().auth.hash) return false;
-        db().auth.hash = r[1];
-        persist(db());
-        return true;
+    return verifyPw(oldPw).then(function (ok) {
+      if (!ok) return false;
+      return newKdf(newPw).then(function (k) {
+        return hashPw(newPw).then(function (h) {
+          var d = db();
+          d.auth.kdf = k;
+          d.auth.hash = h; // keep the legacy verifier in step for old exports
+          persist(d);
+          return sessionToken(newPw).then(function (t) {
+            try { sessionStorage.setItem(SESSION, t); } catch (e) {}
+            return true;
+          });
+        });
       });
+    });
   }
 
   /* ---- export / import / reset -------------------------------------------- */

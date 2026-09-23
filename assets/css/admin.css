@@ -33,7 +33,6 @@
   color: var(--dim); margin-bottom: 18px;
 }
 .adm-login__title { font-size: 34px; margin-bottom: 12px; }
-.adm-login__sub { font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 28px; }
 .adm-login__btn { width: 100%; justify-content: center; margin-top: 6px; }
 .adm-hint { font-family: var(--font-mono); font-size: 11px; color: var(--dimmer); margin-top: 20px; }
 .adm-hint code { color: var(--muted); }

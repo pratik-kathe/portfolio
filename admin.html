@@ -24,14 +24,12 @@
     <form class="adm-login__card" id="login-form" autocomplete="off">
       <p class="adm-kicker">PRATIK KATHE · CONTENT PORTAL</p>
       <h1 class="adm-login__title">Client portal</h1>
-      <p class="adm-login__sub">Edit the site's copy, sections and case studies. Everything saves to this browser and can be exported as JSON.</p>
       <label class="adm-f">
         <span>Password</span>
         <input type="password" id="login-pw" autofocus autocomplete="current-password" aria-describedby="login-err">
       </label>
       <button class="btn btn--solid adm-login__btn" type="submit">Sign in</button>
       <p class="adm-err" id="login-err" role="alert" hidden></p>
-      <p class="adm-hint">Default password: <code>pratik@portfolio</code> — change it under Settings.</p>
       <a class="adm-back" href="index.html">← Back to the site</a>
     </form>
     <script>
@@ -55,12 +53,21 @@
               show("Portal scripts didn't load — hard-refresh this tab (Cmd+Shift+R).");
               return;
             }
+            var fbtn = form.querySelector('button[type="submit"]');
+            if (fbtn) { fbtn.disabled = true; fbtn.textContent = "Checking…"; }
+            function fsettle() {
+              if (fbtn) { fbtn.disabled = false; fbtn.textContent = "Sign in"; }
+            }
             s.login(document.getElementById("login-pw").value).then(function (ok) {
+              fsettle();
               if (ok) {
                 if (window.__admShowApp) window.__admShowApp();
                 else location.reload();
               } else show("Wrong password.");
-            }).catch(function (e2) { show((e2 && e2.message) || "Login failed."); });
+            }).catch(function (e2) {
+              fsettle();
+              show((e2 && e2.message) || "Login failed.");
+            });
           } catch (e3) { show("Login error: " + (e3 && e3.message)); }
         });
       })();
@@ -146,7 +153,7 @@
 
           <div class="adm-card">
             <h3 class="adm-card__h">Change password</h3>
-            <p class="adm-sub">Stored as a salted SHA-256 hash in this browser.</p>
+            <p class="adm-sub">Stored as a salted PBKDF2-SHA256 hash (600k iterations) in this browser.</p>
             <label class="adm-f"><span>Current password</span><input type="password" id="pw-old" autocomplete="current-password"></label>
             <label class="adm-f"><span>New password</span><input type="password" id="pw-new" autocomplete="new-password"></label>
             <label class="adm-f"><span>Repeat new password</span><input type="password" id="pw-new2" autocomplete="new-password"></label>

@@ -596,10 +596,19 @@
         showErr("Password checks are blocked here — use https:// or http://localhost.");
         return;
       }
+      // PBKDF2 (600k rounds) takes a moment — paint "Checking…" so the wait
+      // never looks like a dead button, and restore it on every path out.
+      var btn = loginForm.querySelector('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = "Checking…"; }
+      function settle() {
+        if (btn) { btn.disabled = false; btn.textContent = "Sign in"; }
+      }
       store().login($("login-pw").value).then(function (ok) {
+        settle();
         if (ok) showApp();
         else showErr("Wrong password.");
       }).catch(function (err) {
+        settle();
         showErr((err && err.message) || "Login failed — see the browser console.");
       });
     } catch (err2) {

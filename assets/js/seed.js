@@ -6,8 +6,10 @@
 (function () {
   "use strict";
 
+  // Legacy password verifier: sha256("<salt>:<password>"). Kept only to verify
+  // stored copies made before PBKDF2 existed; the active verifier is auth.kdf.
   var DEFAULT_HASH =
-    "7a768ad6aad06ffc44a2fc98db53968062e7779ffb70bc8aff23486b6ede7107"; // sha256("pk.portfolio.salt:pratik@portfolio")
+    "7a768ad6aad06ffc44a2fc98db53968062e7779ffb70bc8aff23486b6ede7107";
 
   var SITE = {
     meta: {
@@ -935,7 +937,18 @@
 
   window.SEED = {
     version: 1,
-    auth: { salt: "pk.portfolio.salt", hash: DEFAULT_HASH },
+    auth: {
+      salt: "pk.portfolio.salt",
+      hash: DEFAULT_HASH,
+      // PBKDF2-SHA256 verifier (600k iterations, OWASP) — salts were generated
+      // once at setup; no plaintext password exists anywhere in this repository.
+      kdf: {
+        iter: 600000,
+        authSalt: "76ff0726a5d1515801ea3f5b9c4251de",
+        sessionSalt: "e60a85efd60f2153332b49af8fe0521a",
+        verifier: "67026b0b654a5022c57e2c1c7e4bdaf166883b77a42617b7540a9bee4a3c370b"
+      }
+    },
     site: SITE,
     caseStudies: CASE_STUDIES
   };
