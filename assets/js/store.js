@@ -30,6 +30,76 @@
     try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) { /* private mode: memory only */ }
   }
 
+  /* ---- v1 → v2 migration: fixed named sections → ordered blocks ----------
+     v2 case studies carry an ordered `blocks` array (any section type, any
+     order — image / video / Figma / quote / …). Legacy studies keep their
+     original keys as a safety copy; the renderer and the portal editor only
+     ever read `blocks`. */
+  var DATA_VERSION = 2;
+
+  function blocksFromLegacy(cs) {
+    var out = [];
+    try {
+      if (Array.isArray(cs.meta) && cs.meta.length) {
+        out.push({ type: "meta", items: cs.meta });
+      }
+      if (cs.outcomes && Array.isArray(cs.outcomes.items) && cs.outcomes.items.length) {
+        out.push({
+          type: "outcomes",
+          heading: cs.outcomes.heading || "",
+          items: cs.outcomes.items,
+          note: cs.outcomes.note || ""
+        });
+      }
+      if (cs.context && cs.context.body) {
+        out.push({
+          type: "text",
+          label: cs.context.label || "",
+          heading: cs.context.heading || "",
+          body: cs.context.body,
+          flush: ""
+        });
+      }
+      if (cs.solution && Array.isArray(cs.solution.panels) && cs.solution.panels.length) {
+        out.push({
+          type: "panels",
+          label: cs.solution.label || "",
+          heading: cs.solution.heading || "",
+          intro: cs.solution.intro || "",
+          panels: cs.solution.panels
+        });
+      }
+      if (cs.decisions && Array.isArray(cs.decisions.stories) && cs.decisions.stories.length) {
+        out.push({
+          type: "decisions",
+          label: cs.decisions.label || "",
+          heading: cs.decisions.heading || "",
+          stories: cs.decisions.stories
+        });
+      }
+      // next / reflection sat flush under the previous section (no top
+      // padding of their own) — tagged so they keep their original rhythm.
+      if (cs.next && cs.next.body) {
+        out.push({ type: "text", label: cs.next.label || "", heading: "", body: cs.next.body, flush: "1" });
+      }
+      if (cs.reflection && cs.reflection.body) {
+        out.push({ type: "text", label: cs.reflection.label || "", heading: "", body: cs.reflection.body, flush: "1" });
+      }
+    } catch (e) { /* a malformed legacy study must never block the read */ }
+    return out;
+  }
+
+  /** Runs on every read. Returns true when the data changed (caller persists). */
+  function migrate(d) {
+    if (!d || !Array.isArray(d.caseStudies)) return false;
+    if ((d.version || 1) >= DATA_VERSION) return false;
+    d.caseStudies.forEach(function (cs) {
+      if (cs && !Array.isArray(cs.blocks)) cs.blocks = blocksFromLegacy(cs);
+    });
+    d.version = DATA_VERSION;
+    return true;
+  }
+
   function db() {
     if (cache) return cache;
     var d = null;
@@ -38,6 +108,7 @@
       d = seed();
       persist(d);
     }
+    if (migrate(d)) persist(d);
     cache = d;
     return cache;
   }
@@ -103,13 +174,10 @@
       slug: "", order: 0,
       metaTitle: "", shortTitle: "", category: "", heroChip: "", date: "",
       title: "", cardLine: "", blurb: "", summary: "",
-      meta: [{ label: "", value: "" }, { label: "", value: "" }],
-      outcomes: { heading: "Where this landed", items: [{ value: "", label: "" }], note: "" },
-      context: { label: "CONTEXT", heading: "", body: "" },
-      solution: { label: "SOLUTION AS A JOURNEY", heading: "", intro: "", panels: [] },
-      decisions: { label: "DECISION STORIES", heading: "Three calls that shaped this project", stories: [] },
-      next: { label: "WHAT'S NEXT", body: "" },
-      reflection: { label: "REFLECTION", body: "" },
+      blocks: [
+        { type: "meta", items: [{ label: "", value: "" }, { label: "", value: "" }] },
+        { type: "text", label: "CONTEXT", heading: "", body: "", flush: "" }
+      ],
       footer: { question: "Have a question about a decision here?", tail: " — I'm happy to talk through it." }
     };
   }
@@ -214,11 +282,16 @@
     if (!d || !d.site || !Array.isArray(d.caseStudies)) {
       throw new Error("That file isn't a portfolio export.");
     }
+    migrate(d); // old exports (v1) come in legacy shape — upgrade on the way in
     persist(d);
     return d;
   }
 
-  function reset() { persist(seed()); }
+  function reset() {
+    var d = seed();
+    migrate(d);
+    persist(d);
+  }
 
   /* ---- public -------------------------------------------------------------- */
 

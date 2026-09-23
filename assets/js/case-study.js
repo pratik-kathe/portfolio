@@ -1,8 +1,10 @@
 /* ==========================================================================
    case-study.js — the universal case-study template.
    Reads ?slug=, resolves the study in Store, and renders:
-   hero → meta → outcomes → context → solution panels → decision stories →
-   what's next → reflection → footer (all / next).
+   hero → ordered blocks → footer (all / next).
+   Blocks (v2 data model) are typed and ordered: text, meta, metrics,
+   figure panels, decision stories, image, video, Figma embed, pull quote,
+   list, raw HTML — any type, anywhere. Unknown types render nothing.
    Unknown slug renders the .not-found state.
    ========================================================================== */
 (function () {
@@ -46,7 +48,7 @@
   var metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.content = cs.summary || "";
 
-  /* ---- section builders ------------------------------------------------------ */
+  /* ---- structural section (always first) ------------------------------------- */
 
   function heroSection() {
     return '<section class="cs-hero" id="top"><div class="shell">' +
@@ -60,11 +62,41 @@
     "</div></section>";
   }
 
-  function metaSection() {
-    if (!cs.meta || !cs.meta.length) return "";
+  /* ---- embed helpers ---------------------------------------------------------- */
+
+  function embedBox(src, title) {
+    return '<div class="cs-embed cs-embed--16x9"><iframe src="' + esc(src) +
+      '" title="' + esc(title) + '" loading="lazy" allowfullscreen></iframe></div>';
+  }
+
+  /** YouTube / Vimeo / direct file → embeddable HTML; "" when unknown. */
+  function videoEmbed(url) {
+    var m = url.match(/(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+    if (m) return embedBox("https://www.youtube.com/embed/" + m[1], "Embedded YouTube video");
+    m = url.match(/vimeo\.com\/(\d+)/);
+    if (m) return embedBox("https://player.vimeo.com/video/" + m[1], "Embedded Vimeo video");
+    if (/\.(mp4|webm|ogv|ogg|mov|m4v)(\?|#|$)/i.test(url)) {
+      return '<video class="cs-embed__file" src="' + esc(url) +
+        '" controls preload="metadata" playsinline></video>';
+    }
+    return "";
+  }
+
+  /** Figma file/design/proto → official embed; "" for non-Figma links. */
+  function figmaEmbed(url) {
+    if (!/figma\.com\/(file|design|proto|board|slides|deck)\//i.test(url)) return "";
+    return '<div class="cs-embed cs-embed--figma"><iframe src="https://www.figma.com/embed?embed_host=share&amp;url=' +
+      esc(encodeURIComponent(url)) + '" title="Figma file" loading="lazy" allowfullscreen></iframe></div>';
+  }
+
+  /* ---- block sections (any type, any order) ------------------------------------ */
+
+  function metaSection(b) {
+    var items = b.items || [];
+    if (!items.length) return "";
     return '<section class="cs-meta"><div class="shell">' +
       '<div class="meta-grid" data-reveal>' +
-        cs.meta.map(function (m) {
+        items.map(function (m) {
           if (!m.label && !m.value) return "";
           return "<div>" +
             '<div class="meta-grid__label">' + esc(m.label) + "</div>" +
@@ -75,44 +107,44 @@
     "</div></section>";
   }
 
-  function outcomesSection() {
-    var o = cs.outcomes;
-    if (!o || !o.items || !o.items.length) return "";
+  function outcomesSection(b) {
+    if (!b.items || !b.items.length) return "";
     return '<section class="cs-outcomes"><div class="shell">' +
-      '<p class="cs-outcomes__heading" data-reveal>' + esc(o.heading) + "</p>" +
+      (b.heading ? '<p class="cs-outcomes__heading" data-reveal>' + esc(b.heading) + "</p>" : "") +
       '<div class="cs-outcomes__grid" data-reveal>' +
-        o.items.map(function (it) {
+        b.items.map(function (it) {
           return '<div class="cs-outcomes__item">' +
             '<div class="cs-outcomes__value">' + esc(it.value) + "</div>" +
             '<div class="cs-outcomes__label">' + esc(it.label) + "</div>" +
           "</div>";
         }).join("") +
       "</div>" +
-      (o.note ? '<p class="cs-outcomes__note" data-reveal>' + esc(o.note) + "</p>" : "") +
+      (b.note ? '<p class="cs-outcomes__note" data-reveal>' + esc(b.note) + "</p>" : "") +
     "</div></section>";
   }
 
-  function contextSection() {
-    var c = cs.context;
-    if (!c || !c.body) return "";
-    return '<section class="cs-context"><div class="shell shell--copy">' +
-      '<p class="label" data-reveal>' + esc(c.label) + "</p>" +
-      '<h2 class="cs-context__heading" data-reveal>' + esc(c.heading) + "</h2>" +
-      '<p class="cs-context__body" data-reveal>' + esc(c.body) + "</p>" +
+  function textSection(b) {
+    if (!b.label && !b.heading && !b.body) return "";
+    var flush = b.flush === "1" || b.flush === 1;
+    return '<section class="cs-context' + (flush ? " cs-context--flush" : "") +
+        '"><div class="shell shell--copy">' +
+      (b.label ? '<p class="label" data-reveal>' + esc(b.label) + "</p>" : "") +
+      (b.heading ? '<h2 class="cs-context__heading" data-reveal>' + esc(b.heading) + "</h2>" : "") +
+      (b.body ? '<p class="cs-context__body' + (b.heading ? "" : " cs-context__body--bare") +
+        '" data-reveal>' + esc(b.body) + "</p>" : "") +
     "</div></section>";
   }
 
-  function solutionSection() {
-    var s = cs.solution;
-    if (!s || !s.panels || !s.panels.length) return "";
+  function panelsSection(b) {
+    if (!b.panels || !b.panels.length) return "";
     return '<section class="cs-solution"><div class="shell shell--solution">' +
-      '<div data-reveal><p class="label">' + esc(s.label) + "</p></div>" +
-      '<h2 class="h2 cs-solution__heading" data-reveal>' + esc(s.heading) + "</h2>" +
-      '<p class="cs-solution__intro" data-reveal>' + esc(s.intro) + "</p>" +
+      (b.label ? '<div data-reveal><p class="label">' + esc(b.label) + "</p></div>" : "") +
+      (b.heading ? '<h2 class="h2 cs-solution__heading" data-reveal>' + esc(b.heading) + "</h2>" : "") +
+      (b.intro ? '<p class="cs-solution__intro" data-reveal>' + esc(b.intro) + "</p>" : "") +
       '<div class="cs-solution__grid">' +
-        s.panels.map(function (p) {
+        b.panels.map(function (p) {
           return '<figure class="cs-figure" data-reveal>' +
-            p.content + /* raw SVG straight into the figure: it carries its own frame */
+            (p.content || "") + /* raw SVG straight into the figure: it carries its own frame */
             '<figcaption class="cs-figure__caption">' + esc(p.caption) + "</figcaption>" +
           "</figure>";
         }).join("") +
@@ -120,18 +152,23 @@
     "</div></section>";
   }
 
-  function decisionsSection() {
-    var d = cs.decisions;
-    if (!d || !d.stories || !d.stories.length) return "";
+  function storyLine(k, v) {
+    return '<p class="cs-story__line"><strong>' + esc(k) + ":</strong> " + esc(v) + "</p>";
+  }
+
+  function decisionsSection(b) {
+    if (!b.stories || !b.stories.length) return "";
     return '<section class="cs-decisions"><div class="shell shell--copy">' +
-      '<div data-reveal><p class="label">' + esc(d.label) + "</p>" +
-      '<h2 class="h2 cs-decisions__heading" data-reveal>' + esc(d.heading) + "</h2></div>" +
-      d.stories.map(function (st) {
+      ((b.label || b.heading) ? "<div data-reveal>" +
+        (b.label ? '<p class="label">' + esc(b.label) + "</p>" : "") +
+        (b.heading ? '<h2 class="h2 cs-decisions__heading">' + esc(b.heading) + "</h2>" : "") +
+      "</div>" : "") +
+      b.stories.map(function (st) {
         var lines = "";
-        if (st.before) lines += line("Before", st.before);
-        if (st.tradeoff) lines += line("The trade-off", st.tradeoff);
-        if (st.action) lines += line("What I did", st.action);
-        if (st.result) lines += line("What happened", st.result);
+        if (st.before) lines += storyLine("Before", st.before);
+        if (st.tradeoff) lines += storyLine("The trade-off", st.tradeoff);
+        if (st.action) lines += storyLine("What I did", st.action);
+        if (st.result) lines += storyLine("What happened", st.result);
         return '<article class="cs-story" data-reveal>' +
           '<h3 class="cs-story__title">' + esc(st.title) + "</h3>" +
           (st.lead ? '<p class="cs-story__lead">' + esc(st.lead) + "</p>" : "") +
@@ -139,41 +176,104 @@
         "</article>";
       }).join("") +
     "</div></section>";
+  }
 
-    function line(k, v) {
-      return '<p class="cs-story__line"><strong>' + esc(k) + ":</strong> " + esc(v) + "</p>";
+  function imageSection(b) {
+    if (!b.src) return "";
+    var alt = esc(b.alt || "");
+    if (b.width === "full") {
+      return '<section class="cs-media cs-media--full">' +
+        '<img class="cs-media__img" src="' + esc(b.src) + '" alt="' + alt +
+          '" loading="lazy" data-reveal>' +
+        (b.caption ? '<div class="shell"><p class="cs-media__caption">' + esc(b.caption) + "</p></div>" : "") +
+      "</section>";
     }
-  }
-
-  function nextSection() {
-    var n = cs.next;
-    if (!n || !n.body) return "";
-    return '<section class="cs-next"><div class="shell shell--copy">' +
-      '<div data-reveal><p class="label">' + esc(n.label) + "</p></div>" +
-      '<p class="cs-next__body" data-reveal>' + esc(n.body) + "</p>" +
+    var shellCls = b.width === "inset" ? "shell shell--copy" : "shell";
+    return '<section class="cs-media"><div class="' + shellCls + '">' +
+      '<figure class="cs-media__figure" data-reveal>' +
+        '<img class="cs-media__img" src="' + esc(b.src) + '" alt="' + alt + '" loading="lazy">' +
+        (b.caption ? '<figcaption class="cs-media__caption">' + esc(b.caption) + "</figcaption>" : "") +
+      "</figure>" +
     "</div></section>";
   }
 
-  function reflectionSection() {
-    var r = cs.reflection;
-    if (!r || !r.body) return "";
-    return '<section class="cs-reflection"><div class="shell shell--copy">' +
-      '<div data-reveal><p class="label">' + esc(r.label) + "</p></div>" +
-      '<p class="cs-reflection__body" data-reveal>' + esc(r.body) + "</p>" +
+  function videoSection(b) {
+    if (!b.url) return "";
+    var embed = videoEmbed(b.url);
+    var body = embed ||
+      '<a class="btn btn--outline btn--sm" href="' + esc(b.url) +
+        '" target="_blank" rel="noopener">Open video ' + icons.arrow() + "</a>";
+    return '<section class="cs-media cs-media--embed"><div class="shell shell--solution">' +
+      (b.title ? '<p class="label" data-reveal>' + esc(b.title) + "</p>" : "") +
+      '<div data-reveal>' + body + "</div>" +
+      (b.caption ? '<p class="cs-media__caption" data-reveal>' + esc(b.caption) + "</p>" : "") +
     "</div></section>";
+  }
+
+  function figmaSection(b) {
+    if (!b.url) return "";
+    var embed = figmaEmbed(b.url);
+    var body = embed
+      ? embed + '<p class="cs-embed__link"><a href="' + esc(b.url) +
+          '" target="_blank" rel="noopener">Open in Figma ' + icons.arrow() + "</a></p>"
+      : '<a class="btn btn--outline btn--sm" href="' + esc(b.url) +
+          '" target="_blank" rel="noopener">Open in Figma ' + icons.arrow() + "</a>";
+    return '<section class="cs-media cs-media--embed"><div class="shell shell--solution">' +
+      (b.title ? '<p class="label" data-reveal>' + esc(b.title) + "</p>" : "") +
+      '<div data-reveal>' + body + "</div>" +
+      (b.caption ? '<p class="cs-media__caption" data-reveal>' + esc(b.caption) + "</p>" : "") +
+    "</div></section>";
+  }
+
+  function quoteSection(b) {
+    if (!b.text) return "";
+    return '<section class="cs-quote"><div class="shell shell--copy" data-reveal>' +
+      '<blockquote class="cs-quote__text">' + esc(b.text) + "</blockquote>" +
+      (b.attribution ? '<cite class="cs-quote__by">' + esc(b.attribution) + "</cite>" : "") +
+    "</div></section>";
+  }
+
+  function listSection(b) {
+    var items = (b.items || []).filter(function (it) { return it && it.text; });
+    if (!b.heading && !items.length) return "";
+    return '<section class="cs-list"><div class="shell shell--copy">' +
+      (b.heading ? '<h2 class="cs-list__heading" data-reveal>' + esc(b.heading) + "</h2>" : "") +
+      '<ul class="cs-list__items" data-reveal>' +
+        items.map(function (it) {
+          return "<li>" + esc(it.text).replace(/\n/g, "<br>") + "</li>";
+        }).join("") +
+      "</ul>" +
+    "</div></section>";
+  }
+
+  function htmlSection(b) {
+    if (!b.html) return "";
+    return '<section class="cs-html"><div class="shell" data-reveal>' + b.html + "</div></section>";
+  }
+
+  function blockHTML(b) {
+    if (!b || !b.type) return "";
+    switch (b.type) {
+      case "meta": return metaSection(b);
+      case "outcomes": return outcomesSection(b);
+      case "text": return textSection(b);
+      case "panels": return panelsSection(b);
+      case "decisions": return decisionsSection(b);
+      case "image": return imageSection(b);
+      case "video": return videoSection(b);
+      case "figma": return figmaSection(b);
+      case "quote": return quoteSection(b);
+      case "list": return listSection(b);
+      case "html": return htmlSection(b);
+      default: return ""; // unknown/future type — skip, never break the page
+    }
   }
 
   /* ---- render ---------------------------------------------------------------- */
 
   main.innerHTML =
     heroSection() +
-    metaSection() +
-    outcomesSection() +
-    contextSection() +
-    solutionSection() +
-    decisionsSection() +
-    nextSection() +
-    reflectionSection();
+    (Array.isArray(cs.blocks) ? cs.blocks : []).map(blockHTML).join("");
 
   // "Next: …" follows list order and wraps around (BarrierBreak → CLXNS → Sankey → …)
   footer.innerHTML = UI.caseFooter(cs, all[(i + 1) % all.length]);

@@ -32,12 +32,17 @@
 
   var LISTS = {}; // path → { item: [fields], empty: {...} }
 
-  function F(t, k, l) { return { t: t, k: k, l: l || k }; }
+  function F(t, k, l, o) { return { t: t, k: k, l: l || k, o: o }; }
   function SEC(title) { return { sec: title }; }
   /** Repeatable list field; registers its item schema for add/remove. */
   function L(k, l, item, empty) {
     LISTS[k] = { item: item, empty: empty || {} };
     return { t: "list", k: k, l: l };
+  }
+  /** List field scoped to one block card — its schema rides on the descriptor
+      and is registered under the card's full path at render time. */
+  function Lb(k, l, item, empty) {
+    return { t: "list", k: k, l: l, reg: { item: item, empty: empty || {} } };
   }
 
   function get(o, path) {
@@ -70,66 +75,150 @@
     F("textarea", "blurb", "Card blurb"),
     F("textarea", "summary", "Summary (hero paragraph + meta description)"),
 
-    SEC("Meta strip (4 items under the hero)"),
-    L("meta", "Meta items",
-      [F("text", "label"), F("text", "value")],
-      { label: "", value: "" }),
-
-    SEC("Outcomes — “Where this landed”"),
-    F("text", "outcomes.heading", "Heading"),
-    L("outcomes.items", "Outcome metrics",
-      [F("text", "value", "Value (e.g. 35–40%)"), F("text", "label", "Label")],
-      { value: "", label: "" }),
-    F("text", "outcomes.note", "Italic note under the metrics"),
-
-    SEC("Context"),
-    F("text", "context.label", "Section label"),
-    F("text", "context.heading", "Heading"),
-    F("textarea", "context.body", "Body"),
-
-    SEC("Solution — wireframe panels"),
-    F("text", "solution.label", "Section label"),
-    F("text", "solution.heading", "Heading"),
-    F("textarea", "solution.intro", "Intro"),
-    L("solution.panels", "Panels",
-      [
-        F("textarea", "caption", "Caption"),
-        F("textarea", "alt", "Alt text"),
-        F("mono", "content", "SVG / HTML")
-      ],
-      {
-        caption: "", alt: "",
-        content: '<svg viewBox="0 0 280 340" width="100%" role="img" aria-label="" style="display:block;background:#0a0a0a;border:1px solid rgba(255,255,255,0.15);">' +
-          '<text x="20" y="34" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">New panel</text>' +
-          "</svg>"
-      }),
-
-    SEC("Decision stories"),
-    F("text", "decisions.label", "Section label"),
-    F("text", "decisions.heading", "Heading"),
-    L("decisions.stories", "Stories",
-      [
-        F("text", "title", "Title"),
-        F("textarea", "lead", "Lead (italic)"),
-        F("textarea", "before", "Before"),
-        F("textarea", "tradeoff", "The trade-off"),
-        F("textarea", "action", "What I did"),
-        F("textarea", "result", "What happened")
-      ],
-      { title: "", lead: "", before: "", tradeoff: "", action: "", result: "" }),
-
-    SEC("What's next"),
-    F("text", "next.label", "Section label"),
-    F("textarea", "next.body", "Body"),
-
-    SEC("Reflection"),
-    F("text", "reflection.label", "Section label"),
-    F("textarea", "reflection.body", "Body"),
+    SEC("Page sections — any type, any order"),
+    { t: "blocks", k: "blocks", l: "Sections" },
 
     SEC("Footer question"),
     F("text", "footer.question", "Question"),
     F("text", "footer.tail", "Tail (after the email link)")
   ];
+
+  /* ---- block types (case-study section builder) ----------------------------
+     Each type: label (picker text), fields (rendered inside its card), and
+     empty (the object pushed on add/insert). Lists use Lb so their item
+     schema travels with the descriptor. */
+  var BLOCKS = {
+    text: {
+      label: "Text",
+      fields: [
+        F("text", "label", "Section label (empty for none)"),
+        F("text", "heading", "Heading (optional)"),
+        F("textarea", "body", "Body"),
+        F("select", "flush", "Top spacing",
+          [["", "Standard (padded)"], ["1", "Flush (sits under the section above)"]])
+      ],
+      empty: { type: "text", label: "", heading: "", body: "", flush: "" }
+    },
+    image: {
+      label: "Image",
+      fields: [
+        F("text", "src", "Image URL (https://… or assets/img/…)"),
+        F("text", "alt", "Alt text"),
+        F("textarea", "caption", "Caption (optional)"),
+        F("select", "width", "Width",
+          [["normal", "Normal (page width)"], ["inset", "Inset (text column)"], ["full", "Full-bleed"]])
+      ],
+      empty: { type: "image", src: "", alt: "", caption: "", width: "normal" }
+    },
+    video: {
+      label: "Video",
+      fields: [
+        F("text", "url", "Link — YouTube, Vimeo or direct .mp4 / .webm"),
+        F("text", "title", "Label above (optional)"),
+        F("textarea", "caption", "Caption (optional)")
+      ],
+      empty: { type: "video", url: "", title: "", caption: "" }
+    },
+    figma: {
+      label: "Figma embed",
+      fields: [
+        F("text", "url", "Figma file / design / proto link"),
+        F("text", "title", "Label above (optional)"),
+        F("textarea", "caption", "Caption (optional)")
+      ],
+      empty: { type: "figma", url: "", title: "", caption: "" }
+    },
+    quote: {
+      label: "Pull quote",
+      fields: [
+        F("textarea", "text", "Quote"),
+        F("text", "attribution", "Attribution (optional)")
+      ],
+      empty: { type: "quote", text: "", attribution: "" }
+    },
+    list: {
+      label: "Bulleted list",
+      fields: [
+        F("text", "heading", "Heading (optional)"),
+        Lb("items", "Items", [F("textarea", "text", "Item")], { text: "" })
+      ],
+      empty: { type: "list", heading: "", items: [{ text: "" }] }
+    },
+    meta: {
+      label: "Meta strip",
+      fields: [
+        Lb("items", "Items",
+          [F("text", "label", "Label"), F("text", "value", "Value")],
+          { label: "", value: "" })
+      ],
+      empty: { type: "meta", items: [{ label: "", value: "" }, { label: "", value: "" }] }
+    },
+    outcomes: {
+      label: "Metrics",
+      fields: [
+        F("text", "heading", "Heading"),
+        Lb("items", "Metrics",
+          [F("text", "value", "Value (e.g. 35–40%)"), F("text", "label", "Label")],
+          { value: "", label: "" }),
+        F("text", "note", "Italic note (optional)")
+      ],
+      empty: { type: "outcomes", heading: "Where this landed", items: [{ value: "", label: "" }], note: "" }
+    },
+    panels: {
+      label: "Figure panels (SVG / HTML)",
+      fields: [
+        F("text", "label", "Section label"),
+        F("text", "heading", "Heading"),
+        F("textarea", "intro", "Intro"),
+        Lb("panels", "Panels",
+          [
+            F("textarea", "caption", "Caption"),
+            F("textarea", "alt", "Alt text"),
+            F("mono", "content", "SVG / HTML")
+          ],
+          {
+            caption: "", alt: "",
+            content: '<svg viewBox="0 0 280 340" width="100%" role="img" aria-label="" style="display:block;background:#0a0a0a;border:1px solid rgba(255,255,255,0.15);">' +
+              '<text x="20" y="34" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">New panel</text>' +
+              "</svg>"
+          })
+      ],
+      empty: { type: "panels", label: "", heading: "", intro: "", panels: [] }
+    },
+    decisions: {
+      label: "Decision stories",
+      fields: [
+        F("text", "label", "Section label"),
+        F("text", "heading", "Heading"),
+        Lb("stories", "Stories",
+          [
+            F("text", "title", "Title"),
+            F("textarea", "lead", "Lead (italic)"),
+            F("textarea", "before", "Before"),
+            F("textarea", "tradeoff", "The trade-off"),
+            F("textarea", "action", "What I did"),
+            F("textarea", "result", "What happened")
+          ],
+          { title: "", lead: "", before: "", tradeoff: "", action: "", result: "" })
+      ],
+      empty: { type: "decisions", label: "", heading: "", stories: [] }
+    },
+    html: {
+      label: "Raw HTML",
+      fields: [F("mono", "html", "HTML (rendered as-is)")],
+      empty: { type: "html", html: "" }
+    }
+  };
+
+  function blockEmpty(type) {
+    var spec = BLOCKS[type] || BLOCKS.text;
+    return clone(spec.empty);
+  }
+
+  function pickerType(mount) {
+    var sel = mount.querySelector("[data-newblock-type]");
+    return (sel && sel.value) || "text";
+  }
 
   var SITE_SCHEMA = [
     SEC("Meta"),
@@ -254,28 +343,38 @@
         (f.t === "mono" ? ' class="adm-mono"' : "") +
         ">" + esc(text) + "</textarea></label>";
     }
+    if (f.t === "select") {
+      var opts = (f.o || []).map(function (op) {
+        var on = String(v) === String(op[0]) ? " selected" : "";
+        return '<option value="' + esc(String(op[0])) + '"' + on + ">" + esc(op[1]) + "</option>";
+      }).join("");
+      return '<label class="adm-f"><span>' + lab + "</span>" +
+        '<select class="adm-sel" data-path="' + path + '">' + opts + "</select></label>";
+    }
     return '<label class="adm-f"><span>' + lab + "</span>" +
       '<input type="text" data-path="' + path + '" value="' + esc(String(v)) + '"></label>';
   }
 
-  function listHTML(f, root) {
-    var arr = get(root, f.k) || [];
-    var reg = LISTS[f.k];
+  function listHTML(f, basePath, root) {
+    var path = basePath ? basePath + "." + f.k : f.k;
+    var arr = get(root, path) || [];
+    var reg = LISTS[path];
+    if (!reg) return "";
     var html = '<div class="adm-block">' +
       '<div class="adm-block-head"><span>' + esc(f.l) + " · " + arr.length + "</span>" +
-      '<button type="button" class="adm-mini" data-add="' + f.k + '">+ Add</button></div>';
+      '<button type="button" class="adm-mini" data-add="' + path + '">+ Add</button></div>';
 
     arr.forEach(function (item, i) {
       var last = i === arr.length - 1;
       html += '<div class="adm-item">' +
         '<div class="adm-item__head"><span>' + esc(f.l) + " " + (i + 1) + "</span>" +
           '<span class="adm-item__acts">' +
-            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|-1"' + (i === 0 ? " disabled" : "") + ">↑</button>" +
-            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|1"' + (last ? " disabled" : "") + ">↓</button>" +
-            '<button type="button" class="adm-mini adm-mini--danger" data-del="' + f.k + "|" + i + '">Remove</button>' +
+            '<button type="button" class="adm-mini" data-move="' + path + "|" + i + '|-1"' + (i === 0 ? " disabled" : "") + ">↑</button>" +
+            '<button type="button" class="adm-mini" data-move="' + path + "|" + i + '|1"' + (last ? " disabled" : "") + ">↓</button>" +
+            '<button type="button" class="adm-mini adm-mini--danger" data-del="' + path + "|" + i + '">Remove</button>' +
           "</span>" +
         "</div>" +
-        reg.item.map(function (fd) { return fieldHTML(fd, f.k + "." + i, root); }).join("") +
+        reg.item.map(function (fd) { return fieldHTML(fd, path + "." + i, root); }).join("") +
       "</div>";
     });
 
@@ -285,9 +384,69 @@
   function renderForm(schema, root, mount) {
     mount.innerHTML = schema.map(function (f) {
       if (f.sec) return '<h3 class="adm-sec">' + esc(f.sec) + "</h3>";
-      if (f.t === "list") return listHTML(f, root);
+      if (f.t === "blocks") return blocksHTML(f, root);
+      if (f.t === "list") return listHTML(f, "", root);
       return fieldHTML(f, "", root);
     }).join("");
+  }
+
+  /** The section builder: ordered cards with a type select, ↑/↓ reorder,
+      insert-after and remove. Nested lists register their schema under
+      `blocks.<i>.<key>` at render time so the generic add/del/move handlers
+      work unchanged. */
+  function blocksHTML(f, root) {
+    var arr = get(root, f.k) || [];
+    var typeOpts = Object.keys(BLOCKS).map(function (t) {
+      return '<option value="' + t + '">' + esc(BLOCKS[t].label) + "</option>";
+    }).join("");
+    var html = '<div class="adm-block">' +
+      '<div class="adm-block-head"><span>' + esc(f.l) + " · " + arr.length + "</span>" +
+        '<span class="adm-blocks__add">' +
+          '<select class="adm-sel" data-newblock-type>' + typeOpts + "</select>" +
+          '<button type="button" class="adm-mini" data-addblock="' + f.k + '">+ Add section</button>' +
+        "</span>" +
+      "</div>" +
+      '<p class="adm-hint">Adds at the bottom — ↑ / ↓ moves a section anywhere; “+ here” on a card inserts right after it using the picker type.</p>';
+
+    arr.forEach(function (b, i) {
+      var base = f.k + "." + i;
+      var last = i === arr.length - 1;
+      var spec = BLOCKS[b.type];
+      var head = '<div class="adm-item__head">' +
+          '<span class="adm-blk__num">' + (i + 1) + "</span>" +
+          '<select class="adm-blk__type" data-path="' + base + '.type" data-rerender="1">' +
+            Object.keys(BLOCKS).map(function (t) {
+              return '<option value="' + t + '"' + (t === b.type ? " selected" : "") + ">" +
+                esc(BLOCKS[t].label) + "</option>";
+            }).join("") +
+          "</select>" +
+          '<span class="adm-item__acts">' +
+            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|-1"' + (i === 0 ? " disabled" : "") + ">↑</button>" +
+            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|1"' + (last ? " disabled" : "") + ">↓</button>" +
+            '<button type="button" class="adm-mini" data-blockins="' + f.k + "|" + i + '">+ here</button>' +
+            '<button type="button" class="adm-mini adm-mini--danger" data-del="' + f.k + "|" + i + '">Remove</button>' +
+          "</span>" +
+        "</div>";
+
+      if (!spec) {
+        html += '<div class="adm-item">' + head +
+          '<p class="adm-hint">Unknown section type “' + esc(b.type || "?") + '” — pick a type above.</p></div>';
+        return;
+      }
+
+      spec.fields.forEach(function (fd) {
+        if (fd.t === "list") LISTS[base + "." + fd.k] = fd.reg;
+      });
+      var body = spec.fields.map(function (fd) {
+        return fd.t === "list" ? listHTML(fd, base, root) : fieldHTML(fd, base, root);
+      }).join("");
+      html += '<div class="adm-item adm-item--block">' + head + body + "</div>";
+    });
+
+    if (!arr.length) {
+      html += '<p class="adm-hint">No sections yet — pick a type above and press “+ Add section”. The hero and the footer question are always on.</p>';
+    }
+    return html + "</div>";
   }
 
   /** One delegated handler per editor mount: live input binding + list
@@ -299,6 +458,7 @@
       var v = el.value;
       if (el.dataset.kind === "lines") v = v.split("\n");
       set(getDraft(), el.dataset.path, v);
+      if (el.dataset.rerender) rerender(); // e.g. a block-type switch reshapes the card
     });
 
     mount.addEventListener("click", function (e) {
@@ -312,6 +472,21 @@
         var arr = get(d, btn.dataset.add) || [];
         arr.push(clone(reg.empty));
         set(d, btn.dataset.add, arr);
+        rerender();
+        return;
+      }
+      if (btn.dataset.addblock) {
+        var bl = get(d, btn.dataset.addblock) || [];
+        bl.push(blockEmpty(pickerType(mount)));
+        set(d, btn.dataset.addblock, bl);
+        rerender();
+        return;
+      }
+      if (btn.dataset.blockins) {
+        var bp = btn.dataset.blockins.split("|");
+        var barr = get(d, bp[0]) || [];
+        barr.splice(Number(bp[1]) + 1, 0, blockEmpty(pickerType(mount)));
+        set(d, bp[0], barr);
         rerender();
         return;
       }
