@@ -30,6 +30,13 @@
       '<p class="hero__eyebrow" data-hero>' + esc(h.eyebrow) + "</p>" +
       '<h1 class="hero__title" data-hero>' + esc(h.title) + "</h1>" +
       '<p class="hero__subtitle" data-hero>' + esc(h.subtitle) + "</p>" +
+      (Array.isArray(h.chips) && h.chips.length
+        ? '<div class="hero__chips" data-hero>' +
+            h.chips.filter(Boolean).map(function (k) {
+              return '<span class="chip chip--kw">' + esc(k) + "</span>";
+            }).join("") +
+          "</div>"
+        : "") +
       '<div class="hero__actions" data-hero>' +
         UI.link(h.primary.href, h.primary.label, "btn--solid", icons.arrow()) +
         UI.link(h.secondary.href, h.secondary.label, "btn--outline", icons.arrowDown()) +
@@ -175,6 +182,50 @@
 
   /* ---- contact footer ------------------------------------------------------------ */
   $("contact").innerHTML = UI.contactFooter();
+
+  /* one-click copy-email (guide: contacting you with zero friction). */
+  $("contact").addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest("[data-copy-email]");
+    if (!btn) return;
+    var email = btn.getAttribute("data-copy-email");
+    var label = btn.querySelector(".btn__copy-label");
+    function done(ok) {
+      if (!label) return;
+      if (ok) {
+        label.textContent = "Copied ✓";
+        btn.classList.add("is-copied");
+        setTimeout(function () {
+          label.textContent = email;
+          btn.classList.remove("is-copied");
+        }, 2000);
+      } else {
+        label.textContent = "Copy failed — select manually";
+        setTimeout(function () { label.textContent = email; }, 2400);
+      }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(
+        function () { done(true); },
+        function () { done(legacyCopy()); }
+      );
+    } else {
+      done(legacyCopy());
+    }
+    function legacyCopy() {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = email;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      } catch (err) { return false; }
+    }
+  });
 
   /* ---- motion -------------------------------------------------------------------- */
   window.Portfolio.Anims.init();

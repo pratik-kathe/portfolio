@@ -37,6 +37,30 @@
      ever read `blocks`. */
   var DATA_VERSION = 2;
 
+  /* Seed fingerprints: exact djb2+FNV-1a hashes of the stored JSON of published
+     but UNEDITED seeds that predate newer seed-only fields (thumbnails, metric
+     chips, keyword chips, goals…). A stored copy matching one of these is
+     provably a pristine old seed, so the first read quietly swaps in the new
+     seed — any user edit changes the hash, so edited data is never touched.
+     Compute the next hash BEFORE changing seed content: open the site, run
+     Store.reset(), hash localStorage[KEY], append it here first. */
+  var OLD_SEED_HASHES = ["2433b7db13797edd"];
+
+  function matchesOldSeed(d) {
+    try {
+      var s = JSON.stringify(d);
+      var a = 5381, b = 2166136261;
+      for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        a = ((a * 33) ^ c) >>> 0;
+        b = (b ^ c) >>> 0;
+        b = Math.imul(b, 16777619) >>> 0;
+      }
+      var h = a.toString(16).padStart(8, "0") + b.toString(16).padStart(8, "0");
+      return OLD_SEED_HASHES.indexOf(h) >= 0;
+    } catch (e) { return false; }
+  }
+
   function blocksFromLegacy(cs) {
     var out = [];
     try {
@@ -59,6 +83,11 @@
           body: cs.context.body,
           flush: ""
         });
+      }
+      // business / user goal — same label+value strip as the role meta, so the
+      // problem is explicitly tied to what success meant (guide: body items).
+      if (Array.isArray(cs.goals) && cs.goals.length) {
+        out.push({ type: "meta", items: cs.goals });
       }
       if (cs.quote && cs.quote.text) {
         out.push({ type: "quote", text: cs.quote.text, attribution: cs.quote.attribution || "" });
@@ -114,6 +143,7 @@
     if (cache) return cache;
     var d = null;
     try { d = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { d = null; }
+    if (d && matchesOldSeed(d)) d = null; // pristine old seed → take the new one
     if (!d || !d.site || !Array.isArray(d.caseStudies)) {
       d = seed();
       persist(d);
@@ -184,6 +214,7 @@
       slug: "", order: 0,
       metaTitle: "", shortTitle: "", category: "", heroChip: "", date: "",
       title: "", cardLine: "", blurb: "", impact: "", summary: "",
+      thumbnail: "", metrics: [],
       blocks: [
         { type: "meta", items: [{ label: "", value: "" }, { label: "", value: "" }] },
         { type: "text", label: "CONTEXT", heading: "", body: "", flush: "" }

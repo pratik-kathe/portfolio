@@ -32,6 +32,7 @@
       title: "Designing accessible products people can actually use.",
       subtitle:
         "4.5+ years shipping SaaS, fintech and consumer products — with WCAG 2.1 AA/AAA accessibility built into the system, not bolted on at the end.",
+      chips: ["Design systems", "WCAG 2.1 AA/AAA", "Figma", "SaaS · fintech · consumer"],
       primary: { label: "View all case studies", href: "work.html" },
       secondary: {
         label: "View résumé",
@@ -164,13 +165,22 @@
     },
 
     footer: {
-      note: "Pratik Kathe — Mumbai, India",
+      note: "© 2026 Pratik Kathe — Mumbai, India",
       topLabel: "Back to top ↑",
       workCta: "Get in touch →"
     }
   };
 
   /* ---- case studies ------------------------------------------------------ */
+
+  /** Card thumbnail: NDA-safe wireframe-style SVG shipped as a data-URI —
+      16:10, same palette as the case-study panels (no real client screens). */
+  function thumb(inner) {
+    return "data:image/svg+xml," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400">' +
+      '<rect width="640" height="400" fill="#0a0a0a"/>' + inner + "</svg>"
+    );
+  }
 
   var CASE_STUDIES = [
     {
@@ -188,6 +198,52 @@
       blurb:
         "Architecting a scalable Figma system while making WCAG 2.1 AA/AAA compliance the default, not an afterthought.",
       impact: "35–40% faster handoff · WCAG AA/AAA across the platform",
+      metrics: [
+        { value: "35–40%", label: "faster handoff" },
+        { value: "AA/AAA", label: "WCAG 2.1, platform-wide" },
+        { value: "1 system", label: "every product surface" }
+      ],
+      thumbnail: thumb(
+        '<text x="48" y="56" font-family="IBM Plex Mono, monospace" font-size="15" fill="#9a9993">Component states — button</text>' +
+        '<rect x="48" y="84" width="220" height="52" fill="#f4f3ef"></rect>' +
+        '<text x="158" y="116" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="16" fill="#000000">Save changes</text>' +
+        '<text x="292" y="116" font-family="IBM Plex Mono, monospace" font-size="13" fill="#9a9993">Default</text>' +
+        '<rect x="48" y="152" width="220" height="52" fill="#dcdbd6"></rect>' +
+        '<text x="158" y="184" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="16" fill="#000000" text-decoration="underline">Save changes</text>' +
+        '<text x="292" y="184" font-family="IBM Plex Mono, monospace" font-size="13" fill="#9a9993">Hover</text>' +
+        '<rect x="42" y="214" width="232" height="64" fill="none" stroke="#f4f3ef" stroke-width="3"></rect>' +
+        '<rect x="48" y="220" width="220" height="52" fill="#f4f3ef"></rect>' +
+        '<text x="158" y="252" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="16" fill="#000000">Save changes</text>' +
+        '<text x="292" y="252" font-family="IBM Plex Mono, monospace" font-size="13" fill="#9a9993">Focus</text>' +
+        '<rect x="48" y="298" width="220" height="52" fill="none" stroke="rgba(255,255,255,0.28)"></rect>' +
+        '<text x="158" y="330" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="16" fill="rgba(244,243,239,0.4)">Save changes</text>' +
+        '<circle cx="244" cy="324" r="9" fill="none" stroke="rgba(244,243,239,0.5)" stroke-width="2"></circle>' +
+        '<text x="292" y="330" font-family="IBM Plex Mono, monospace" font-size="13" fill="#9a9993">Disabled</text>' +
+        '<line x1="400" y1="60" x2="400" y2="356" stroke="rgba(255,255,255,0.15)"></line>' +
+        '<text x="432" y="56" font-family="IBM Plex Mono, monospace" font-size="13" fill="#9a9993">Tokens &amp; contrast</text>' +
+        '<rect x="432" y="84" width="64" height="64" fill="#f4f3ef"></rect>' +
+        '<text x="432" y="168" font-family="IBM Plex Mono, monospace" font-size="12" fill="#c9c8c2">Ink</text>' +
+        '<text x="432" y="186" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">18.9 : 1</text>' +
+        '<rect x="520" y="84" width="64" height="64" fill="#9a9993"></rect>' +
+        '<text x="520" y="168" font-family="IBM Plex Mono, monospace" font-size="12" fill="#c9c8c2">Muted</text>' +
+        '<text x="520" y="186" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">7.4 : 1</text>' +
+        '<rect x="432" y="220" width="64" height="64" fill="none" stroke="#f4f3ef" stroke-width="2"></rect>' +
+        '<text x="432" y="304" font-family="IBM Plex Mono, monospace" font-size="12" fill="#c9c8c2">Border</text>' +
+        '<text x="432" y="322" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">3.7 : 1</text>' +
+        '<rect x="520" y="220" width="64" height="64" fill="#1c1c1c" stroke="rgba(255,255,255,0.25)"></rect>' +
+        '<text x="520" y="304" font-family="IBM Plex Mono, monospace" font-size="12" fill="#c9c8c2">Surface-2</text>' +
+        '<text x="520" y="322" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">AA+</text>'
+      ),
+      goals: [
+        {
+          label: "BUSINESS GOAL",
+          value: "Stop rebuilding the same UI every sprint — and get accessibility past a late-stage compliance pass."
+        },
+        {
+          label: "USER GOAL",
+          value: "Users with visual or cognitive disabilities get one consistent, usable experience on every surface."
+        }
+      ],
       summary:
         "One Figma system cut design-to-development handoff time by 35–40% — and made WCAG 2.1 AA/AAA the default at the component level instead of a late-stage fix.",
 
@@ -380,6 +436,54 @@
       blurb:
         "Leading UX for a consumer mobile app end-to-end — market research, onboarding, and a high-traffic companion media platform.",
       impact: "iOS + Android from one flow · ↑ media dwell time",
+      metrics: [
+        { value: "2 platforms", label: "iOS + Android, one flow" },
+        { value: "↑ Dwell time", label: "media-platform sessions" },
+        { value: "ASO assets", label: "built for acquisition" }
+      ],
+      thumbnail: thumb(
+        '<text x="48" y="56" font-family="IBM Plex Mono, monospace" font-size="15" fill="#9a9993">Onboarding — first open</text>' +
+        '<rect x="170" y="76" width="130" height="272" rx="14" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"></rect>' +
+        '<circle cx="204" cy="106" r="10" fill="none" stroke="#f4f3ef"></circle>' +
+        '<line x1="204" y1="100" x2="204" y2="112" stroke="#f4f3ef"></line>' +
+        '<line x1="198" y1="106" x2="210" y2="106" stroke="#f4f3ef"></line>' +
+        '<rect x="192" y="132" width="86" height="7" fill="#f4f3ef"></rect>' +
+        '<rect x="200" y="145" width="70" height="7" fill="#f4f3ef"></rect>' +
+        '<rect x="194" y="166" width="82" height="4" fill="#6f6e6a"></rect>' +
+        '<rect x="200" y="176" width="70" height="4" fill="#6f6e6a"></rect>' +
+        '<rect x="206" y="186" width="58" height="4" fill="#6f6e6a"></rect>' +
+        '<rect x="192" y="288" width="86" height="28" fill="#f4f3ef"></rect>' +
+        '<text x="235" y="306" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="#000000">Get started</text>' +
+        '<text x="235" y="332" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#9a9993" text-decoration="underline">Log in</text>' +
+        '<rect x="340" y="76" width="130" height="272" rx="14" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"></rect>' +
+        '<path d="M356 100 L350 104 L356 108" fill="none" stroke="#f4f3ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+        '<rect x="368" y="101" width="30" height="5" fill="#f4f3ef"></rect>' +
+        '<rect x="402" y="101" width="30" height="5" fill="#f4f3ef"></rect>' +
+        '<rect x="436" y="101" width="22" height="5" fill="none" stroke="rgba(255,255,255,0.35)"></rect>' +
+        '<rect x="354" y="122" width="102" height="6" fill="#f4f3ef"></rect>' +
+        '<rect x="354" y="133" width="72" height="6" fill="#f4f3ef"></rect>' +
+        '<rect x="354" y="152" width="102" height="28" fill="none" stroke="rgba(255,255,255,0.3)"></rect>' +
+        '<text x="362" y="170" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#c9c8c2">Vedic astrology</text>' +
+        '<rect x="354" y="186" width="102" height="28" fill="#f4f3ef"></rect>' +
+        '<text x="362" y="204" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#000000">Western</text>' +
+        '<path d="M436 200 l4 4 l7 -8" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>' +
+        '<rect x="354" y="220" width="102" height="28" fill="none" stroke="rgba(255,255,255,0.3)"></rect>' +
+        '<text x="362" y="238" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#c9c8c2">Numerology</text>' +
+        '<rect x="354" y="254" width="102" height="28" fill="none" stroke="rgba(255,255,255,0.3)"></rect>' +
+        '<text x="362" y="272" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#c9c8c2">Tarot</text>' +
+        '<rect x="354" y="298" width="102" height="26" fill="#f4f3ef"></rect>' +
+        '<text x="405" y="315" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#000000">Continue</text>'
+      ),
+      goals: [
+        {
+          label: "BUSINESS GOAL",
+          value: "Cut onboarding drop-off, and turn early media-platform traffic into real session time."
+        },
+        {
+          label: "USER GOAL",
+          value: "New users reach the app’s core value inside the first sixty seconds."
+        }
+      ],
       summary:
         "Took a multi-user astrology app from market research to App Store launch — redesigning the first sixty seconds, then a companion media platform built to hold attention.",
 
@@ -569,6 +673,59 @@
       blurb:
         "Designing dashboards dense enough to be useful and simple enough to act on, for international clients across four verticals.",
       impact: "99% client satisfaction across 4 industries",
+      metrics: [
+        { value: "99%", label: "client satisfaction" },
+        { value: "4 industries", label: "auto · finance · banking · e-comm" },
+        { value: "Rising Star", label: "award, first year" }
+      ],
+      thumbnail: thumb(
+        '<text x="48" y="56" font-family="IBM Plex Mono, monospace" font-size="15" fill="#9a9993">Dashboard framework — one pattern, four verticals</text>' +
+        '<rect x="48" y="76" width="544" height="272" fill="none" stroke="rgba(255,255,255,0.35)"></rect>' +
+        '<line x1="140" y1="76" x2="140" y2="348" stroke="rgba(255,255,255,0.2)"></line>' +
+        '<circle cx="94" cy="110" r="4" fill="#f4f3ef"></circle>' +
+        '<circle cx="94" cy="140" r="4" fill="rgba(255,255,255,0.35)"></circle>' +
+        '<circle cx="94" cy="170" r="4" fill="rgba(255,255,255,0.35)"></circle>' +
+        '<circle cx="94" cy="200" r="4" fill="rgba(255,255,255,0.35)"></circle>' +
+        '<rect x="160" y="98" width="120" height="8" fill="#f4f3ef"></rect>' +
+        '<rect x="500" y="94" width="72" height="20" fill="none" stroke="rgba(255,255,255,0.35)"></rect>' +
+        '<text x="536" y="108" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9a9993">Filter</text>' +
+        '<rect x="160" y="126" width="126" height="56" fill="rgba(244,243,239,0.08)"></rect>' +
+        '<text x="172" y="152" font-family="IBM Plex Mono, monospace" font-size="15" fill="#f4f3ef">12.4k</text>' +
+        '<path d="M246 166 l6 -8 l6 8" fill="none" stroke="#f4f3ef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>' +
+        '<text x="172" y="172" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9a9993">Loans booked</text>' +
+        '<rect x="300" y="126" width="126" height="56" fill="rgba(244,243,239,0.08)"></rect>' +
+        '<text x="312" y="152" font-family="IBM Plex Mono, monospace" font-size="15" fill="#f4f3ef">86%</text>' +
+        '<path d="M386 166 l6 -8 l6 8" fill="none" stroke="#f4f3ef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>' +
+        '<text x="312" y="172" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9a9993">Approval rate</text>' +
+        '<rect x="440" y="126" width="132" height="56" fill="rgba(244,243,239,0.08)"></rect>' +
+        '<text x="452" y="152" font-family="IBM Plex Mono, monospace" font-size="15" fill="#f4f3ef">4.2d</text>' +
+        '<text x="452" y="172" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9a9993">Time to decision</text>' +
+        '<rect x="160" y="198" width="412" height="90" fill="none" stroke="rgba(255,255,255,0.15)"></rect>' +
+        '<rect x="180" y="248" width="18" height="34" fill="#f4f3ef"></rect>' +
+        '<rect x="214" y="234" width="18" height="48" fill="rgba(244,243,239,0.55)"></rect>' +
+        '<rect x="248" y="256" width="18" height="26" fill="rgba(244,243,239,0.55)"></rect>' +
+        '<rect x="282" y="222" width="18" height="60" fill="#f4f3ef"></rect>' +
+        '<rect x="316" y="240" width="18" height="42" fill="rgba(244,243,239,0.55)"></rect>' +
+        '<rect x="350" y="228" width="18" height="54" fill="rgba(244,243,239,0.55)"></rect>' +
+        '<rect x="384" y="252" width="18" height="30" fill="rgba(244,243,239,0.55)"></rect>' +
+        '<rect x="418" y="214" width="18" height="68" fill="#f4f3ef"></rect>' +
+        '<rect x="452" y="238" width="18" height="44" fill="rgba(244,243,239,0.55)"></rect>' +
+        '<rect x="486" y="226" width="18" height="56" fill="rgba(244,243,239,0.55)"></rect>' +
+        '<rect x="520" y="246" width="18" height="36" fill="#f4f3ef"></rect>' +
+        '<rect x="160" y="302" width="412" height="7" fill="rgba(255,255,255,0.06)"></rect>' +
+        '<rect x="160" y="316" width="380" height="7" fill="rgba(255,255,255,0.05)"></rect>' +
+        '<rect x="160" y="330" width="400" height="7" fill="rgba(255,255,255,0.05)"></rect>'
+      ),
+      goals: [
+        {
+          label: "BUSINESS GOAL",
+          value: "Replace four bespoke dashboard builds with one reusable framework — without losing per-client fit."
+        },
+        {
+          label: "USER GOAL",
+          value: "Each stakeholder reaches the one number their next decision depends on, without hunting for it."
+        }
+      ],
       summary:
         "One configurable dashboard framework replaced four bespoke builds — leading with the single number each stakeholder actually decides on, across automotive, finance, banking and e-commerce.",
 

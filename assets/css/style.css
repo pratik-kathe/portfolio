@@ -477,3 +477,75 @@ a:hover .cta-arrow--down, a:focus-visible .cta-arrow--down { transform: translat
   .method__grid { gap: 36px 24px; }
   .method__body { max-width: none; }
 }
+
+/* ---------- 12. Guide pass: keyword chips, card thumbnails + metric chips,
+                  one-click copy email, case-study closing impact ---------- */
+.hero__chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.chip--kw {
+  font-size: 12.5px;
+  color: var(--fg, #f4f3ef);
+  border-color: var(--line-4, rgba(255, 255, 255, 0.28));
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 14px;
+}
+
+.card__media {
+  aspect-ratio: 16 / 10;
+  margin-bottom: 26px;
+  max-width: 720px;
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid var(--line-3, rgba(255, 255, 255, 0.15));
+}
+.card__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 900px) {
+  .card__link:has(.card__media) {
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .card__link:has(.card__media) .card__media { margin-bottom: 0; max-width: none; }
+}
+
+.card__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 32px;
+  list-style: none;
+  margin-top: 18px;
+  padding: 0;
+}
+.card__metric { display: flex; flex-direction: column; gap: 4px; }
+.card__metric-value {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  color: var(--fg, #f4f3ef);
+  letter-spacing: 0.01em;
+}
+.card__metric-label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--dim, #9a9993);
+}
+
+.btn--copy { cursor: copy; }
+.btn--copy.is-copied {
+  background: var(--wash-2, rgba(255, 255, 255, 0.08));
+  color: var(--fg, #f4f3ef);
+  text-decoration: none;
+}
+
+.cs-footer__recap {
+  margin-bottom: 44px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--line);
+}
+.cs-footer__recap-label { margin-bottom: 22px; }
+.cs-footer__recap-grid { gap: 24px 48px; }
+
+@media (max-width: 640px) {
+  .card__media { margin-bottom: 20px; }
+  .card__metrics { gap: 12px 22px; }
+  .hero__chips { gap: 8px; }
+}

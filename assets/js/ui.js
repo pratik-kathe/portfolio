@@ -57,8 +57,27 @@
 
   /* ---- case-study card (home + work index) -------------------------------- */
   function card(cs) {
+    // thumbnail: NDA-safe wireframe-style image (portal-editable); decorative —
+    // the adjacent copy already describes the project.
+    var media = cs.thumbnail
+      ? '<div class="card__media"><img src="' + esc(cs.thumbnail) +
+        '" alt="" aria-hidden="true" loading="lazy"></div>'
+      : "";
+    var ms = (Array.isArray(cs.metrics) ? cs.metrics : [])
+      .filter(function (m) { return m && m.value; });
+    var metrics = ms.length
+      ? '<ul class="card__metrics">' +
+          ms.map(function (m) {
+            return '<li class="card__metric">' +
+              '<span class="card__metric-value">' + esc(m.value) + "</span>" +
+              '<span class="card__metric-label">' + esc(m.label) + "</span>" +
+            "</li>";
+          }).join("") +
+        "</ul>"
+      : (cs.impact ? '<p class="card__impact">' + esc(cs.impact) + "</p>" : "");
     return '<div class="card">' +
       '<a class="card__link" href="case-study.html?slug=' + esc(cs.slug) + '">' +
+        media +
         '<div class="card__head"><div>' +
           '<div class="card__meta">' +
             '<span class="chip">' + esc(cs.category) + "</span>" +
@@ -67,7 +86,7 @@
           '<h3 class="card__title">' + esc(cs.title) + "</h3>" +
           '<p class="card__by">' + esc(cs.cardLine) + "</p>" +
           '<p class="card__blurb">' + esc(cs.blurb) + "</p>" +
-          (cs.impact ? '<p class="card__impact">' + esc(cs.impact) + "</p>" : "") +
+          metrics +
         "</div>" +
         '<span class="card__cta">View case study ' + icons.arrow() + "</span>" +
       "</div>" +
@@ -87,7 +106,13 @@
       '<h2 class="contact__heading" data-reveal>' + esc(c.heading) + "</h2>" +
       '<p class="contact__text" data-reveal>' + esc(c.text) + "</p>" +
       '<div class="contact__actions" data-reveal>' +
-        link("mailto:" + c.email, c.email, "btn--solid") +
+        /* guide: one-click copy-email as the primary action (mailto kept as
+           an explicit fallback for people who want their mail client). */
+        '<button type="button" class="btn btn--solid btn--copy" data-copy-email="' +
+          esc(c.email) + '" title="Click to copy" aria-label="' + esc(c.email) +
+          ' — copy to clipboard">' +
+          '<span class="btn__copy-label">' + esc(c.email) + "</span></button>" +
+        link("mailto:" + c.email, "Send email", "btn--outline") +
         link(c.linkedin, "LinkedIn", "btn--outline") +
         link(c.resume, "View résumé", "btn--outline") +
       "</div>" +
@@ -115,7 +140,26 @@
   function caseFooter(cs, next) {
     var c = Store.getSite().contact;
     var f = cs.footer || {};
+    /* closing recap (guide: restate final impact at the end) — pulled from the
+       same outcomes block so there's a single source of truth for numbers. */
+    var ob = (cs.blocks || []).filter(function (b) {
+      return b && b.type === "outcomes" && Array.isArray(b.items) && b.items.length;
+    })[0];
+    var recap = ob
+      ? '<div class="cs-footer__recap" data-reveal>' +
+          '<p class="label cs-footer__recap-label">Final impact</p>' +
+          '<div class="cs-outcomes__grid cs-footer__recap-grid">' +
+            ob.items.map(function (it) {
+              return '<div class="cs-outcomes__item">' +
+                '<div class="cs-outcomes__value">' + esc(it.value) + "</div>" +
+                '<div class="cs-outcomes__label">' + esc(it.label) + "</div>" +
+              "</div>";
+            }).join("") +
+          "</div>" +
+        "</div>"
+      : "";
     return '<div class="shell">' +
+      recap +
       '<p class="cs-footer__question" data-reveal>' +
         esc(f.question || "Have a question about a decision here?") + " " +
         '<a href="mailto:' + esc(c.email) + '">Email me</a>' +
