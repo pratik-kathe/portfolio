@@ -39,7 +39,7 @@
         : "") +
       '<div class="hero__actions" data-hero>' +
         UI.link(h.primary.href, h.primary.label, "btn--solid", icons.arrow()) +
-        UI.link(h.secondary.href, h.secondary.label, "btn--outline", icons.arrowDown()) +
+        UI.link(h.secondary.href, h.secondary.label, "btn--outline", icons.arrowUpRight()) +
       "</div>";
   })();
 

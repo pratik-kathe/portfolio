@@ -148,6 +148,8 @@ a:hover .cta-arrow, a:focus-visible .cta-arrow { transform: translateX(3px); }
 .cta-arrow--left, .cta-arrow--down { display: inline-block; transition: transform 0.2s ease; }
 a:hover .cta-arrow--left, a:focus-visible .cta-arrow--left { transform: translateX(-3px); }
 a:hover .cta-arrow--down, a:focus-visible .cta-arrow--down { transform: translateY(3px); }
+.cta-arrow--ext { display: inline-block; transition: transform 0.2s ease; }
+a:hover .cta-arrow--ext, a:focus-visible .cta-arrow--ext { transform: translate(3px, -3px); }
 
 /* Chip / meta tags */
 .chip {
