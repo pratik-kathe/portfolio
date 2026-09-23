@@ -60,6 +60,9 @@
           flush: ""
         });
       }
+      if (cs.quote && cs.quote.text) {
+        out.push({ type: "quote", text: cs.quote.text, attribution: cs.quote.attribution || "" });
+      }
       if (cs.solution && Array.isArray(cs.solution.panels) && cs.solution.panels.length) {
         out.push({
           type: "panels",
@@ -67,6 +70,13 @@
           heading: cs.solution.heading || "",
           intro: cs.solution.intro || "",
           panels: cs.solution.panels
+        });
+      }
+      if (cs.scope && Array.isArray(cs.scope.items) && cs.scope.items.length) {
+        out.push({
+          type: "list",
+          heading: cs.scope.heading || "",
+          items: cs.scope.items.map(function (t) { return { text: t }; })
         });
       }
       if (cs.decisions && Array.isArray(cs.decisions.stories) && cs.decisions.stories.length) {
@@ -173,7 +183,7 @@
     return {
       slug: "", order: 0,
       metaTitle: "", shortTitle: "", category: "", heroChip: "", date: "",
-      title: "", cardLine: "", blurb: "", summary: "",
+      title: "", cardLine: "", blurb: "", impact: "", summary: "",
       blocks: [
         { type: "meta", items: [{ label: "", value: "" }, { label: "", value: "" }] },
         { type: "text", label: "CONTEXT", heading: "", body: "", flush: "" }

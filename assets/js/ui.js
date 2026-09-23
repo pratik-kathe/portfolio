@@ -67,6 +67,7 @@
           '<h3 class="card__title">' + esc(cs.title) + "</h3>" +
           '<p class="card__by">' + esc(cs.cardLine) + "</p>" +
           '<p class="card__blurb">' + esc(cs.blurb) + "</p>" +
+          (cs.impact ? '<p class="card__impact">' + esc(cs.impact) + "</p>" : "") +
         "</div>" +
         '<span class="card__cta">View case study ' + icons.arrow() + "</span>" +
       "</div>" +

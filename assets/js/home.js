@@ -82,6 +82,26 @@
       "</div>";
   })();
 
+  /* ---- how I work (principles) --------------------------------------------- */
+  (function () {
+    var sec = document.getElementById("method");
+    var mount = document.getElementById("method-inner");
+    var p = site.principles;
+    if (!sec || !mount) return;
+    if (!p || !Array.isArray(p.items) || !p.items.length) { sec.style.display = "none"; return; }
+    mount.innerHTML =
+      UI.sectionHead(p.heading, p.intro) +
+      '<div class="method__grid">' +
+        p.items.map(function (it, i) {
+          return '<div class="method__item" data-reveal>' +
+            '<span class="method__num" aria-hidden="true">' + (i + 1 < 10 ? "0" : "") + (i + 1) + "</span>" +
+            '<h3 class="method__title">' + esc(it.title) + "</h3>" +
+            '<p class="method__body">' + esc(it.body) + "</p>" +
+          "</div>";
+        }).join("") +
+      "</div>";
+  })();
+
   /* ---- skills --------------------------------------------------------------- */
   (function () {
     var s = site.skills;

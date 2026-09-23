@@ -73,6 +73,7 @@
     F("text", "date", "Date line"),
     F("text", "cardLine", "Card byline (role, company)"),
     F("textarea", "blurb", "Card blurb"),
+    F("text", "impact", "Card outcome line (shown on work cards)"),
     F("textarea", "summary", "Summary (hero paragraph + meta description)"),
 
     SEC("Page sections — any type, any order"),
@@ -256,6 +257,13 @@
     L("about.details", "Detail items",
       [F("text", "label", "Label"), F("text", "value", "Value")],
       { label: "", value: "" }),
+
+    SEC("How I work (principles)"),
+    F("text", "principles.heading", "Heading"),
+    F("textarea", "principles.intro", "Intro"),
+    L("principles.items", "Principles",
+      [F("text", "title", "Title"), F("textarea", "body", "Body")],
+      { title: "", body: "" }),
 
     SEC("Selected work (home)"),
     F("text", "work.heading", "Heading"),

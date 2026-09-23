@@ -11,16 +11,16 @@
 
   var SITE = {
     meta: {
-      title: "Pratik Kathe — Product Designer Portfolio",
+      title: "Pratik Kathe — Senior Product Designer, Mumbai",
       description:
-        "Senior product and UI/UX designer in Mumbai — accessible products, design systems and WCAG 2.1 AA/AAA compliance."
+        "Senior product designer in Mumbai — design systems, complex SaaS and WCAG 2.1 AA/AAA accessibility. Full case studies, résumé and contact."
     },
 
     nav: {
       brand: "Pratik Kathe",
       items: [
-        { id: "about", label: "About", href: "#about" },
         { id: "work", label: "Work", href: "work.html" },
+        { id: "about", label: "About", href: "#about" },
         { id: "skills", label: "Skills", href: "#skills" },
         { id: "experience", label: "Experience", href: "#experience" },
         { id: "contact", label: "Contact", href: "#contact" }
@@ -31,7 +31,7 @@
       eyebrow: "Senior Product Designer — Mumbai, India",
       title: "Designing accessible products people can actually use.",
       subtitle:
-        "4.5+ years of UI/UX and product design across SaaS, fintech, e-commerce and automotive — with a rare, deliberate focus on WCAG 2.1 AA/AAA compliance most product teams are still hiring for.",
+        "4.5+ years shipping SaaS, fintech and consumer products — with WCAG 2.1 AA/AAA accessibility built into the system, not bolted on at the end.",
       primary: { label: "View all case studies", href: "work.html" },
       secondary: {
         label: "View résumé",
@@ -44,16 +44,16 @@
 
     stats: [
       { value: "4.5+", label: "years across SaaS, fintech, e-commerce & automotive" },
-      { value: "AA/AAA", label: "WCAG 2.1 compliance built into every engagement" },
+      { value: "AA/AAA", label: "WCAG 2.1 built into the system, from day one" },
       { value: "2×", label: "company awards — Maverick Performer & Rising Star" },
-      { value: "99%", label: "client satisfaction rate across B2B & B2C work" }
+      { value: "99%", label: "client satisfaction across B2B & B2C work" }
     ],
 
     about: {
       heading: "About",
       paragraphs: [
-        "I'm a senior product and UI/UX designer with 4.5+ years delivering scalable, accessible digital products for global clients. My work sits at the intersection of interface design and inclusive design — I architect Figma design systems from scratch, lead end-to-end design lifecycles, and translate ambiguous requirements into technically feasible solutions that hold up in production.",
-        "What sets my practice apart is depth in WCAG 2.1 AA/AAA compliance — a capability most product teams are actively hiring for and few designers have applied at enterprise scale. I'm currently open to Senior Product Designer and UI/UX Designer roles globally."
+        "I'm a senior product designer with 4.5+ years shipping accessible digital products for global clients — from architecting Figma design systems from scratch to leading end-to-end design for consumer and B2B products. My work sits where interface craft meets inclusive design: technically feasible, documented, and built to hold up in production.",
+        "What I go deep on is WCAG 2.1 AA/AAA — not as an audit, but as structure baked into components and tokens — alongside the systems thinking and AI-assisted workflows modern product teams are hiring for. I'm currently open to Senior Product Designer and UI/UX roles, globally."
       ],
       image: {
         src: "assets/img/portrait.jpg",
@@ -68,10 +68,21 @@
       ]
     },
 
+    principles: {
+      heading: "How I work",
+      intro: "Four habits that show up in every case study below.",
+      items: [
+        { title: "Decisions, not process theatre", body: "Each case study leads with the call: what I chose, what I traded away, and why. Frameworks don't survive production — decisions do." },
+        { title: "Accessibility as structure", body: "A checklist catches what someone remembers. I encode contrast, focus and error states into components, so the accessible version is the only version." },
+        { title: "Systems over screens", body: "I design the machine that makes the next ten screens faster — tokens, documented states, annotated specs — then stay embedded through build." },
+        { title: "AI-assisted, judgment-led", body: "AI handles synthesis, variants and first drafts. Taste, trade-offs and accountability stay human — that's where the value is." }
+      ]
+    },
+
     work: {
       heading: "Selected work",
       intro:
-        "Three engagements, three problems — a systems rebuild, a consumer launch, and a data-heavy dashboard practice.",
+        "Three engagements, three problems — a systems rebuild, a consumer launch, and a data-heavy dashboard practice. Each opens into a full case study: the call, the trade-off, and what happened next.",
       cta: { label: "View all case studies", href: "work.html" },
       limit: 3
     },
@@ -79,27 +90,27 @@
     workPage: {
       heading: "Selected work",
       intro:
-        "Three engagements, three different problems — a systems rebuild, a consumer launch, and a data-heavy dashboard practice. Each one below is a full case study: the problem, the decisions behind the solution, and what happened after."
+        "Three full case studies — the problem, the calls I made, and what happened after. Skimmable in three minutes; worth reading in ten."
     },
 
     skills: {
       heading: "Skills & tools",
       groups: [
         {
-          title: "Design & UX",
-          items: ["UI/UX Design", "Product Design", "Wireframing", "Prototyping", "Interaction Design", "User Research", "Design Thinking"]
+          title: "Design systems & accessibility",
+          items: ["Design Systems", "Design Tokens", "Component Documentation", "WCAG 2.1 AA/AAA", "Inclusive Design", "Accessibility Auditing"]
         },
         {
-          title: "Specialisations",
-          items: ["Design Systems", "SaaS Design", "Web Design", "Mobile App Design", "Responsive Web Design", "Branding"]
+          title: "Product & UX",
+          items: ["Product Design", "UI/UX Design", "User Research", "Interaction Design", "Wireframing", "Prototyping", "Design Thinking", "Responsive Web Design"]
         },
         {
-          title: "Accessibility",
-          items: ["WCAG 2.1 AA/AAA", "Inclusive Design", "Accessibility Auditing"]
+          title: "Domains",
+          items: ["B2B SaaS", "Fintech", "E-commerce", "Mobile Apps", "Data Dashboards", "Branding"]
         },
         {
-          title: "Tools",
-          items: ["Figma", "Adobe XD", "Illustrator", "Photoshop", "After Effects", "Premiere Pro", "HTML & CSS"]
+          title: "Tools & AI",
+          items: ["Figma", "Adobe XD", "Photoshop", "Illustrator", "After Effects", "Premiere Pro", "HTML & CSS", "AI-assisted workflows"]
         }
       ]
     },
@@ -145,7 +156,7 @@
     contact: {
       heading: "Open to Senior Product Designer and UI/UX roles, globally.",
       text:
-        "Have a question about any of the work on this site? I'm happy to talk through the decisions behind it.",
+        "Questions about a decision in the work below? Email is the fastest way to reach me — I'm happy to talk through the reasoning.",
       email: "kathepratik29@gmail.com",
       linkedin: "https://www.linkedin.com/in/pratik-kathe-86763b1b9/",
       resume:
@@ -164,7 +175,7 @@
   var CASE_STUDIES = [
     {
       slug: "barrierbreak-design-system",
-      metaTitle: "BarrierBreak — Case Study",
+      metaTitle: "Accessible design system (BarrierBreak)",
       shortTitle: "BarrierBreak design system",
       order: 1,
 
@@ -176,8 +187,9 @@
       cardLine: "UI/UX & Product Designer, BarrierBreak",
       blurb:
         "Architecting a scalable Figma system while making WCAG 2.1 AA/AAA compliance the default, not an afterthought.",
+      impact: "35–40% faster handoff · WCAG AA/AAA across the platform",
       summary:
-        "Architecting a Figma system from scratch and making WCAG 2.1 AA/AAA compliance the default, not a late-stage fix.",
+        "One Figma system cut design-to-development handoff time by 35–40% — and made WCAG 2.1 AA/AAA the default at the component level instead of a late-stage fix.",
 
       meta: [
         { label: "ROLE", value: "UI/UX & Product Designer" },
@@ -201,6 +213,10 @@
         heading: "Why accessibility kept slipping through the cracks on an enterprise SaaS platform",
         body:
           "The product had no shared design language. Every surface was rebuilt from scratch, and accessibility was treated as a late-stage compliance pass rather than a decision made at the start. That meant inconsistent components across the platform, duplicated design work every sprint, and accessibility fixes bolted on after a feature already shipped — expensive to catch, and easy for users with visual or cognitive disabilities to fall through the cracks of."
+      },
+
+      quote: {
+        text: "The question isn't \"does this pass?\" — it's \"is it structurally impossible for this to fail?\""
       },
 
       solution: {
@@ -286,6 +302,16 @@
         ]
       },
 
+      scope: {
+        heading: "Scope & deliverables",
+        items: [
+          "Figma tokens with WCAG contrast ratios documented at the point of creation",
+          "Components with accessible states defined — focus, error, disabled, motion",
+          "Discovery workshops with engineering to fold build constraints in early",
+          "Developer-ready annotated specs, with support embedded through implementation"
+        ]
+      },
+
       decisions: {
         label: "DECISION STORIES",
         heading: "Three calls that shaped this project",
@@ -331,7 +357,7 @@
       reflection: {
         label: "REFLECTION",
         body:
-          "Treating accessibility as a system-level decision, not a per-screen fix, is what made it stick. It also changed how I evaluate every design decision since: not \"does this pass,\" but \"is it structurally impossible for this to fail.\""
+          "Treating accessibility as a system-level decision — not a per-screen fix — is what made it stick. The lens it gave me outlasted the project: I design for the failure mode first, and let the checklist confirm what the system already guarantees."
       },
 
       footer: {
@@ -342,7 +368,7 @@
 
     {
       slug: "clxns-astrology-app",
-      metaTitle: "CLXNS Technologies — Case Study",
+      metaTitle: "Astrology app launch (CLXNS)",
       shortTitle: "CLXNS astrology app",
       order: 2,
 
@@ -353,8 +379,9 @@
       cardLine: "UI/UX Designer, CLXNS Technologies",
       blurb:
         "Leading UX for a consumer mobile app end-to-end — market research, onboarding, and a high-traffic companion media platform.",
+      impact: "iOS + Android from one flow · ↑ media dwell time",
       summary:
-        "Leading UX end-to-end for a consumer app in a crowded category, alongside a companion media platform built to hold attention.",
+        "Took a multi-user astrology app from market research to App Store launch — redesigning the first sixty seconds, then a companion media platform built to hold attention.",
 
       meta: [
         { label: "ROLE", value: "UI/UX Designer" },
@@ -378,6 +405,10 @@
         heading: "Why users were bouncing before they saw what the app could actually do",
         body:
           "A crowded astrology app category with high drop-off at onboarding, alongside a companion media platform that needed to hold attention, not just load fast. New users were leaving before they understood the app's core value, and the media platform's early traffic wasn't translating into meaningful session time — two connected products, each leaking users at a different stage of the journey."
+      },
+
+      quote: {
+        text: "Design for the first sixty seconds first — build everything else around getting there faster."
       },
 
       solution: {
@@ -460,6 +491,16 @@
         ]
       },
 
+      scope: {
+        heading: "Scope & deliverables",
+        items: [
+          "Competitor research across the astrology app category",
+          "Redesigned onboarding and feature-discovery flow, shipped on iOS and Android",
+          "Companion media platform layout tuned for lean-back browsing",
+          "App Store and social creative assets built off the new onboarding"
+        ]
+      },
+
       decisions: {
         label: "DECISION STORIES",
         heading: "Three calls that shaped this project",
@@ -505,7 +546,7 @@
       reflection: {
         label: "REFLECTION",
         body:
-          "Designing two connected products at once forced a clearer view of where each one earned a user's attention. The onboarding work taught me to design for the first sixty seconds first, and build everything else around getting there faster."
+          "Designing two connected products at once forced a clearer view of where each one actually earned a user's attention. I now start consumer work by earning the first minute — then design everything after it to earn the next ten."
       },
 
       footer: {
@@ -516,7 +557,7 @@
 
     {
       slug: "sankey-b2b-dashboards",
-      metaTitle: "Sankey Solutions — Case Study",
+      metaTitle: "B2B dashboards, 4 industries (Sankey)",
       shortTitle: "Sankey dashboards",
       order: 3,
 
@@ -527,8 +568,9 @@
       cardLine: "UI/UX Designer, Sankey Solutions",
       blurb:
         "Designing dashboards dense enough to be useful and simple enough to act on, for international clients across four verticals.",
+      impact: "99% client satisfaction across 4 industries",
       summary:
-        "Designing dashboards dense enough to be useful and simple enough to act on, for international clients across four verticals.",
+        "One configurable dashboard framework replaced four bespoke builds — leading with the single number each stakeholder actually decides on, across automotive, finance, banking and e-commerce.",
 
       meta: [
         { label: "ROLE", value: "UI/UX Designer" },
@@ -552,6 +594,10 @@
         heading: "Why more data on screen wasn't making anyone's decisions easier",
         body:
           "Stakeholders across automotive, finance, banking and e-commerce clients were drowning in data with no fast path to a decision. Each client's workflows were dense and different, but the underlying need was the same: surface the number that matters, not every number that exists — across web and mobile, for teams who didn't have time to hunt for it."
+      },
+
+      quote: {
+        text: "The real skill wasn't a layout pattern — it was asking each stakeholder what decision they were actually trying to make."
       },
 
       solution: {
@@ -660,6 +706,16 @@
         ]
       },
 
+      scope: {
+        heading: "Scope & deliverables",
+        items: [
+          "Stakeholder interviews per vertical to surface the decision-driving metric",
+          "One reusable dashboard framework, configured around each client's priority metrics",
+          "Desktop-to-mobile adaptation of the same pattern",
+          "Motion graphics, video and brand identity where the engagement called for it"
+        ]
+      },
+
       decisions: {
         label: "DECISION STORIES",
         heading: "Three calls that shaped this project",
@@ -704,7 +760,7 @@
       reflection: {
         label: "REFLECTION",
         body:
-          "Working across four industries in one year was the fastest way to learn that \"simplify the dashboard\" means something different every time. The real skill wasn't a layout pattern — it was asking each stakeholder what decision they were actually trying to make."
+          "Working across four industries in one year was the fastest way to learn that \"simplify the dashboard\" means something different every time. The patterns mattered less than the question behind them — and that question is now the first thing I ask on any data-heavy project."
       },
 
       footer: {
