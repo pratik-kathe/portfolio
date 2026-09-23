@@ -44,7 +44,7 @@
      seed — any user edit changes the hash, so edited data is never touched.
      Compute the next hash BEFORE changing seed content: open the site, run
      Store.reset(), hash localStorage[KEY], append it here first. */
-  var OLD_SEED_HASHES = ["2433b7db13797edd", "36e301856980357f"];
+  var OLD_SEED_HASHES = ["2433b7db13797edd", "36e301856980357f", "fabea60293a76e9c"];
 
   function matchesOldSeed(d) {
     try {
@@ -75,6 +75,15 @@
           note: cs.outcomes.note || ""
         });
       }
+      // "What I did" bullets belong in the opening, right after the impact
+      // numbers (template Frame 3: impact at a glance + what I did).
+      if (cs.scope && Array.isArray(cs.scope.items) && cs.scope.items.length) {
+        out.push({
+          type: "list",
+          heading: cs.scope.heading || "",
+          items: cs.scope.items.map(function (t) { return { text: t }; })
+        });
+      }
       if (cs.context && cs.context.body) {
         out.push({
           type: "text",
@@ -99,13 +108,6 @@
           heading: cs.solution.heading || "",
           intro: cs.solution.intro || "",
           panels: cs.solution.panels
-        });
-      }
-      if (cs.scope && Array.isArray(cs.scope.items) && cs.scope.items.length) {
-        out.push({
-          type: "list",
-          heading: cs.scope.heading || "",
-          items: cs.scope.items.map(function (t) { return { text: t }; })
         });
       }
       if (cs.decisions && Array.isArray(cs.decisions.stories) && cs.decisions.stories.length) {

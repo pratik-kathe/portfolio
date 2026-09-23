@@ -163,7 +163,7 @@
           ' — copy to clipboard">' +
           '<span class="btn__copy-label">' + esc(c.email) + "</span></button>" +
         link(c.linkedin, "LinkedIn", "btn--outline") +
-        link(c.resume, "View résumé", "btn--outline") +
+        link(c.resume, "View Resume", "btn--outline") +
       "</div>" +
       '<span class="sr-only" role="status" id="copy-status"></span>' +
       '<div class="contact__bottom">' +
@@ -180,7 +180,7 @@
       "<span>" + esc(s.footer.note) + "</span>" +
       "<span>" +
         '<a href="index.html#contact">' + esc(s.footer.workCta) + "</a>" +
-        '<a href="' + esc(s.contact.resume) + '" target="_blank" rel="noopener">View résumé</a>' +
+        '<a href="' + esc(s.contact.resume) + '" target="_blank" rel="noopener">View Resume</a>' +
         '<a href="#top">Back to top ↑</a>' +
       "</span>" +
     "</div>";

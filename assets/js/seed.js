@@ -35,7 +35,7 @@
       chips: ["Design systems", "WCAG 2.1 AA/AAA", "Figma", "SaaS"],
       primary: { label: "View all case studies", href: "work.html" },
       secondary: {
-        label: "View résumé",
+        label: "View Resume",
         href: "https://drive.google.com/file/d/1d7Ra3NSomWC0fbyTPTJzQL6VQWsJoM9k/view?usp=drive_link"
       },
       showDeco: true,
@@ -193,10 +193,10 @@
       category: "Enterprise SaaS · Accessibility",
       heroChip: "Enterprise SaaS · Accessibility · Design Systems",
       date: "Jan 2024 — Present",
-      title: "Building an accessible design system for an enterprise SaaS platform",
+      title: "Building an accessible design system for enterprise SaaS — cutting handoff time 35–40%",
       cardLine: "UI/UX & Product Designer, BarrierBreak",
       blurb:
-        "Architecting a scalable Figma system while making WCAG 2.1 AA/AAA compliance the default, not an afterthought.",
+        "Every surface was rebuilt from scratch with accessibility bolted on late. I'm architecting one Figma system where WCAG 2.1 AA/AAA is the default, not an afterthought.",
       impact: "35–40% faster handoff · WCAG AA/AAA across the platform",
       metrics: [
         { value: "35–40%", label: "faster handoff" },
@@ -245,13 +245,15 @@
         }
       ],
       summary:
-        "One Figma system cut design-to-development handoff time by 35–40% — and made WCAG 2.1 AA/AAA the default at the component level instead of a late-stage fix.",
+        "One Figma system cut design-to-development handoff time by 35–40% — and made WCAG 2.1 AA/AAA the default, not a late-stage fix.",
 
       meta: [
         { label: "ROLE", value: "UI/UX & Product Designer" },
+        { label: "TEAM", value: "Engineers & stakeholders" },
         { label: "TIMELINE", value: "Jan 2024 — Present" },
-        { label: "CLIENT", value: "BarrierBreak, Mumbai (Hybrid)" },
-        { label: "TOOLS", value: "Figma, WCAG 2.1 AA/AAA" }
+        { label: "TOOLS", value: "Figma, WCAG 2.1 AA/AAA" },
+        { label: "STATUS", value: "Live — evolving with the product" },
+        { label: "CLIENT", value: "BarrierBreak, Mumbai (Hybrid)" }
       ],
 
       outcomes: {
@@ -359,12 +361,12 @@
       },
 
       scope: {
-        heading: "Scope & deliverables",
+        heading: "What I did",
         items: [
-          "Figma tokens with WCAG contrast ratios documented at the point of creation",
-          "Components with accessible states defined — focus, error, disabled, motion",
-          "Discovery workshops with engineering to fold build constraints in early",
-          "Developer-ready annotated specs, with support embedded through implementation"
+          "Architected Figma tokens with WCAG contrast ratios documented at the point of creation",
+          "Defined accessible states for every component — focus, error, disabled, motion",
+          "Ran discovery workshops with engineering to fold build constraints in early",
+          "Shipped developer-ready annotated specs, embedded through implementation"
         ]
       },
 
@@ -418,7 +420,7 @@
 
       footer: {
         question: "Have a question about a decision here?",
-        tail: " — I'm happy to talk through it."
+        tail: " — I'm happy to talk through it. Details sit under NDA; glad to walk through them in an interview."
       }
     },
 
@@ -431,10 +433,10 @@
       category: "Mobile App · iOS & Android",
       heroChip: "Mobile App · iOS & Android · Media Platform",
       date: "Apr 2023 — Jan 2024",
-      title: "Taking a multi-user astrology app from research to App Store launch",
+      title: "Taking a multi-user astrology app from research to App Store launch, lifting media dwell time",
       cardLine: "UI/UX Designer, CLXNS Technologies",
       blurb:
-        "Leading UX for a consumer mobile app end-to-end — market research, onboarding, and a high-traffic companion media platform.",
+        "New users bounced before seeing the app’s value. I led UX end-to-end — research, a rebuilt first sixty seconds, and the companion media platform.",
       impact: "iOS + Android from one flow · ↑ media dwell time",
       metrics: [
         { value: "2 platforms", label: "iOS + Android, one flow" },
@@ -485,13 +487,14 @@
         }
       ],
       summary:
-        "Took a multi-user astrology app from market research to App Store launch — redesigning the first sixty seconds, then a companion media platform built to hold attention.",
+        "Took a multi-user astrology app from research to App Store launch — redesigning the first sixty seconds, then a companion media platform.",
 
       meta: [
         { label: "ROLE", value: "UI/UX Designer" },
         { label: "TIMELINE", value: "Apr 2023 — Jan 2024" },
         { label: "CLIENT", value: "CLXNS Technologies Pvt Ltd" },
-        { label: "PLATFORMS", value: "iOS, Android, Web" }
+        { label: "PLATFORMS", value: "iOS, Android, Web" },
+        { label: "STATUS", value: "Shipped — App Store launch" }
       ],
 
       outcomes: {
@@ -596,12 +599,12 @@
       },
 
       scope: {
-        heading: "Scope & deliverables",
+        heading: "What I did",
         items: [
-          "Competitor research across the astrology app category",
-          "Redesigned onboarding and feature-discovery flow, shipped on iOS and Android",
-          "Companion media platform layout tuned for lean-back browsing",
-          "App Store and social creative assets built off the new onboarding"
+          "Researched the astrology app category to find where onboarding lost people",
+          "Redesigned onboarding and feature discovery — shipped on iOS and Android",
+          "Designed the companion media platform’s layout for lean-back browsing",
+          "Created App Store and social creative assets off the new onboarding"
         ]
       },
 
@@ -655,7 +658,7 @@
 
       footer: {
         question: "Have a question about a decision here?",
-        tail: " — I'm happy to talk through it."
+        tail: " — I'm happy to talk through it. Details sit under NDA; glad to walk through them in an interview."
       }
     },
 
@@ -668,10 +671,10 @@
       category: "B2B Dashboards · Multi-industry",
       heroChip: "B2B Dashboards · Multi-industry",
       date: "Aug 2021 — Aug 2022",
-      title: "Simplifying data-heavy B2B dashboards across automotive, fintech and e-commerce",
+      title: "Simplifying data-heavy B2B dashboards across four industries, landing 99% client satisfaction",
       cardLine: "UI/UX Designer, Sankey Solutions",
       blurb:
-        "Designing dashboards dense enough to be useful and simple enough to act on, for international clients across four verticals.",
+        "Stakeholders were drowning in data with no fast path to a decision. I designed one framework — dense enough to be useful, simple enough to act on — across four verticals.",
       impact: "99% client satisfaction across 4 industries",
       metrics: [
         { value: "99%", label: "client satisfaction" },
@@ -727,13 +730,16 @@
         }
       ],
       summary:
-        "One configurable dashboard framework replaced four bespoke builds — leading with the single number each stakeholder actually decides on, across automotive, finance, banking and e-commerce.",
+        "One configurable dashboard framework replaced four bespoke builds — leading with the single number each stakeholder actually decides on.",
 
       meta: [
         { label: "ROLE", value: "UI/UX Designer" },
+        { label: "TEAM", value: "Client stakeholders per vertical" },
         { label: "TIMELINE", value: "Aug 2021 — Aug 2022" },
         { label: "CLIENT", value: "Sankey Solutions (Remote)" },
-        { label: "INDUSTRIES", value: "Automotive, finance, banking, e-commerce" }
+        { label: "PLATFORMS", value: "Web + mobile" },
+        { label: "INDUSTRIES", value: "Automotive, finance, banking, e-commerce" },
+        { label: "STATUS", value: "Shipped" }
       ],
 
       outcomes: {
@@ -864,12 +870,12 @@
       },
 
       scope: {
-        heading: "Scope & deliverables",
+        heading: "What I did",
         items: [
-          "Stakeholder interviews per vertical to surface the decision-driving metric",
-          "One reusable dashboard framework, configured around each client's priority metrics",
-          "Desktop-to-mobile adaptation of the same pattern",
-          "Motion graphics, video and brand identity where the engagement called for it"
+          "Interviewed stakeholders per vertical to surface each decision-driving metric",
+          "Designed one reusable dashboard framework, configured around each client’s priority metrics",
+          "Adapted the same pattern from desktop to mobile",
+          "Extended engagements into motion graphics, video and brand identity"
         ]
       },
 
@@ -922,7 +928,7 @@
 
       footer: {
         question: "Have a question about a decision here?",
-        tail: " — I'm happy to talk through it."
+        tail: " — I'm happy to talk through it. Details sit under NDA; glad to walk through them in an interview."
       }
     }
   ];
