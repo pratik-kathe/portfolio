@@ -70,23 +70,25 @@
   }
 
   /** YouTube / Vimeo / direct file → embeddable HTML; "" when unknown. */
-  function videoEmbed(url) {
+  function videoEmbed(url, name) {
     var m = url.match(/(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
-    if (m) return embedBox("https://www.youtube.com/embed/" + m[1], "Embedded YouTube video");
+    if (m) return embedBox("https://www.youtube.com/embed/" + m[1], name ? "YouTube video — " + name : "Embedded YouTube video");
     m = url.match(/vimeo\.com\/(\d+)/);
-    if (m) return embedBox("https://player.vimeo.com/video/" + m[1], "Embedded Vimeo video");
+    if (m) return embedBox("https://player.vimeo.com/video/" + m[1], name ? "Vimeo video — " + name : "Embedded Vimeo video");
     if (/\.(mp4|webm|ogv|ogg|mov|m4v)(\?|#|$)/i.test(url)) {
       return '<video class="cs-embed__file" src="' + esc(url) +
-        '" controls preload="metadata" playsinline></video>';
+        '" controls preload="metadata" playsinline aria-label="' +
+        esc(name || "Case study video") + '"></video>';
     }
     return "";
   }
 
   /** Figma file/design/proto → official embed; "" for non-Figma links. */
-  function figmaEmbed(url) {
+  function figmaEmbed(url, name) {
     if (!/figma\.com\/(file|design|proto|board|slides|deck)\//i.test(url)) return "";
     return '<div class="cs-embed cs-embed--figma"><iframe src="https://www.figma.com/embed?embed_host=share&amp;url=' +
-      esc(encodeURIComponent(url)) + '" title="Figma file" loading="lazy" allowfullscreen></iframe></div>';
+      esc(encodeURIComponent(url)) + '" title="' + esc(name ? "Figma embed — " + name : "Figma file") +
+      '" loading="lazy" allowfullscreen></iframe></div>';
   }
 
   /* ---- block sections (any type, any order) ------------------------------------ */
@@ -180,7 +182,7 @@
 
   function imageSection(b) {
     if (!b.src) return "";
-    var alt = esc(b.alt || "");
+    var alt = esc(b.alt || b.caption || "");
     if (b.width === "full") {
       return '<section class="cs-media cs-media--full">' +
         '<img class="cs-media__img" src="' + esc(b.src) + '" alt="' + alt +
@@ -199,7 +201,7 @@
 
   function videoSection(b) {
     if (!b.url) return "";
-    var embed = videoEmbed(b.url);
+    var embed = videoEmbed(b.url, b.title);
     var body = embed ||
       '<a class="btn btn--outline btn--sm" href="' + esc(b.url) +
         '" target="_blank" rel="noopener">Open video ' + icons.arrow() + "</a>";
@@ -212,7 +214,7 @@
 
   function figmaSection(b) {
     if (!b.url) return "";
-    var embed = figmaEmbed(b.url);
+    var embed = figmaEmbed(b.url, b.title);
     var body = embed
       ? embed + '<p class="cs-embed__link"><a href="' + esc(b.url) +
           '" target="_blank" rel="noopener">Open in Figma ' + icons.arrow() + "</a></p>"

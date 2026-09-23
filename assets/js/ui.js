@@ -42,18 +42,68 @@
   function nav(activeId, onHome) {
     var site = Store.getSite();
     var html = '<a class="site-nav__brand" href="index.html">' + esc(site.nav.brand) + "</a>";
-    html += '<div class="site-nav__links">';
-    site.nav.items.forEach(function (it) {
+    html += '<button class="nav-toggle" type="button" data-nav-toggle' +
+      ' aria-expanded="false" aria-controls="site-menu">' +
+      '<span class="nav-toggle__box" aria-hidden="true">' +
+        '<span class="nav-toggle__bar"></span>' +
+        '<span class="nav-toggle__bar"></span>' +
+        '<span class="nav-toggle__bar"></span>' +
+      "</span>" +
+      '<span class="sr-only">Menu</span>' +
+      "</button>";
+    html += '<div class="site-nav__links" id="site-menu">';
+    site.nav.items.forEach(function (it, idx) {
       var href = it.href;
       if (!onHome && href.charAt(0) === "#") href = "index.html" + href;
       var cls = "site-nav__link" + (it.id === "contact" ? " site-nav__link--btn" : "");
-      html += '<a class="' + cls + '" href="' + esc(href) + '"' +
+      html += '<a class="' + cls + '" href="' + esc(href) + '" style="--i:' + idx + '"' +
         (it.id === activeId ? ' aria-current="page"' : "") +
         ">" + esc(it.label) + "</a>";
     });
     html += "</div>";
     return html;
   }
+
+  /* ---- mobile menu (hamburger) --------------------------------------------
+     Delegated at document level so it works no matter when a page injects
+     UI.nav() markup. Panel itself is CSS (≤820px media query at the bottom
+     of style.css): opacity + translateY reveal with staggered link delays.
+  -------------------------------------------------------------------------- */
+  var MENU_MQ = "(max-width: 820px)";
+
+  function menuBtn() { return document.querySelector("[data-nav-toggle]"); }
+  function menuPanel() { return document.getElementById("site-menu"); }
+  function menuIsOpen() { return document.body.classList.contains("nav-open"); }
+
+  function setMenu(open) {
+    var btn = menuBtn(), menu = menuPanel();
+    if (!btn || !menu) return;
+    document.body.classList.toggle("nav-open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    /* lock page scroll and keep background content out of the tab order
+       while the overlay is up (inert is a no-op on older browsers) */
+    document.body.style.overflow = open ? "hidden" : "";
+    Array.prototype.forEach.call(document.querySelectorAll("main, footer"), function (el) {
+      if (open) el.setAttribute("inert", "");
+      else el.removeAttribute("inert");
+    });
+    if (!open && menu.contains(document.activeElement)) btn.focus();
+  }
+
+  document.addEventListener("click", function (e) {
+    if (!e.target || !e.target.closest) return;
+    if (e.target.closest("[data-nav-toggle]")) { setMenu(!menuIsOpen()); return; }
+    if (e.target.closest("#site-menu a")) setMenu(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && menuIsOpen()) setMenu(false);
+  });
+  var menuWasMobile = window.matchMedia ? window.matchMedia(MENU_MQ).matches : false;
+  window.addEventListener("resize", function () {
+    var now = window.matchMedia ? window.matchMedia(MENU_MQ).matches : false;
+    if (menuWasMobile && !now && menuIsOpen()) setMenu(false); // grew to desktop → reset
+    menuWasMobile = now;
+  });
 
   /* ---- case-study card (home + work index) -------------------------------- */
   function card(cs) {
@@ -116,6 +166,7 @@
         link(c.linkedin, "LinkedIn", "btn--outline") +
         link(c.resume, "View résumé", "btn--outline") +
       "</div>" +
+      '<span class="sr-only" role="status" id="copy-status"></span>' +
       '<div class="contact__bottom">' +
         "<span>" + esc(f.note) + "</span>" +
         '<a href="#top">Back to top ↑</a>' +

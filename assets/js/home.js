@@ -189,18 +189,26 @@
     if (!btn) return;
     var email = btn.getAttribute("data-copy-email");
     var label = btn.querySelector(".btn__copy-label");
+    /* announce the outcome to screen readers (live region in contactFooter) */
+    function announce(msg) {
+      var st = document.getElementById("copy-status");
+      if (st) st.textContent = msg;
+    }
     function done(ok) {
       if (!label) return;
       if (ok) {
         label.textContent = "Copied ✓";
         btn.classList.add("is-copied");
+        announce("Email copied to clipboard.");
         setTimeout(function () {
           label.textContent = email;
           btn.classList.remove("is-copied");
+          announce("");
         }, 2000);
       } else {
         label.textContent = "Copy failed — select manually";
-        setTimeout(function () { label.textContent = email; }, 2400);
+        announce("Copy failed — select the address manually.");
+        setTimeout(function () { label.textContent = email; announce(""); }, 2400);
       }
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {

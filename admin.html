@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Client portal — Pratik Kathe</title>
+<meta name="description" content="Content portal for the Pratik Kathe portfolio site — edit copy, sections and case studies.">
 <meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -12,19 +14,23 @@
 <link rel="stylesheet" href="assets/css/admin.css">
 </head>
 <body class="adm-body">
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <!-- ================= LOGIN GATE ================= -->
-  <div class="adm-login" id="login-view">
+  <!-- ================= LOGIN GATE =================
+       <main> here (not a div) so the logged-out gate still exposes a main
+       landmark; admin.js hides one view while the other is shown, so only
+       one <main> is ever visible (valid HTML). -->
+  <main class="adm-login" id="login-view">
     <form class="adm-login__card" id="login-form" autocomplete="off">
       <p class="adm-kicker">PRATIK KATHE · CONTENT PORTAL</p>
       <h1 class="adm-login__title">Client portal</h1>
       <p class="adm-login__sub">Edit the site's copy, sections and case studies. Everything saves to this browser and can be exported as JSON.</p>
       <label class="adm-f">
         <span>Password</span>
-        <input type="password" id="login-pw" autofocus>
+        <input type="password" id="login-pw" autofocus autocomplete="current-password" aria-describedby="login-err">
       </label>
       <button class="btn btn--solid adm-login__btn" type="submit">Sign in</button>
-      <p class="adm-err" id="login-err" hidden></p>
+      <p class="adm-err" id="login-err" role="alert" hidden></p>
       <p class="adm-hint">Default password: <code>pratik@portfolio</code> — change it under Settings.</p>
       <a class="adm-back" href="index.html">← Back to the site</a>
     </form>
@@ -59,24 +65,25 @@
         });
       })();
     </script>
-  </div>
+  </main>
 
   <!-- ================= APP ================= -->
   <div class="adm-app" id="app-view" hidden>
     <header class="adm-top">
       <a class="adm-top__brand" href="index.html">← View site</a>
-      <nav class="adm-tabs" id="tabs" aria-label="Portal sections">
-        <button type="button" class="adm-tab is-on" data-tab="studies">Case studies</button>
-        <button type="button" class="adm-tab" data-tab="site">Site</button>
-        <button type="button" class="adm-tab" data-tab="settings">Settings</button>
-      </nav>
+      <div class="adm-tabs" id="tabs" role="tablist" aria-label="Portal sections">
+        <button type="button" class="adm-tab is-on" id="tab-studies" role="tab" aria-selected="true" aria-controls="pane-studies" data-tab="studies">Case studies</button>
+        <button type="button" class="adm-tab" id="tab-site" role="tab" aria-selected="false" aria-controls="pane-site" data-tab="site" tabindex="-1">Site</button>
+        <button type="button" class="adm-tab" id="tab-settings" role="tab" aria-selected="false" aria-controls="pane-settings" data-tab="settings" tabindex="-1">Settings</button>
+      </div>
       <button type="button" class="adm-ghost" id="logout-btn">Log out</button>
     </header>
 
-    <main class="adm-main">
+    <main class="adm-main" id="main-content" tabindex="-1">
+      <h1 class="sr-only">Content portal</h1>
 
       <!-- ---- Case studies ---- -->
-      <section class="adm-pane" id="pane-studies">
+      <section class="adm-pane" id="pane-studies" role="tabpanel" aria-labelledby="tab-studies" tabindex="0">
         <div class="adm-pane__bar">
           <div>
             <h2 class="adm-h">Case studies</h2>
@@ -89,7 +96,7 @@
       </section>
 
       <!-- ---- Site ---- -->
-      <section class="adm-pane" id="pane-site" hidden>
+      <section class="adm-pane" id="pane-site" role="tabpanel" aria-labelledby="tab-site" tabindex="0" hidden>
         <div class="adm-pane__bar">
           <div>
             <h2 class="adm-h">Site content</h2>
@@ -100,7 +107,7 @@
       </section>
 
       <!-- ---- Settings ---- -->
-      <section class="adm-pane" id="pane-settings" hidden>
+      <section class="adm-pane" id="pane-settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" hidden>
         <div class="adm-pane__bar">
           <div>
             <h2 class="adm-h">Settings</h2>
@@ -112,7 +119,7 @@
           <div class="adm-card">
             <h3 class="adm-card__h">Export</h3>
             <p class="adm-sub">Download the whole site content as JSON, or copy it.</p>
-            <textarea class="adm-mono adm-export" id="export-out" readonly rows="8"></textarea>
+            <textarea class="adm-mono adm-export" id="export-out" readonly rows="8" aria-label="Site content as JSON"></textarea>
             <div class="adm-row">
               <button type="button" class="btn btn--solid btn--sm" id="export-download">Download .json</button>
               <button type="button" class="btn btn--outline btn--sm" id="export-copy">Copy</button>
@@ -134,19 +141,19 @@
               <button type="button" class="btn btn--solid btn--sm" id="import-btn">Import</button>
               <button type="button" class="btn btn--outline btn--sm" id="reset-btn">Reset to original</button>
             </div>
-            <p class="adm-msg" id="settings-msg" hidden></p>
+            <p class="adm-msg" id="settings-msg" role="status" hidden></p>
           </div>
 
           <div class="adm-card">
             <h3 class="adm-card__h">Change password</h3>
             <p class="adm-sub">Stored as a salted SHA-256 hash in this browser.</p>
-            <label class="adm-f"><span>Current password</span><input type="password" id="pw-old"></label>
-            <label class="adm-f"><span>New password</span><input type="password" id="pw-new"></label>
-            <label class="adm-f"><span>Repeat new password</span><input type="password" id="pw-new2"></label>
+            <label class="adm-f"><span>Current password</span><input type="password" id="pw-old" autocomplete="current-password"></label>
+            <label class="adm-f"><span>New password</span><input type="password" id="pw-new" autocomplete="new-password"></label>
+            <label class="adm-f"><span>Repeat new password</span><input type="password" id="pw-new2" autocomplete="new-password"></label>
             <div class="adm-row">
               <button type="button" class="btn btn--solid btn--sm" id="pw-btn">Update password</button>
             </div>
-            <p class="adm-msg" id="pw-msg" hidden></p>
+            <p class="adm-msg" id="pw-msg" role="status" hidden></p>
           </div>
         </div>
       </section>
@@ -154,7 +161,7 @@
     </main>
   </div>
 
-  <div class="adm-toast" id="toast" hidden></div>
+  <div class="adm-toast" id="toast" role="status" hidden></div>
 
   <script src="assets/js/seed.js"></script>
   <script src="assets/js/store.js"></script>

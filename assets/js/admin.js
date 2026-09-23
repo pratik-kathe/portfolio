@@ -415,7 +415,7 @@
     var html = '<div class="adm-block">' +
       '<div class="adm-block-head"><span>' + esc(f.l) + " · " + arr.length + "</span>" +
         '<span class="adm-blocks__add">' +
-          '<select class="adm-sel" data-newblock-type>' + typeOpts + "</select>" +
+          '<select class="adm-sel" data-newblock-type aria-label="Section type to add">' + typeOpts + "</select>" +
           '<button type="button" class="adm-mini" data-addblock="' + f.k + '">+ Add section</button>' +
         "</span>" +
       "</div>" +
@@ -427,17 +427,22 @@
       var spec = BLOCKS[b.type];
       var head = '<div class="adm-item__head">' +
           '<span class="adm-blk__num">' + (i + 1) + "</span>" +
-          '<select class="adm-blk__type" data-path="' + base + '.type" data-rerender="1">' +
+          '<select class="adm-blk__type" data-path="' + base + '.type" data-rerender="1"' +
+            ' aria-label="Section ' + (i + 1) + ' type">' +
             Object.keys(BLOCKS).map(function (t) {
               return '<option value="' + t + '"' + (t === b.type ? " selected" : "") + ">" +
                 esc(BLOCKS[t].label) + "</option>";
             }).join("") +
           "</select>" +
           '<span class="adm-item__acts">' +
-            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|-1"' + (i === 0 ? " disabled" : "") + ">↑</button>" +
-            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|1"' + (last ? " disabled" : "") + ">↓</button>" +
-            '<button type="button" class="adm-mini" data-blockins="' + f.k + "|" + i + '">+ here</button>' +
-            '<button type="button" class="adm-mini adm-mini--danger" data-del="' + f.k + "|" + i + '">Remove</button>' +
+            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|-1"' +
+              (i === 0 ? " disabled" : "") + ' aria-label="Move section ' + (i + 1) + ' up">↑</button>' +
+            '<button type="button" class="adm-mini" data-move="' + f.k + "|" + i + '|1"' +
+              (last ? " disabled" : "") + ' aria-label="Move section ' + (i + 1) + ' down">↓</button>' +
+            '<button type="button" class="adm-mini" data-blockins="' + f.k + "|" + i + '"' +
+              ' aria-label="+ here — insert a section after section ' + (i + 1) + '">+ here</button>' +
+            '<button type="button" class="adm-mini adm-mini--danger" data-del="' + f.k + "|" + i + '"' +
+              ' aria-label="Remove section ' + (i + 1) + '">Remove</button>' +
           "</span>" +
         "</div>";
 
@@ -607,15 +612,35 @@
     location.reload();
   });
 
-  /* ---- tabs --------------------------------------------------------------- */
-  $("tabs").addEventListener("click", function (e) {
-    var btn = e.target.closest(".adm-tab");
-    if (!btn) return;
-    document.querySelectorAll(".adm-tab").forEach(function (b) { b.classList.toggle("is-on", b === btn); });
+  /* ---- tabs (WAI-ARIA tablist pattern: click + arrow keys + roving
+          tabindex; aria-selected mirrored in selectTab) ------------------- */
+  function selectTab(btn) {
+    document.querySelectorAll(".adm-tab").forEach(function (b) {
+      var on = b === btn;
+      b.classList.toggle("is-on", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+      b.tabIndex = on ? 0 : -1;
+    });
     ["studies", "site", "settings"].forEach(function (id) {
       $("pane-" + id).hidden = id !== btn.dataset.tab;
     });
     if (btn.dataset.tab === "settings") refreshExport();
+  }
+  $("tabs").addEventListener("click", function (e) {
+    var btn = e.target.closest(".adm-tab");
+    if (btn) selectTab(btn);
+  });
+  $("tabs").addEventListener("keydown", function (e) {
+    var keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
+    var tabs = Array.prototype.slice.call(document.querySelectorAll(".adm-tab"));
+    var i = tabs.indexOf(document.activeElement);
+    if (keys.indexOf(e.key) === -1 || i === -1) return;
+    e.preventDefault();
+    var n = e.key === "ArrowRight" ? (i + 1) % tabs.length
+      : e.key === "ArrowLeft" ? (i - 1 + tabs.length) % tabs.length
+      : e.key === "Home" ? 0 : tabs.length - 1;
+    tabs[n].focus();
+    selectTab(tabs[n]);
   });
 
   /* ======================================================================
