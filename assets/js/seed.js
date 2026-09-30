@@ -184,6 +184,61 @@
     );
   }
 
+  /* Reserved slot for a UI screen that hasn't been uploaded yet: the label
+     names the screen so the space stays visible in the layout. Replace the
+     block with { type:"image", src, alt, caption, width } once the file is in
+     assets/img/ — or paste the src straight into the html. */
+  function pendingSlot(label, note) {
+    return '<figure class="cs-pending"><div class="cs-pending__box">' +
+      '<span class="cs-pending__label">' + label + "</span>" +
+      '<span class="cs-pending__meta">' + (note || "UI screen pending upload") + "</span>" +
+      "</div></figure>";
+  }
+
+  function pending(label, note) {
+    return { type: "html", html: pendingSlot(label, note) };
+  }
+
+  /** Two reserved slots side by side — e.g. a V1 / V2 comparison. */
+  function pendingPair(a, b, note) {
+    return {
+      type: "html",
+      html: '<div class="cs-pending__grid">' + pendingSlot(a, note) + pendingSlot(b, note) + "</div>"
+    };
+  }
+
+  /* ---- uploaded screenshots -------------------------------------------------
+     The files live in assets/img/. alt text describes what the screen shows
+     (the visible label does that job), the caption names the slot.            */
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function shotFigure(s) {
+    return '<figure class="cs-media__figure">' +
+      '<img class="cs-media__img" src="assets/img/' + s.file + '" alt="' + esc(s.alt) + '" loading="lazy">' +
+      '<figcaption class="cs-media__caption">' + esc(s.caption) + "</figcaption>" +
+      "</figure>";
+  }
+
+  /** One screenshot, full width of the media column. */
+  function shot(s) {
+    var b = { type: "image", src: "assets/img/" + s.file, alt: s.alt, caption: s.caption || "" };
+    if (s.width) b.width = s.width;
+    return b;
+  }
+
+  /** Two screenshots side by side — same grid the reserved pair used. */
+  function shotPair(a, b) {
+    return { type: "html", html: '<div class="cs-pending__grid">' + shotFigure(a) + shotFigure(b) + "</div>" };
+  }
+
+  /** Up to four screenshots in one responsive grid — e.g. the IA maps. */
+  function shotGrid(list, cls) {
+    return { type: "html", html: '<div class="cs-grid' + (cls ? " " + cls : "") + '">' + list.map(shotFigure).join("") + "</div>" };
+  }
+
   var CASE_STUDIES = [
     {
       slug: "barrierbreak-design-system",
@@ -927,6 +982,699 @@
         body:
           "Working across four industries in one year was the fastest way to learn that \"simplify the dashboard\" means something different every time. The patterns mattered less than the question behind them — and that question is now the first thing I ask on any data-heavy project."
       },
+
+      footer: {
+        question: "Have a question about a decision here?",
+        tail: " — I'm happy to talk through it. Details sit under NDA; glad to walk through them in an interview."
+      }
+    },
+
+    {
+      slug: "accessibility-management-system",
+      metaTitle: "Accessibility management platform — Accessly Internal & Accessly",
+      shortTitle: "Accessibility management system",
+      order: 4,
+
+      /* card + hero */
+      category: "Accessibility SaaS · Product Design",
+      heroChip: "Accessibility SaaS · End-to-end Product Design · Accessibility",
+      date: "3 months to v1 · 6 months to client version",
+      title: "Cutting issue documentation from 3 hours to 30 seconds — Accessly Internal and the client SaaS it became",
+      cardLine: "UI/UX & Product Designer — sole designer, end to end",
+      blurb:
+        "Testers spent 75% of their time reporting instead of testing, across two 30-column spreadsheets. I designed Accessly Internal — which documents a page in about 30 seconds — and its patterns became Accessly, a SaaS used by 100+ paying customers.",
+      impact: "~30 sec per page (was ~3 hrs) · 100+ paying customers · 300+ screens",
+      metrics: [
+        { value: "~30 sec", label: "issue docs per page (was ~3 hrs)" },
+        { value: "100+", label: "paying customers on Accessly" },
+        { value: "300+", label: "screens, one designer" }
+      ],
+      thumbnail: thumb(
+        '<text x="48" y="56" font-family="IBM Plex Mono, monospace" font-size="15" fill="#9a9993">Report — Overall view</text>' +
+        '<line x1="48" y1="74" x2="592" y2="74" stroke="rgba(255,255,255,0.15)"></line>' +
+        '<rect x="48" y="92" width="544" height="56" fill="none" stroke="rgba(255,255,255,0.25)"></rect>' +
+        '<text x="66" y="116" font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#f4f3ef">1.1.1  Image alt text missing</text>' +
+        '<text x="66" y="136" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">42 instances · 6 pages</text>' +
+        '<rect x="452" y="106" width="122" height="28" fill="#f4f3ef"></rect>' +
+        '<text x="513" y="125" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#000000">Major · AA</text>' +
+        '<rect x="48" y="160" width="544" height="56" fill="none" stroke="rgba(255,255,255,0.25)"></rect>' +
+        '<text x="66" y="184" font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#f4f3ef">2.4.2  Page title</text>' +
+        '<text x="66" y="204" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">12 instances · 12 pages</text>' +
+        '<rect x="452" y="174" width="122" height="28" fill="none" stroke="rgba(255,255,255,0.4)"></rect>' +
+        '<text x="513" y="193" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Validate</text>' +
+        '<rect x="48" y="228" width="544" height="56" fill="none" stroke="rgba(255,255,255,0.25)"></rect>' +
+        '<text x="66" y="252" font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#f4f3ef">1.3.1  Info &amp; relationships</text>' +
+        '<text x="66" y="272" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">88 instances · 31 pages</text>' +
+        '<rect x="452" y="242" width="122" height="28" fill="#dcdbd6"></rect>' +
+        '<text x="513" y="261" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#000000">Fail</text>' +
+        '<line x1="48" y1="312" x2="592" y2="312" stroke="rgba(255,255,255,0.15)"></line>' +
+        '<circle cx="54" cy="340" r="5" fill="#f4f3ef"></circle>' +
+        '<text x="68" y="345" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Fail</text>' +
+        '<circle cx="128" cy="340" r="5" fill="none" stroke="#f4f3ef"></circle>' +
+        '<text x="142" y="345" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Validate</text>' +
+        '<circle cx="232" cy="340" r="5" fill="none" stroke="rgba(255,255,255,0.5)" stroke-dasharray="3 2"></circle>' +
+        '<text x="246" y="345" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Suggestion</text>' +
+        '<text x="48" y="378" font-family="IBM Plex Mono, monospace" font-size="12" fill="#6f6e6a">~3 hours of Excel → ~30 seconds per page</text>'
+      ),
+
+      summary:
+        "Two 30-column spreadsheets became Accessly Internal — issue documentation in ~30 seconds, not 3 hours — its patterns now power Accessly, a SaaS used by 100+ paying customers.",
+
+      blocks: [
+        {
+          type: "meta",
+          items: [
+            { label: "ROLE", value: "Sole UI/UX designer, end to end: research, IA, user flows, wireframes, UI, design system" },
+            { label: "TIMELINE", value: "~3 months to the base version, used internally first; ~6 months of internal iteration, then the client version, live; still adding features today; design system built separately (~1 month)" },
+            { label: "TEAM", value: "CEO / product owner; 3 developers when I started, now a 20-person team (testers, content writers, front-end, back-end and AI developers)" },
+            { label: "PLATFORM", value: "Web SaaS, 300+ screens across internal and customer versions" },
+            { label: "USERS", value: "Admins, Managers (PMs, mentors), Testers (testers, QA, reviewers)" },
+            { label: "PRODUCTS", value: "Accessly Internal (our audit team) → Accessly (client SaaS) + Accessly Extension (browser)" },
+            { label: "STATUS", value: "Live — Accessly Internal in daily use; Accessly (Free, Pro, Enterprise) used by 100+ paying customers" }
+          ]
+        },
+
+        {
+          type: "outcomes",
+          heading: "Impact at a glance",
+          items: [
+            { value: "~3 hrs → ~30 sec", label: "issue documentation per page for auto-detected issues (~99.7% less time)" },
+            { value: "~90%", label: "fewer human data-entry errors — issues are generated from our ruleset, testers validate" },
+            { value: "100+", label: "paying customers on Accessly, built on patterns from Accessly Internal" },
+            { value: "30+ columns", label: "of Excel replaced by structured views, a review workflow and an automatic audit trail" }
+          ],
+          note: "Testers' role shifted from writing reports to validating them. Timesheets fill themselves through a production on/off toggle."
+        },
+
+        shot({
+          file: "acs-cover.webp",
+          alt: "Cover: the Accessly projects screen behind the words “Making Accessibility Simple for Everyone”, labelled as a UX case study.",
+          caption: "Cover — Accessly: making accessibility simple for everyone",
+          width: "full"
+        }),
+
+        {
+          type: "text",
+          label: "CONTEXT",
+          heading: "Manual audits, documented by hand",
+          body:
+            "My company runs manual accessibility audits for enterprise clients, checking websites against WCAG. Every issue a tester finds has to be documented in detail: what fails, where, how to reproduce it, which WCAG success criterion it breaks, how severe it is, and how to fix it in code. Clients receive this as a formal report and use it to fix their products. Accessibility testing depends on human judgment, so the goal was never to remove testers — it was to remove the repetitive work around them."
+        },
+
+        {
+          type: "list",
+          heading: "The problem",
+          items: [
+            { text: "Testers spent about 1 hour testing a web page and about 3 hours documenting it — 75% of their time went into reporting, not testing" },
+            { text: "All of it lived in two Excel sheets: an internal tracking sheet and a client-facing report" }
+          ]
+        },
+
+        shotPair(
+          {
+            file: "acs-excel-internal.webp",
+            alt: "The internal tracking spreadsheet: page, issue name, comments, status, who tested and reviewed it, issue description, screenshot, severity and WCAG success criteria columns, with the hidden review workflow running off to the right.",
+            caption: "Excel — internal tracking sheet (client details hidden)"
+          },
+          {
+            file: "acs-excel-client.webp",
+            alt: "The client-facing report spreadsheet: page name, issue name, actual result, steps to reproduce, screenshot and expected results, with client screenshots and code replaced by NDA notes.",
+            caption: "Excel — client-facing report (client details hidden)"
+          }
+        ),
+
+        {
+          type: "list",
+          heading: "What the spreadsheets revealed",
+          items: [
+            { text: "Double data entry — “Comments” and “Issue Description” held the exact same text, and a “Move to Report” column meant retyping everything into the client report" },
+            { text: "A workflow hidden in columns — Tested By → Testing Reviewed By → Written By → Self QC → Reporting Reviewed By → QA → Finalized → Client Feedback: seven stages, with no status visibility and no notifications" },
+            { text: "Copy-paste errors — in one report row “Suggested Code” was identical to “Existing Code”, and formula cells showed #N/A" },
+            { text: "Inconsistent data — one sheet rated severity “High”, the other “Major / Critical”; there was no shared taxonomy" },
+            { text: "Conversations cut off — reviewer feedback lived in a single truncated cell: “no need to ra…”" },
+            { text: "No audit trail — nobody could tell who changed what, or when" },
+            { text: "Manual evidence and timesheets — every screenshot captured, pasted and annotated by hand; the assistive technology matrix (JAWS, NVDA, VoiceOver, ZoomText) filled cell by cell; hours logged separately, by hand" }
+          ]
+        },
+
+        {
+          type: "list",
+          heading: "Pain points by role",
+          items: [
+            { text: "Tester — hours of repetitive typing, copy-pasting code and screenshots for every instance" },
+            { text: "Reviewer / QA — feedback lost in cramped cells; no way to see what changed since the last review" },
+            { text: "Manager — no live view of project progress, quality, or hours spent versus hours sold" },
+            { text: "Client — reports assembled by hand, with inconsistent data and occasional errors" }
+          ]
+        },
+
+        {
+          type: "quote",
+          text: "I spent longer writing up one issue than finding it.",
+          attribution: "Tester, internal accessibility testing team"
+        },
+
+        {
+          type: "text",
+          label: "WHERE THIS FITS",
+          heading: "The first product I built — and the extension that came after it",
+          body:
+            "Accessly Internal was the first product I designed and built in my current role; it started from those two spreadsheets and had to earn its place against years of muscle memory. The Accessly Extension came after it — built for Chrome and now also live on Firefox, Edge and Safari. It scans a page, sorts results into Fail, Validate, Suggestion and Pass, jumps to the failing code, captures screenshots and exports to Excel: it can find issues, but it cannot manage them. Accessly Internal, and later Accessly, close that gap. Both generate fully documented issues from our own ruleset and import issues from Accessly Extension into the same projects; Accessly also scans client sites on demand, weekly or monthly."
+        },
+
+        {
+          type: "list",
+          heading: "Three products, one workflow",
+          items: [
+            { text: "Excel — manual reporting" },
+            { text: "Accessly Extension — find issues (Chrome, Firefox, Edge, Safari)" },
+            { text: "Accessly Internal and Accessly — manage issues: assign, review, discuss, track" },
+            { text: "AI code fixes — fix issues" },
+            { text: "Each layer took one manual job away: finding, managing, then fixing" }
+          ]
+        },
+
+        {
+          type: "list",
+          heading: "Users and roles",
+          items: [
+            { text: "Admins — set up the system: manage users, clients, rules, guidelines and technologies" },
+            { text: "Managers (project managers, mentors) — plan and monitor projects; they need progress, quality and hours at a glance" },
+            { text: "Testers (testers, QA, reviewers) — log, edit and approve issues; they need speed, fewer clicks and a clear review status" },
+            { text: "Clients — receive reports without a hand-built spreadsheet behind them" },
+            { text: "The same roles serve both our internal team and paying customers" }
+          ]
+        },
+
+        {
+          type: "list",
+          heading: "Goals",
+          items: [
+            { text: "Automate issue documentation: scan, capture and fill every field" },
+            { text: "Keep humans in the loop: testers can edit, override, validate or add issues" },
+            { text: "Turn the hidden Excel workflow into visible statuses and reviews" },
+            { text: "Give managers live visibility into progress, quality and hours" }
+          ]
+        },
+
+        {
+          type: "list",
+          heading: "Constraints",
+          items: [
+            { text: "The product itself had to be accessible — an accessibility company cannot ship an inaccessible tool" },
+            { text: "Dense, technical data: one issue carries 15+ fields, including code blocks and WCAG mappings" },
+            { text: "Existing habits: the team had years of muscle memory in Excel vocabulary and statuses" },
+            { text: "Scale: built for internal use first, it had to work later for paying customers with unlimited users" },
+            { text: "Solo designer: I owned every screen and the design system, so consistency had to come from reusable patterns" }
+          ]
+        },
+
+        {
+          type: "text",
+          label: "PROCESS",
+          heading: "From a verbal brief to a shipped product",
+          body:
+            "I started from a verbal brief from the CEO, with no existing product vision, and shaped the structure before any UI. The base version shipped in about three months and went straight into use inside our organisation; over the next six months we improved it, built the client version and made it live. We are still adding features and building more products around it — today Accessly runs smoothly and is taking on paying clients."
+        },
+
+        {
+          type: "list",
+          heading: "How the work ran",
+          items: [
+            { text: "Excel audit — I studied the two spreadsheets column by column; every column became a field, a status or a feature" },
+            { text: "User flow — a first rough flow from the brief: login, dashboards, projects, timesheet, settings" },
+            { text: "Information architecture — each section mapped to its data" },
+            { text: "Wireframes — low-fidelity structure (the originals were lost over 2.5 years, so these are recreated for presentation)" },
+            { text: "UI and iteration — built on a design system I created separately, then refined with feedback from real testers on live projects" },
+            { text: "Testing with the internal accessibility team, then back into the UI" }
+          ]
+        },
+
+        shot({
+          file: "acs-user-flow.webp",
+          alt: "Hand-drawn user flow: login and password recovery, project list, project details, plans, findings, feedback, report download, timesheet and settings branches.",
+          caption: "User flow — login, dashboards, projects, timesheet, settings"
+        }),
+        shotGrid(
+          [
+            {
+              file: "acs-ia-dashboard.webp",
+              alt: "Dashboard data map: KPIs, finalized issues, testing status, process hours, the testers leaderboard, project hours and the overview data tables behind them.",
+              caption: "Information architecture — Dashboard"
+            },
+            {
+              file: "acs-ia-team.webp",
+              alt: "Team data map: captain, testers and a team activity table covering report, quality assurance, support, fixing, meeting and training hours.",
+              caption: "Team"
+            },
+            {
+              file: "acs-ia-timesheet.webp",
+              alt: "Timesheet data map: date, client, task type, module, complexity, hours and units, plus a per-person breakdown by process.",
+              caption: "Timesheet"
+            },
+            {
+              file: "acs-ia-settings.webp",
+              alt: "Settings data map: clients, users, guidelines, technology, status and process sections, each backed by its own data table.",
+              caption: "Settings"
+            }
+          ],
+          "cs-grid--2"
+        ),
+        shot({
+          file: "acs-wireframes.webp",
+          alt: "Board of ten low-fidelity wireframes: 01 Project dashboard, 02 Dashboard table view, 03 Projects list, 04 Issue report, 05 Issue details, 06 Create issue, 07 Create issue filled, 08 Activity logs, 09 Timesheet and 10 Profile settings, each annotated with sticky-note questions such as chart or table toggle per widget and scroll versus table view.",
+          caption: "Wireframes — ten screens, low-fidelity structure",
+          width: "full"
+        }),
+
+        {
+          type: "html",
+          html:
+            '<p class="cs-embed__link"><a href="case-study.html?slug=barrierbreak-design-system">The design system that keeps these 300+ screens consistent has its own case study →</a></p>'
+        },
+
+        {
+          type: "list",
+          heading: "Keeping the team's language",
+          items: [
+            { text: "Excel values such as Perfect Issues, Approved After Fixing, Delete – QA, No QA Needed, To Be Approved and Instance Missed became the product's statuses" },
+            { text: "Adoption friction stayed low because nothing had to be relearned" }
+          ]
+        },
+
+        {
+          type: "list",
+          heading: "How the IA evolved — from 4 project sections to 8 tabs",
+          items: [
+            { text: "Dashboard → Dashboard, kept; a lighter Overview gives a summary rather than the full dashboard" },
+            { text: "Details → Details, kept" },
+            { text: "URLs (inside Details) → Pages — matches the team's unit of work: pages" },
+            { text: "Plan → Plan, kept" },
+            { text: "— → Score — scores needed context, not just a number" },
+            { text: "Report → Report, kept but split into four views" },
+            { text: "— → Logs — replaces the missing audit trail" }
+          ]
+        },
+
+        {
+          type: "text",
+          label: "KEY DESIGN DECISIONS",
+          heading: "One 30-column row, split into screens that each do one job",
+          body:
+            "The core work was splitting a single 30+ column spreadsheet row into screens that each serve one job — then testing the riskiest of them with the people who would live in it."
+        },
+
+        {
+          type: "list",
+          heading: "The flow",
+          items: [
+            { text: "Pages (add URLs) → Scans (manual, weekly, monthly) → Report (issues auto-generated) → Issue Detail (tester edits, validates) → Reviewer approves → Report + scores" },
+            { text: "Pages and Scans exist only in Accessly; internally, testers start from Report" }
+          ]
+        },
+
+        {
+          type: "decisions",
+          stories: [
+            {
+              title: "Report: one row of 30 columns → four purpose-built views",
+              lead: "V1 showed every instance with a large screenshot in the row, so only about 9 rows fit on screen.",
+              before: "One Excel row carried 30 columns, and V1 reproduced it: every instance on one screen, with a screenshot in the row.",
+              tradeoff: "Splitting the data risked hiding detail — a manager still needed the whole site at once, and a tester still needed every instance.",
+              action: "Four views: Overall (one row per issue — pages affected, instances, WCAG principle, severity, level), Issue (instances grouped by issue type), Code (instances grouped by identical code, so developers fix many instances with one change) and List (a flat table for sorting and filtering). Screenshots moved to Issue Detail where they stay readable; Type and Updated Type sit side by side, so the system suggests and a human decides while the original is kept for audit; bulk actions (Update, Pass, Export) appear once rows are selected, with a live count; status edits happen inline; and one result taxonomy — Fail, Validate, Suggestion, Pass — is shared with Accessly Extension.",
+              result: "A manager can read what is wrong across the whole site without scrolling 500 rows, and changing 100 statuses no longer means editing 100 cells."
+            }
+          ]
+        },
+
+        shotPair(
+          {
+            file: "acs-report-v1.webp",
+            alt: "Report V1: one table where every instance of an issue sits on its own row with a screenshot thumbnail, severity, success criterion and status.",
+            caption: "Report V1 — every instance on one screen"
+          },
+          {
+            file: "acs-report-v2.webp",
+            alt: "Report V2: the Project Report with Overall, List, Issue and Code tabs, here showing instances grouped under each issue type.",
+            caption: "Report V2 — four views"
+          }
+        ),
+
+        {
+          type: "decisions",
+          stories: [
+            {
+              title: "Issue Detail: accordions → one instance at a time",
+              lead: "One issue type can carry 10–20 instances; V1 stacked them all on a single page.",
+              before: "All instances of an issue type sat in accordions on one page, with one media panel serving many instances — heavy scrolling, and it was unclear which screenshot belonged to which.",
+              tradeoff: "One instance per page adds navigation, so testers had to move between instances without losing context.",
+              action: "V2 gives one instance per page with “1 of 4” navigation, shows system type and the tester's updated type together in the header, adds a Steps to Validate field that says exactly what to check, pins success criterion, level and severity in a sticky footer, moves the primary actions (Update, Pass, Edit, Create Issue) into the header, puts alt text on every screenshot, and uses Generate Code (AI) to write an accessible fix for the existing code.",
+              result: "Everything needed to judge one instance sits on one screen, and the metadata buried in V1 is always in view."
+            }
+          ]
+        },
+
+        shotPair(
+          {
+            file: "acs-issue-detail-v1.webp",
+            alt: "Issue Detail V1: every instance of one issue stacked in accordions on a single page, with environment, actual result, recommendation, expected result and code fields shared across them.",
+            caption: "Issue Detail V1 — all instances in accordions"
+          },
+          {
+            file: "acs-issue-detail-v2.webp",
+            alt: "Issue Detail V2: one instance at a time with “1 of 4 issues” navigation, element and page details, steps to validate, media, and Update, Pass and Edit actions in the header.",
+            caption: "Issue Detail V2 — one instance at a time"
+          }
+        ),
+
+        {
+          type: "decisions",
+          stories: [
+            {
+              title: "Create Issue: tested with real testers, then redesigned",
+              lead: "Hypothesis: batch creation would save testers time. The internal accessibility team used it on live client projects.",
+              before: "V1 was a modal where testers queued several issues with Add New, then submitted all of them with Create.",
+              tradeoff: "Testing found three failures: testers lost track of which queued issue they were filling in, one invalid field blocked the whole batch, and closing the modal by accident lost all queued work.",
+              action: "One issue at a time, on a full page, with the fields restructured — the same layout as Issue Detail, so what you create is what you later read. Fewer required fields (V2 needs only Element, Issue Type, Page, Status and Existing Code), level derived automatically from the chosen success criterion, and consistent names across screens: Failed Environment became Browsers, Actual / Expected Code became Existing / Suggested Code.",
+              result: "Testers log fast and add detail later, and a whole class of Excel mismatch errors disappeared with the derived level."
+            }
+          ]
+        },
+
+        shotPair(
+          {
+            file: "acs-create-issue-v1.webp",
+            alt: "Create Issue V1: a modal filled in for one issue, with page, issue, issue type, success criteria, severity, failed environment, steps to reproduce, media upload, results and code fields, and Clear, Create and Add New actions.",
+            caption: "Create Issue V1 — batch modal"
+          },
+          {
+            file: "acs-create-issue-v2.webp",
+            alt: "Create Issue V2: a full page opened from the report breadcrumb, with element, issue type, page, browsers, steps to reproduce, results, existing and suggested code, a media panel and the tester's name.",
+            caption: "Create Issue V2 — one issue, full page"
+          }
+        ),
+
+        {
+          type: "list",
+          heading: "Dashboard and Score — data a manager can act on",
+          items: [
+            { text: "Dashboard — KPI cards for delivered, units, issues, sales hours versus actual hours and overshoot; overshoot and actual hours turn red with an up-arrow when a project goes over budget" },
+            { text: "Dashboard — filters by tester and reviewer, to see individual performance, and a testers' leaderboard ranked by “perfect issues”, making quality visible" },
+            { text: "Score — Defect Score (risk: Low → Very High) and Conformance Score (Poor → Excellent against WCAG A, AA, AAA): two gauges with opposite polarity, so their colour bands are reversed and each shows its value and meaning in text" },
+            { text: "Score — breakdowns by severity, top fails, conformance level and WCAG principle, each chart with its own Chart / Table toggle" }
+          ]
+        },
+
+        shot({
+          file: "acs-score.webp",
+          alt: "Score screen: an Issues by Severity pie with its legend, a Defect Score gauge and a Conformance Score gauge side by side with their values and risk bands written out as text under each dial, a Top 7 Fails table, and Issues by Conformance Level and Issues by WCAG Principle bar charts, each with a Chart / Table toggle.",
+          caption: "Score screen — defect and conformance gauges with the breakdowns beneath"
+        }),
+
+        {
+          type: "text",
+          label: "TIMESHEET",
+          heading: "Filled automatically",
+          body:
+            "A Production on/off toggle in the header tracks a tester's time inside a project. When they switch off or log out, hours go straight into the timesheet by project and process (testing, reporting, QA, documentation). Views cover my timesheet, team timesheet, production hours and today's breakdown; off-production, training and meeting hours stay visible too."
+        },
+
+        shot({
+          file: "acs-timesheet.webp",
+          alt: "Timesheet screen: Overview (Daily) with production hours per project, today's breakdown by activity, and off-production, training and meeting hours.",
+          caption: "Timesheet screen — filled by the production on/off toggle"
+        }),
+
+        {
+          type: "text",
+          label: "LOGS",
+          heading: "The audit trail Excel never had",
+          body:
+            "Every action is one readable sentence: who, what changed, from what to what, on which issue, and when. The same activity component is reused inside Issue Detail. The Logs screen carries the same feed under a search box and a date-range filter, so a year of activity can be narrowed to a day."
+        },
+
+        shot({
+          file: "acs-logs.webp",
+          alt: "Logs screen: a search box and a Last 7 Days filter above a feed of one-sentence activity entries — who created an issue, who changed a status and from what to what, and who edited code, each with a timestamp.",
+          caption: "Logs screen — the audit trail Excel never had"
+        }),
+
+        {
+          type: "text",
+          label: "ACCESSIBILITY",
+          heading: "Designing an accessible accessibility product",
+          body:
+            "The hardest accessibility problem was data visualisation, because charts are rarely usable with a screen reader."
+        },
+
+        {
+          type: "list",
+          heading: "How the charts stay usable",
+          items: [
+            { text: "A table behind every chart — each chart widget has a Chart / Table toggle, and the table view is fully accessible" },
+            { text: "Patterns, not just colour — dots, stripes and checks separate chart segments, so colour-blind and low-vision users can tell them apart (WCAG 1.4.1, Use of Color)" },
+            { text: "Status never by colour alone — over-budget KPIs use a red background and an up-arrow icon" },
+            { text: "Alt text on every screenshot, including the evidence images testers upload" },
+            { text: "An accessible chart library, chosen with the developers from the start" }
+          ]
+        },
+
+        shotPair(
+          {
+            file: "acs-dashboard-chart.webp",
+            alt: "Project Dashboard, chart view: KPI cards for delivered, units, issues, sales hours, actual hours and overshoot, with actual hours and overshoot on red cards with up arrows; beneath them, charts drawn with patterned segments — sales hours by client, exceeding versus within hours, hours by process, projects by team structure, top 5 overshoot, sales versus actual hours by client, delivery times, deliveries after 9 PM and overshoot by client — each with a Chart / Table toggle.",
+            caption: "Project Dashboard — chart view, every widget with a Chart / Table toggle"
+          },
+          {
+            file: "acs-dashboard-table.webp",
+            alt: "The same Project Dashboard with every widget switched to its Table view — sortable, labelled rows for clients and sales hours, team structure, processes, delivery times, project overshoot percentages and issue counts, carrying the same numbers the charts draw.",
+            caption: "The same dashboard, every chart as a sortable table"
+          }
+        ),
+
+        {
+          type: "text",
+          label: "SAME CORE, TWO AUDIENCES",
+          heading: "One core, two audiences",
+          body:
+            "Accessly Internal and Accessly, our live client product, run on the same core — Report and Issue Detail — and differ only at the edges. Every screen above is from Accessly Internal; this section shows what changed when the same patterns served paying customers. The four Report views and the one-instance Issue Detail shipped to clients unchanged in structure: the internal team had already stress-tested them on live audits, so Accessly started from proven patterns."
+        },
+
+        {
+          type: "list",
+          heading: "What changed, and why",
+          items: [
+            { text: "Report and Issue Detail — both audiences: both read and act on the same issues" },
+            { text: "Pages — Accessly only: clients add and manage their own URLs" },
+            { text: "Scans — Accessly only: clients run scans themselves, on demand or on a schedule" },
+            { text: "Timesheet — Accessly Internal only: tracks our testers' billable hours" },
+            { text: "Leaderboard — Accessly Internal only: makes our team's review quality visible" },
+            { text: "Production on/off toggle — Accessly Internal only: feeds the internal timesheet" },
+            { text: "Only in Accessly Internal: Timesheet, Leaderboard and the Production toggle exist to run our audit business — billing hours, tester quality, time tracking. Clients pay for results, not hours, so none of them made it into Accessly" }
+          ]
+        },
+
+        {
+          type: "list",
+          heading: "What clients needed that our team didn't",
+          items: [
+            { text: "Choose what gets tested → Pages: clients add, crawl, enable and retest their own URLs" },
+            { text: "Get a report without a tester → Scans: on-demand and scheduled scans with a history" },
+            { text: "Prove progress over time → Results Comparison: two scans side by side, with new and fixed issues" },
+            { text: "Work in their own tools → Jira integration: our severities, statuses and fields mapped to their Jira" },
+            { text: "Follow their own policy → Custom Standards: our ruleset, switchable rule by rule" }
+          ]
+        },
+
+        {
+          type: "decisions",
+          stories: [
+            {
+              title: "Pages: clients choose what gets tested",
+              lead: "Internally, pages came from the project brief, so Accessly Internal never needed this screen.",
+              before: "Our testers were assigned pages from the brief; clients arrive alone and must decide what to test.",
+              action: "Overview cards for unscanned, scanned, completed, failed, in-progress and pending pages; per-page results in the same Fail / Validate / Suggestion / Pass columns as Report and Accessly Extension, so one taxonomy runs through every product; bulk actions (Re Crawl, Test All, Retest, Enable, Disable, Edit, Add); and page status (Active / Inactive) kept separate from scan status (Completed, In Progress, Failed, Pending), so pausing a page never hides its last result.",
+              result: "One taxonomy across every product, and clients manage their own URLs without a tester in the loop."
+            }
+          ]
+        },
+
+        shot({
+          file: "acs-pages.webp",
+          alt: "Pages screen: overview cards for unscanned and scanned pages, a table of page names and URLs with created dates and results, plus search, per-page settings and bulk actions.",
+          caption: "Pages screen (anonymised)"
+        }),
+
+        {
+          type: "text",
+          label: "SETTINGS",
+          heading: "From one form to a settings area",
+          body:
+            "Settings began as a single Edit Profile form behind a two-item menu. In the final version the same form sits inside a full settings area — Users, Clients, Accessibility, Guidelines, Success Criteria, Issue Variables, Status, Profile — and the account rules are stated on screen instead of left to guesswork: which file types and size a picture accepts, which fields are mandatory, and where password change and subscription cancellation live."
+        },
+
+        shotPair(
+          {
+            file: "acs-profile-v1.webp",
+            alt: "Accessly Settings, first variation: an Edit Profile form with profile picture, full name, email and password fields, behind a Settings menu that holds only Edit Profile and Members.",
+            caption: "Accessly — Settings, Edit Profile, first variation"
+          },
+          {
+            file: "acs-profile-v2.webp",
+            alt: "Accessly Settings, final version: the Profile screen inside a full Settings menu, showing the upload size and file-format rules, fields marked with an asterisk as mandatory, first and last name, email, a Change Password link and a Cancel Subscription option above Cancel and Update.",
+            caption: "Accessly — Settings, Profile, final version"
+          }
+        ),
+
+        {
+          type: "decisions",
+          stories: [
+            {
+              title: "Results Comparison: proof of progress",
+              lead: "Our team delivered an audit and moved on; a client needs to show their leadership that accessibility is improving.",
+              before: "Two audits in time, with nothing that turned them into a before/after.",
+              action: "Pick any two scans and see fails, validates and totals side by side, with the difference, plus a New Issues / Fixed Issues toggle showing what the latest release broke and what the team fixed.",
+              result: "Improvement becomes something a client can show, in one screen."
+            }
+          ]
+        },
+
+        shot({
+          file: "acs-compare.webp",
+          alt: "Results Comparison screen: two scans compared side by side with fails, validates and totals, the updated issue list, and new and fixed issues grouped by issue type.",
+          caption: "Results Comparison screen (anonymised)"
+        }),
+
+        {
+          type: "decisions",
+          stories: [
+            {
+              title: "Jira integration: meet clients in their tools",
+              lead: "Client developers live in Jira, not in our product. Instead of asking them to switch, the integration carries our data into their workflow.",
+              before: "Findings were exported by hand and retyped into a second tool.",
+              action: "Severity mapping (our Blocker, Critical, Major, Minor and Best Practice → Jira priorities), status mapping (To Do, In Progress, Completed → Jira statuses, syncing both ways), field mapping (every issue field — Element, Actual Result, Recommendation, Steps to Validate, Existing Code and more → an existing Jira field, a new field, or skipped), plus Auto Sync and Auto Create Issues.",
+              result: "This is the Excel problem solved a second time: in Accessly Internal, structured issues replaced copy-paste between two spreadsheets; for clients, field mapping replaces copy-paste between two tools."
+            }
+          ]
+        },
+
+        shot({
+          file: "acs-jira.webp",
+          alt: "Jira integration screen: project link and issue type, sync options, severity mapping from Blocker to Best Practice, and status mapping from To Do, In Progress and Completed to Jira statuses.",
+          caption: "Jira mapping screen (anonymised)"
+        }),
+
+        {
+          type: "decisions",
+          stories: [
+            {
+              title: "Custom Standards: our ruleset, their policy",
+              lead: "The ruleset that generates every issue — and cut data-entry errors by ~90% internally — became a feature clients can configure.",
+              before: "One internal ruleset, applied the same way to every engagement.",
+              action: "Default standards (WCAG 2.2 AA as default, plus WCAG 2.2 A, 2.1 AA and A, 2.0 AA and EN 301 549), each showing its active rulesets; a custom standard built on a default with every rule switchable; Automated / Manual tabs so scanner rules and human checks stay distinct; a role per rule (developer, designer, content writer, tester) so each issue lands with the person who fixes it; and Set as Default to apply a standard across projects.",
+              result: "The ruleset that automated our own documentation became something clients steer themselves."
+            }
+          ]
+        },
+
+        shot({
+          file: "acs-standards.webp",
+          alt: "Custom Standards screen: a client standard based on WCAG 2.2 (AA) with Automated and Manual rulesets, rule names such as skipped heading level and missing form labels, and an element table underneath.",
+          caption: "Custom Standards screen (anonymised)"
+        }),
+
+        {
+          type: "text",
+          label: "PROJECTS",
+          heading: "From a plain table to a starting point",
+          body:
+            "Both screens are from Accessly, the client product: the first variation and the final version. Internally our testers were assigned projects; clients arrive alone and must start one themselves, so the final screen is built as a starting point — recent projects on top, a create action where the work begins, and a grid / table toggle for however many projects someone holds."
+        },
+
+        shotPair(
+          {
+            file: "acs-projects-v1.webp",
+            alt: "Accessly Projects, first variation: a plain table of projects with delivery date and number of issues, and a search box.",
+            caption: "Accessly — Projects, first variation"
+          },
+          {
+            file: "acs-projects-v2.webp",
+            alt: "Accessly Projects, final version: recent projects on top, a grid / table toggle, project tags, a Create Project action in the header and as a card, and an extension install prompt.",
+            caption: "Accessly — Projects, final version"
+          }
+        ),
+
+        {
+          type: "list",
+          heading: "What the final version adds",
+          items: [
+            { text: "A prominent Create Project action, in the header and as a card" },
+            { text: "Recent Projects on top, since most people work on 2–3 projects at a time" },
+            { text: "Grid / Table toggle: cards to scan a few projects, a table for many" },
+            { text: "A How to Use panel and tutorial for self-serve onboarding" },
+            { text: "Links to install Accessly Extension, connecting the product ecosystem" },
+            { text: "Tags to categorise projects by client and product" },
+            { text: "Scores moved out of the list into a dedicated Score tab with gauges and risk bands — a bare 80% in a list told a client nothing; the Table view still shows them." }
+          ]
+        },
+
+        {
+          type: "text",
+          label: "IMPACT",
+          flush: "1",
+          body:
+            "Patterns I designed for Accessly Internal became the core of Accessly, our live client product, now used by 100+ paying customers. Inside our own team, documenting auto-detected issues went from about 3 hours per page to about 30 seconds — roughly 360 times faster. The time claim is not a stopwatch estimate: our timesheet logs record the hours spent documenting a page by hand, and the product's own output is the evidence for the other side — about 30 seconds for a single web page. Errors dropped because issues are no longer typed: the system generates every field from our own accessibility ruleset. Testers still check that each issue and the final report are correct, so the time saved is in documentation, not judgment."
+        },
+
+        {
+          type: "quote",
+          text: "Now I check what the system wrote instead of writing it myself.",
+          attribution: "Tester, internal accessibility testing team"
+        },
+
+        {
+          type: "list",
+          heading: "Before → after, area by area",
+          items: [
+            { text: "Issue documentation (auto-detected issues): ~3 hours per page → ~30 seconds per page" },
+            { text: "Human data-entry errors: copy-paste mistakes, mismatched fields, duplicate text → ~90% fewer (team estimate)" },
+            { text: "Tester's job: write every field by hand → validate generated issues and reports" },
+            { text: "Review workflow: 7 stages hidden in Excel columns → visible statuses, comments, bulk actions" },
+            { text: "Audit trail: none → every change logged automatically" },
+            { text: "Timesheets: filled by hand → logged automatically by project and process" },
+            { text: "Data consistency: free text, mixed severity scales → shared taxonomy; level derived from success criterion" },
+            { text: "Product reach: internal spreadsheet → the core of Accessly, used by 100+ paying customers" }
+          ]
+        },
+
+        {
+          type: "list",
+          heading: "What I learned",
+          items: [
+            { text: "Automation should replace documentation, not judgment — keeping Type and Updated Type side by side made testers trust the system" },
+            { text: "Respect existing vocabulary — reusing Excel's statuses made adoption easy" },
+            { text: "Numbers need context — a bare 80% in a list helped nobody; the same score on a gauge with a risk band did" },
+            { text: "Test with real users on real work — the Create Issue redesign came from watching testers on live projects" },
+            { text: "Working as the only designer while the team grew from 3 developers to 20 taught me to write decisions down — a UI choice that lived only in my head broke the moment someone else built on it" }
+          ]
+        },
+
+        {
+          type: "text",
+          label: "WHAT'S NEXT",
+          flush: "1",
+          body:
+            "Generate Code — now part of a separate AI product — writes an accessible fix for each failing snippet and is working in production."
+        },
+
+        {
+          type: "text",
+          label: "REFLECTION",
+          flush: "1",
+          body:
+            "What I'd do differently: watch someone do the job before designing the shortcut. I designed batch creation before I watched a tester use it, and it took one live client project to expose all three failures — I'd run that test earlier and start Create Issue on a full page, not a modal. What I'd keep: automating documentation rather than judgment, reusing the vocabulary the team already had, and giving every number a context. The thing that made 300+ screens possible for a single designer was building the design system alongside the product, not after it — and the thing that made Accessly win clients was that the internal team had already stress-tested every shared pattern on live audits."
+        }
+      ],
 
       footer: {
         question: "Have a question about a decision here?",

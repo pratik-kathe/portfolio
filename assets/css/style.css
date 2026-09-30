@@ -398,6 +398,20 @@ a:hover .cta-arrow--ext, a:focus-visible .cta-arrow--ext { transform: translate(
 
 .cs-html { width: 100%; padding: clamp(30px, 4.5vw, 60px) var(--pad-x); }
 
+/* Reserved slots for case-study UI screens not uploaded yet (seed.js
+   pending()/pendingPair()). Replace the block with an `image` block. */
+.cs-pending { margin: 0; }
+.cs-pending__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.cs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.cs-grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(430px, 100%), 1fr)); }
+.cs-pending__box {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  min-height: clamp(200px, 24vw, 300px); padding: 32px 20px; text-align: center;
+  background: var(--panel); border: 1px dashed var(--line-3);
+}
+.cs-pending__label { font-family: var(--font-mono); font-size: 13px; line-height: 1.5; color: var(--body); }
+.cs-pending__meta { font-family: var(--font-mono); font-size: 12px; color: var(--dim); }
+
 /* Not-found state */
 .not-found { max-width: var(--max-copy); margin: 0 auto; padding: clamp(60px, 9vw, 120px) var(--pad-x); }
 .not-found__title { font-size: clamp(27px, 3.22vw, 52px); margin-bottom: 20px; }
