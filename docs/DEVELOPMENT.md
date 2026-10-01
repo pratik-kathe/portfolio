@@ -156,7 +156,7 @@ pristine. Mechanism (`store.js`):
 Registered hashes (oldest → newest):
 
 ```js
-["2433b7db13797edd", "36e301856980357f", "fabea60293a76e9c", "2769c408abaf22dc", "8a2405e403e32340", "2b1568807f6b302a", "609e5da440589590", "43a4eec7004d3a0f", "d13f8826c6972f68", "420c94be651bf846", "46cca52dba6f1b1d", "8b6cd2b815707a8a", "1f0a4dbf98a4a373", "5a5d5f689a7f3f7c", "17acc2316c184839", "23bef682fe0eb958", "85bb3a467c46e770", "ada284ea62e11ff0"]
+["2433b7db13797edd", "36e301856980357f", "fabea60293a76e9c", "2769c408abaf22dc", "8a2405e403e32340", "2b1568807f6b302a", "609e5da440589590", "43a4eec7004d3a0f", "d13f8826c6972f68", "420c94be651bf846", "46cca52dba6f1b1d", "8b6cd2b815707a8a", "1f0a4dbf98a4a373", "5a5d5f689a7f3f7c", "17acc2316c184839", "23bef682fe0eb958", "85bb3a467c46e770", "ada284ea62e11ff0", "bc8758430cb697eb", "fa1e835e0823da92"]
 ```
 
 ## 8. Authentication & session security

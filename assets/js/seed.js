@@ -1009,33 +1009,7 @@
         { value: "100+", label: "paying customers on Accessly" },
         { value: "300+", label: "screens, one designer" }
       ],
-      thumbnail: thumb(
-        '<text x="48" y="56" font-family="IBM Plex Mono, monospace" font-size="15" fill="#9a9993">Report — Overall view</text>' +
-        '<line x1="48" y1="74" x2="592" y2="74" stroke="rgba(255,255,255,0.15)"></line>' +
-        '<rect x="48" y="92" width="544" height="56" fill="none" stroke="rgba(255,255,255,0.25)"></rect>' +
-        '<text x="66" y="116" font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#f4f3ef">1.1.1  Image alt text missing</text>' +
-        '<text x="66" y="136" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">42 instances · 6 pages</text>' +
-        '<rect x="452" y="106" width="122" height="28" fill="#f4f3ef"></rect>' +
-        '<text x="513" y="125" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#000000">Major · AA</text>' +
-        '<rect x="48" y="160" width="544" height="56" fill="none" stroke="rgba(255,255,255,0.25)"></rect>' +
-        '<text x="66" y="184" font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#f4f3ef">2.4.2  Page title</text>' +
-        '<text x="66" y="204" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">12 instances · 12 pages</text>' +
-        '<rect x="452" y="174" width="122" height="28" fill="none" stroke="rgba(255,255,255,0.4)"></rect>' +
-        '<text x="513" y="193" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Validate</text>' +
-        '<rect x="48" y="228" width="544" height="56" fill="none" stroke="rgba(255,255,255,0.25)"></rect>' +
-        '<text x="66" y="252" font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#f4f3ef">1.3.1  Info &amp; relationships</text>' +
-        '<text x="66" y="272" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">88 instances · 31 pages</text>' +
-        '<rect x="452" y="242" width="122" height="28" fill="#dcdbd6"></rect>' +
-        '<text x="513" y="261" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#000000">Fail</text>' +
-        '<line x1="48" y1="312" x2="592" y2="312" stroke="rgba(255,255,255,0.15)"></line>' +
-        '<circle cx="54" cy="340" r="5" fill="#f4f3ef"></circle>' +
-        '<text x="68" y="345" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Fail</text>' +
-        '<circle cx="128" cy="340" r="5" fill="none" stroke="#f4f3ef"></circle>' +
-        '<text x="142" y="345" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Validate</text>' +
-        '<circle cx="232" cy="340" r="5" fill="none" stroke="rgba(255,255,255,0.5)" stroke-dasharray="3 2"></circle>' +
-        '<text x="246" y="345" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9a9993">Suggestion</text>' +
-        '<text x="48" y="378" font-family="IBM Plex Mono, monospace" font-size="12" fill="#6f6e6a">~3 hours of Excel → ~30 seconds per page</text>'
-      ),
+      thumbnail: "assets/img/acs-cover-card.webp",
 
       summary:
         "Two 30-column spreadsheets became Accessly Internal — issue documentation in ~30 seconds, not 3 hours — its patterns now power Accessly, a SaaS used by 100+ paying customers.",
@@ -1248,9 +1222,31 @@
         }),
 
         {
+          type: "text",
+          label: "DESIGN SYSTEM",
+          heading: "One system behind the 300+ screens",
+          body:
+            "Accessly Internal and Accessly were not drawn screen by screen. The 300+ screens come from one set of components I designed alongside the product — about a month of work — holding tokens, components and documented accessible states (focus, error, disabled, motion) in Figma, with every token aligned to WCAG AA/AAA contrast at creation rather than audited afterwards. The client version inherited those same components, so a second product did not mean a second UI, and one designer could keep every screen consistent."
+        },
+
+        /* Design-system thumbnail — reserved slot (visible until you fill it).
+           To add the image: drop the file into assets/img/ and replace the
+           pending(...) line below with e.g.
+
+             shot({
+               file: "acs-design-system.webp",
+               alt: "Design system: ...",
+               caption: "Design system — components, tokens and accessible states"
+             }),
+
+           shot() also accepts width: "full" | "inset"; for a 2-up layout use
+           shotPair(a, b) or shotGrid([...], "cs-grid--2"). */
+        pending("Design system — thumbnail", "Reserved for the design system image"),
+
+        {
           type: "html",
           html:
-            '<p class="cs-embed__link"><a href="case-study.html?slug=barrierbreak-design-system">The design system that keeps these 300+ screens consistent has its own case study →</a></p>'
+            '<div class="cs-cta"><a class="btn btn--solid btn--sm" href="case-study.html?slug=barrierbreak-design-system">Read the design system case study →</a></div>'
         },
 
         {
