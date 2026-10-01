@@ -137,6 +137,27 @@
     "</div></section>";
   }
 
+  /** A `text` block whose next block is a `.cs-panel` screenshot renders as one
+      two-column section — copy left, panel right — instead of two stacked
+      full-width sections. The feature walkthrough is 21 features long, so
+      stacking the caption block on top of its portrait screenshot roughly
+      doubled the scroll. Only fires on panel screenshots (matches nothing in
+      the other studies, which use cs-pending / cs-grid html blocks). */
+  function featureSection(t, h) {
+    var flush = t.flush === "1" || t.flush === 1;
+    return '<section class="cs-context cs-feature' +
+        (flush ? " cs-context--flush cs-feature--flush" : "") +
+        '"><div class="shell cs-feature__grid">' +
+      '<div class="cs-feature__copy">' +
+        (t.label ? '<p class="label" data-reveal>' + esc(t.label) + "</p>" : "") +
+        (t.heading ? '<h2 class="cs-context__heading" data-reveal>' + esc(t.heading) + "</h2>" : "") +
+        (t.body ? '<p class="cs-context__body' + (t.heading ? "" : " cs-context__body--bare") +
+          '" data-reveal>' + esc(t.body) + "</p>" : "") +
+      "</div>" +
+      '<div class="cs-feature__media" data-reveal>' + h.html + "</div>" +
+    "</div></section>";
+  }
+
   function panelsSection(b) {
     if (!b.panels || !b.panels.length) return "";
     return '<section class="cs-solution"><div class="shell shell--solution">' +
@@ -271,11 +292,30 @@
     }
   }
 
+  /** Render the block list, folding each `text` + following `.cs-panel` pair
+      into a single featureSection so copy and screenshot sit side by side.
+      Every other block renders exactly as it did. */
+  function blocksHTML(blocks) {
+    var out = "";
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i];
+      var next = blocks[i + 1];
+      if (b && b.type === "text" && next && next.type === "html" &&
+          /class="cs-panel"/.test(next.html || "")) {
+        out += featureSection(b, next);
+        i++; // consumed the screenshot
+      } else {
+        out += blockHTML(b);
+      }
+    }
+    return out;
+  }
+
   /* ---- render ---------------------------------------------------------------- */
 
   main.innerHTML =
     heroSection() +
-    (Array.isArray(cs.blocks) ? cs.blocks : []).map(blockHTML).join("");
+    blocksHTML(Array.isArray(cs.blocks) ? cs.blocks : []);
 
   // "Next: …" follows list order and wraps around (BarrierBreak → CLXNS → Sankey → …)
   footer.innerHTML = UI.caseFooter(cs, all[(i + 1) % all.length]);

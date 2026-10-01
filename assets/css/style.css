@@ -316,6 +316,26 @@ a:hover .cta-arrow--ext, a:focus-visible .cta-arrow--ext { transform: translate(
 .cs-context--flush { padding-top: 0; }
 .cs-context__body--bare { margin-top: 0; max-width: 640px; }
 
+/* Feature walkthrough row — copy left, portrait panel screenshot right.
+   case-study.js featureSection() pairs a `text` block with the .cs-panel
+   screenshot that immediately follows it, so a feature is one row instead of
+   a text section stacked on an image section. Falls back to the old stacked
+   flow below 840px, where the copy column would get too narrow to read. */
+.cs-feature__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  gap: clamp(24px, 3.5vw, 56px);
+  align-items: start;
+}
+.cs-feature__copy,
+.cs-feature__media { min-width: 0; }
+/* 420px = the plugin panel's native width, so the screenshot renders 1:1 and
+   the copy column keeps a readable measure. Stack below 840px, where the
+   copy column would drop under ~300px. */
+@media (max-width: 840px) {
+  .cs-feature__grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
 .cs-solution { width: 100%; padding: 0 var(--pad-x) clamp(50px, 7.5vw, 100px); border-bottom: 1px solid var(--line); }
 .cs-solution__heading { margin-bottom: 16px; }
 .cs-solution__intro { font-size: 16px; line-height: 1.7; color: var(--muted); max-width: 640px; margin-bottom: 44px; }

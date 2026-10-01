@@ -1704,7 +1704,7 @@
         { value: "13 checks", label: "5 tools, grouped into 5 tabs" },
         { value: "15 days", label: "research to handoff" }
       ],
-      thumbnail: "assets/img/al-overview.webp",
+      thumbnail: "assets/img/al-cover.webp",
 
       summary:
         "Accessly Lens scans the Figma file itself — 13 checks, 5 tools, a score out of 100 and a developer-ready spec — designed, built and tested in 15 days, so accessibility is checked before the design is signed off.",
@@ -1735,11 +1735,13 @@
           note: "Measured on the shipped plugin: axe-core run against every tab, the engine's own test suite, and our own design work."
         },
 
-        panelShot({
-          file: "al-overview.webp",
-          alt: "Accessly Lens plugin panel showing a score of 68, with 12 failures, 9 items to review and 35 passes, followed by a list of contrast failures.",
-          caption: "Accessly Lens — the score, the counts and every issue, worst first"
-        }),
+        {
+          type: "image",
+          src: "assets/img/al-cover.webp",
+          alt: "Cover: the Accessly Lens wordmark and the words UX case study beside the plugin panel, showing a score of 68 with 12 failures, 9 items to review and 35 passes.",
+          caption: "Cover — Accessly Lens: accessibility checks inside Figma",
+          width: "full"
+        },
 
         {
           type: "text",
