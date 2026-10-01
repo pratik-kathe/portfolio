@@ -361,6 +361,10 @@ a:hover .cta-arrow--ext, a:focus-visible .cta-arrow--ext { transform: translate(
 .cs-media--full .cs-media__img { border-left: none; border-right: none; }
 .cs-media--full .shell { padding: 0 var(--pad-x); }
 
+/* Tall portrait screenshots (a plugin panel is 836×1514): capped so one
+   doesn't stretch to the full column and swallow the page. */
+.cs-panel { max-width: 500px; margin: 0 auto; }
+
 .cs-embed {
   position: relative; width: 100%; aspect-ratio: 16 / 9;
   background: #050505; border: 1px solid var(--line-2); overflow: hidden;
@@ -372,6 +376,7 @@ a:hover .cta-arrow--ext, a:focus-visible .cta-arrow--ext { transform: translate(
   background: #000; border: 1px solid var(--line-2);
 }
 .cs-embed__link { margin-top: 16px; font-family: var(--font-mono); font-size: 13px; }
+.cs-cta { margin-top: 26px; }
 .cs-embed__link a { color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
 .cs-embed__link a:hover { color: var(--fg); }
 
