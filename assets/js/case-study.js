@@ -47,6 +47,9 @@
   document.title = (cs.metaTitle || cs.title) + " — Pratik Kathe";
   var metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.content = cs.summary || "";
+  /* Scoped styling hook — lets CSS tune one study (e.g. its canvas shots)
+     without adding study-specific branches to the shared block renderer. */
+  document.documentElement.setAttribute("data-study", cs.slug);
 
   /* ---- structural section (always first) ------------------------------------- */
 
@@ -143,9 +146,12 @@
       stacking the caption block on top of its portrait screenshot roughly
       doubled the scroll. Only fires on panel screenshots (matches nothing in
       the other studies, which use cs-pending / cs-grid html blocks). */
-  function featureSection(t, h) {
+  function featureSection(t, h, n) {
     var flush = t.flush === "1" || t.flush === 1;
-    return '<section class="cs-context cs-feature' +
+    /* Alternate sides down the walkthrough: even rows copy-left/screenshot-right,
+       odd rows reversed, so the eye zig-zags instead of tracking one column. */
+    var flip = n % 2 === 1 ? " cs-feature--flip" : "";
+    return '<section class="cs-context cs-feature' + flip +
         (flush ? " cs-context--flush cs-feature--flush" : "") +
         '"><div class="shell cs-feature__grid">' +
       '<div class="cs-feature__copy">' +
@@ -297,12 +303,13 @@
       Every other block renders exactly as it did. */
   function blocksHTML(blocks) {
     var out = "";
+    var n = 0; // feature-row counter, drives the left/right alternation
     for (var i = 0; i < blocks.length; i++) {
       var b = blocks[i];
       var next = blocks[i + 1];
       if (b && b.type === "text" && next && next.type === "html" &&
           /class="cs-panel"/.test(next.html || "")) {
-        out += featureSection(b, next);
+        out += featureSection(b, next, n++);
         i++; // consumed the screenshot
       } else {
         out += blockHTML(b);

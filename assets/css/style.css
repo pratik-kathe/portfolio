@@ -316,24 +316,37 @@ a:hover .cta-arrow--ext, a:focus-visible .cta-arrow--ext { transform: translate(
 .cs-context--flush { padding-top: 0; }
 .cs-context__body--bare { margin-top: 0; max-width: 640px; }
 
-/* Feature walkthrough row — copy left, portrait panel screenshot right.
-   case-study.js featureSection() pairs a `text` block with the .cs-panel
-   screenshot that immediately follows it, so a feature is one row instead of
-   a text section stacked on an image section. Falls back to the old stacked
-   flow below 840px, where the copy column would get too narrow to read. */
+/* Feature walkthrough row — copy on one side, portrait panel screenshot on the
+   other. case-study.js featureSection() pairs a `text` block with the .cs-panel
+   screenshot that immediately follows it, so a feature is one row instead of a
+   text section stacked on an image section. Rows alternate sides
+   (.cs-feature--flip) so the walkthrough zig-zags rather than tracking one
+   column. Falls back to the stacked flow below 840px, where the copy column
+   would get too narrow to read. */
 .cs-feature__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
   gap: clamp(24px, 3.5vw, 56px);
-  align-items: start;
+  /* Centred, not top-aligned: the screenshot is always taller than its caption
+     block, so top-aligning left a ~420px void under the copy on every row. */
+  align-items: center;
 }
 .cs-feature__copy,
 .cs-feature__media { min-width: 0; }
-/* 420px = the plugin panel's native width, so the screenshot renders 1:1 and
-   the copy column keeps a readable measure. Stack below 840px, where the
-   copy column would drop under ~300px. */
+/* 360px keeps the panel legible without dominating the row. On a flipped row
+   the media is pulled onto the first track, so the column widths swap with it
+   and the copy keeps the flexible measure. */
+.cs-feature--flip .cs-feature__grid {
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+}
+.cs-feature--flip .cs-feature__media { order: -1; }
+/* Both selectors are listed: .cs-feature--flip .cs-feature__grid is more
+   specific than .cs-feature__grid, so it would otherwise win inside the query
+   and leave flipped rows in two columns at 400px. */
 @media (max-width: 840px) {
-  .cs-feature__grid { grid-template-columns: 1fr; gap: 32px; }
+  .cs-feature__grid,
+  .cs-feature--flip .cs-feature__grid { grid-template-columns: 1fr; gap: 32px; }
+  .cs-feature--flip .cs-feature__media { order: 0; }
 }
 
 .cs-solution { width: 100%; padding: 0 var(--pad-x) clamp(50px, 7.5vw, 100px); border-bottom: 1px solid var(--line); }
@@ -384,6 +397,25 @@ a:hover .cta-arrow--ext, a:focus-visible .cta-arrow--ext { transform: translate(
 /* Tall portrait screenshots (a plugin panel is 836×1514): capped so one
    doesn't stretch to the full column and swallow the page. */
 .cs-panel { max-width: 500px; margin: 0 auto; }
+
+/* The two canvas screenshots shipped near-square (1600×1570) with roughly a
+   third of each frame being empty grey canvas — a wall of whitespace in an
+   otherwise dense study. They are now cropped to their subject (the sign-up
+   dialog carrying badges 1-5; the accessibility report frame), which makes
+   them portrait: at shell width they would run ~1360px tall, so cap the
+   height and centre the figure instead. Scoped by the data-study hook
+   case-study.js sets, because the accessibility management system renders the
+   same .cs-media markup and one of its images is a correctly-sized 889px
+   tall. */
+[data-study="accessly-lens-figma-plugin"]
+  .cs-media:not(.cs-media--full) .cs-media__img {
+  width: auto;
+  max-width: 100%;
+  max-height: 560px;
+  margin-inline: auto;
+}
+[data-study="accessly-lens-figma-plugin"]
+  .cs-media:not(.cs-media--full) .cs-media__caption { text-align: center; }
 
 .cs-embed {
   position: relative; width: 100%; aspect-ratio: 16 / 9;
