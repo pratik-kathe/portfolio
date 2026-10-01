@@ -317,7 +317,8 @@
     heroSection() +
     blocksHTML(Array.isArray(cs.blocks) ? cs.blocks : []);
 
-  // "Next: …" follows list order and wraps around (BarrierBreak → CLXNS → Sankey → …)
+  // "Next: …" follows list order and wraps around (Accessibility management
+  // system → Accessly Lens → …)
   footer.innerHTML = UI.caseFooter(cs, all[(i + 1) % all.length]);
 
   window.Portfolio.Anims.init();
