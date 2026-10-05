@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client portal — Pratik Kathe</title>
+<meta name="description" content="Content portal for the Pratik Kathe portfolio site — edit copy, sections and case studies.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="adm-body">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- ================= LOGIN GATE =================
+       <main> here (not a div) so the logged-out gate still exposes a main
+       landmark; admin.js hides one view while the other is shown, so only
+       one <main> is ever visible (valid HTML). -->
+  <main class="adm-login" id="login-view">
+    <form class="adm-login__card" id="login-form" autocomplete="off">
+      <p class="adm-kicker">PRATIK KATHE · CONTENT PORTAL</p>
+      <h1 class="adm-login__title">Client portal</h1>
+      <label class="adm-f">
+        <span>Password</span>
+        <input type="password" id="login-pw" autofocus autocomplete="current-password" aria-describedby="login-err">
+      </label>
+      <button class="btn btn--solid adm-login__btn" type="submit">Sign in</button>
+      <p class="adm-err" id="login-err" role="alert" hidden></p>
+      <a class="adm-back" href="index.html">← Back to the site</a>
+    </form>
+    <script>
+      /* Fallback login handler — survives even if assets/js/admin.js fails to
+         load or throws. admin.js marks the form data-live="1" when it attaches
+         its own handler; until then (or forever, if admin.js never runs) this
+         one drives the gate so a click can never silently do a native reload. */
+      (function () {
+        var form = document.getElementById("login-form");
+        if (!form) return;
+        function show(m) {
+          var e = document.getElementById("login-err");
+          if (e) { e.textContent = m; e.hidden = false; }
+        }
+        form.addEventListener("submit", function (ev) {
+          if (form.getAttribute("data-live") === "1") return; // admin.js owns it
+          ev.preventDefault();
+          try {
+            var s = window.Portfolio && window.Portfolio.Store;
+            if (!s || typeof s.login !== "function") {
+              show("Portal scripts didn't load — hard-refresh this tab (Cmd+Shift+R).");
+              return;
+            }
+            var fbtn = form.querySelector('button[type="submit"]');
+            if (fbtn) { fbtn.disabled = true; fbtn.textContent = "Checking…"; }
+            function fsettle() {
+              if (fbtn) { fbtn.disabled = false; fbtn.textContent = "Sign in"; }
+            }
+            s.login(document.getElementById("login-pw").value).then(function (ok) {
+              fsettle();
+              if (ok) {
+                if (window.__admShowApp) window.__admShowApp();
+                else location.reload();
+              } else show("Wrong password.");
+            }).catch(function (e2) {
+              fsettle();
+              show((e2 && e2.message) || "Login failed.");
+            });
+          } catch (e3) { show("Login error: " + (e3 && e3.message)); }
+        });
+      })();
+    </script>
+  </main>
+
+  <!-- ================= APP ================= -->
+  <div class="adm-app" id="app-view" hidden>
+    <header class="adm-top">
+      <a class="adm-top__brand" href="index.html">← View site</a>
+      <div class="adm-tabs" id="tabs" role="tablist" aria-label="Portal sections">
+        <button type="button" class="adm-tab is-on" id="tab-studies" role="tab" aria-selected="true" aria-controls="pane-studies" data-tab="studies">Case studies</button>
+        <button type="button" class="adm-tab" id="tab-site" role="tab" aria-selected="false" aria-controls="pane-site" data-tab="site" tabindex="-1">Site</button>
+        <button type="button" class="adm-tab" id="tab-settings" role="tab" aria-selected="false" aria-controls="pane-settings" data-tab="settings" tabindex="-1">Settings</button>
+      </div>
+      <button type="button" class="adm-ghost" id="logout-btn">Log out</button>
+    </header>
+
+    <main class="adm-main" id="main-content" tabindex="-1">
+      <h1 class="sr-only">Content portal</h1>
+
+      <!-- ---- Case studies ---- -->
+      <section class="adm-pane" id="pane-studies" role="tabpanel" aria-labelledby="tab-studies" tabindex="0">
+        <div class="adm-pane__bar">
+          <div>
+            <h2 class="adm-h">Case studies</h2>
+            <p class="adm-sub">Add, edit, duplicate, reorder or delete. Order drives the card list and the “Next: …” link.</p>
+          </div>
+          <button type="button" class="btn btn--solid btn--sm" id="add-study">+ New case study</button>
+        </div>
+        <div class="adm-study-list" id="study-list"></div>
+        <div class="adm-editor" id="study-editor" hidden></div>
+      </section>
+
+      <!-- ---- Site ---- -->
+      <section class="adm-pane" id="pane-site" role="tabpanel" aria-labelledby="tab-site" tabindex="0" hidden>
+        <div class="adm-pane__bar">
+          <div>
+            <h2 class="adm-h">Site content</h2>
+            <p class="adm-sub">Hero, stats, about, skills, experience, education, hobby and contact — every word on the home and work pages.</p>
+          </div>
+        </div>
+        <div class="adm-editor" id="site-editor"></div>
+      </section>
+
+      <!-- ---- Settings ---- -->
+      <section class="adm-pane" id="pane-settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" hidden>
+        <div class="adm-pane__bar">
+          <div>
+            <h2 class="adm-h">Settings</h2>
+            <p class="adm-sub">Export a backup, import one, reset to the original content, or change the password.</p>
+          </div>
+        </div>
+
+        <div class="adm-grid-2">
+          <div class="adm-card">
+            <h3 class="adm-card__h">Export</h3>
+            <p class="adm-sub">Download the whole site content as JSON, or copy it.</p>
+            <textarea class="adm-mono adm-export" id="export-out" readonly rows="8" aria-label="Site content as JSON"></textarea>
+            <div class="adm-row">
+              <button type="button" class="btn btn--solid btn--sm" id="export-download">Download .json</button>
+              <button type="button" class="btn btn--outline btn--sm" id="export-copy">Copy</button>
+            </div>
+          </div>
+
+          <div class="adm-card">
+            <h3 class="adm-card__h">Import</h3>
+            <p class="adm-sub">Replaces all current content in this browser.</p>
+            <label class="adm-f">
+              <span>JSON file</span>
+              <input type="file" id="import-file" accept=".json,application/json">
+            </label>
+            <label class="adm-f">
+              <span>…or paste JSON</span>
+              <textarea class="adm-mono" id="import-text" rows="5" placeholder='{"version":1, …}'></textarea>
+            </label>
+            <div class="adm-row">
+              <button type="button" class="btn btn--solid btn--sm" id="import-btn">Import</button>
+              <button type="button" class="btn btn--outline btn--sm" id="reset-btn">Reset to original</button>
+            </div>
+            <p class="adm-msg" id="settings-msg" role="status" hidden></p>
+          </div>
+
+          <div class="adm-card">
+            <h3 class="adm-card__h">Change password</h3>
+            <p class="adm-sub">Stored as a salted PBKDF2-SHA256 hash (600k iterations) in this browser.</p>
+            <label class="adm-f"><span>Current password</span><input type="password" id="pw-old" autocomplete="current-password"></label>
+            <label class="adm-f"><span>New password</span><input type="password" id="pw-new" autocomplete="new-password"></label>
+            <label class="adm-f"><span>Repeat new password</span><input type="password" id="pw-new2" autocomplete="new-password"></label>
+            <div class="adm-row">
+              <button type="button" class="btn btn--solid btn--sm" id="pw-btn">Update password</button>
+            </div>
+            <p class="adm-msg" id="pw-msg" role="status" hidden></p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="adm-toast" id="toast" role="status" hidden></div>
+
+  <script src="assets/js/seed.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
