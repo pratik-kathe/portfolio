@@ -45,7 +45,7 @@
      seed — any user edit changes the hash, so edited data is never touched.
      Compute the next hash BEFORE changing seed content: open the site, run
      Store.reset(), hash localStorage[KEY], append it here first. */
-  var OLD_SEED_HASHES = ["2433b7db13797edd", "36e301856980357f", "fabea60293a76e9c", "2769c408abaf22dc", "8a2405e403e32340", "2b1568807f6b302a", "609e5da440589590", "43a4eec7004d3a0f", "d13f8826c6972f68", "420c94be651bf846", "46cca52dba6f1b1d", "8b6cd2b815707a8a", "1f0a4dbf98a4a373", "5a5d5f689a7f3f7c", "17acc2316c184839", "23bef682fe0eb958", "85bb3a467c46e770", "ada284ea62e11ff0", "bc8758430cb697eb", "fa1e835e0823da92", "c6ccc6f12c876413", "4d45bf5413257adc", "3aa5dc007e923a26", "746ba9498927dacb", "7ddc5871ca1bc2eb", "6470b74d0d5faa4d", "184ebc9f6a9f5605", "f0d11c975c257611", "2bd7dacec5ce15e4", "022998d4f06d879c", "9fc37caa815b3754", "5c89c79ee52c4aca", "02dd54ccf1958392", "615a55e05c4f306a", "42fd0aa5a2f843b5"];
+  var OLD_SEED_HASHES = ["2433b7db13797edd", "36e301856980357f", "fabea60293a76e9c", "2769c408abaf22dc", "8a2405e403e32340", "2b1568807f6b302a", "609e5da440589590", "43a4eec7004d3a0f", "d13f8826c6972f68", "420c94be651bf846", "46cca52dba6f1b1d", "8b6cd2b815707a8a", "1f0a4dbf98a4a373", "5a5d5f689a7f3f7c", "17acc2316c184839", "23bef682fe0eb958", "85bb3a467c46e770", "ada284ea62e11ff0", "bc8758430cb697eb", "fa1e835e0823da92", "c6ccc6f12c876413", "4d45bf5413257adc", "3aa5dc007e923a26", "746ba9498927dacb", "7ddc5871ca1bc2eb", "6470b74d0d5faa4d", "184ebc9f6a9f5605", "f0d11c975c257611", "2bd7dacec5ce15e4", "022998d4f06d879c", "9fc37caa815b3754", "5c89c79ee52c4aca", "02dd54ccf1958392", "615a55e05c4f306a", "42fd0aa5a2f843b5", "3dc9b3a0fcb7b16a"];
 
   function matchesOldSeed(d) {
     try {

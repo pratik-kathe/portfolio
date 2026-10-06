@@ -338,18 +338,6 @@
           standalone: true
         }),
 
-        {
-          type: "outcomes",
-          heading: "What changed",
-          items: [
-            { value: "~3 hrs → ~30 sec", label: "to document the auto-detected issues on one page" },
-            { value: "~90%", label: "fewer data-entry errors (team estimate): issues are generated, testers validate" },
-            { value: "100+", label: "paying customers on Accessly, the client product built on the same patterns" },
-            { value: "300+", label: "screens across both products, from one designer and one design system" }
-          ],
-          note: "The 3 hours comes from our timesheet logs for hand-documented pages; the 30 seconds is what the product takes to generate a page's documented issues. Testers still check every issue, so the time saved is in typing, not judgement."
-        },
-
         /* ── 4 · PROBLEM AND CONTEXT ──────────────────────────────────────
            Guide, Stage 3: the real problem in business language, why it is
            worth solving, the minimum background, one context card. */
@@ -389,6 +377,7 @@
           type: "meta",
           items: [
             { label: "PRODUCT", value: "Accessly Internal (our audit team), which became Accessly (client SaaS, Free / Pro / Enterprise)" },
+            { label: "SCOPE", value: "Full product, 0 → 1 — a new internal tool first, then the same patterns shipped as a client SaaS. Not a redesign: two spreadsheets were replaced outright" },
             { label: "MY ROLE", value: "Sole UI/UX designer, end to end: research, IA, flows, wireframes, UI, design system" },
             { label: "TIMELINE", value: "~3 months to v1 in internal use; ~6 more months to the live client version; design system ~1 month" },
             { label: "TEAM", value: "CEO as product owner; 3 developers when I started, a 20-person team today" },
@@ -644,6 +633,21 @@
           "cs-grid--2"
         ),
 
+        /* Scores sit here, not under the cover: Stage 8.2 runs tease straight
+           into problem with nothing between, and keeping the numbers this far
+           up is what lets the first Decision Story land in the first half. */
+        {
+          type: "outcomes",
+          heading: "What changed",
+          items: [
+            { value: "~3 hrs → ~30 sec", label: "to document the auto-detected issues on one page" },
+            { value: "~90%", label: "fewer data-entry errors (team estimate): issues are generated, testers validate" },
+            { value: "100+", label: "paying customers on Accessly, the client product built on the same patterns" },
+            { value: "300+", label: "screens across both products, from one designer and one design system" }
+          ],
+          note: "The 3 hours comes from our timesheet logs for hand-documented pages; the 30 seconds is what the product takes to generate a page's documented issues. Testers still check every issue, so the time saved is in typing, not judgement."
+        },
+
         /* ── 7 · ITERATION ARCHIVE ────────────────────────────────────────
            Guide, Stage 5: the versions thrown away, and why. */
         {
@@ -739,10 +743,8 @@
           label: "UI SYSTEM",
           heading: "One system behind 300+ screens and two products",
           body:
-            "I didn't draw 300+ screens one by one. I built a design system alongside the product (about a month of work): tokens, components and documented accessible states for focus, error, disabled and motion. Every colour token was checked against WCAG AA/AAA contrast when it was created, not audited later. When Accessly was built, it inherited the same components, so a second product didn't mean a second UI, and one designer could keep both consistent while the team grew from 3 developers to 20."
+            "I didn't draw 300+ screens one by one. I built a design system alongside the product (about a month of work): tokens, components and documented accessible states for focus, error, disabled and motion. Type follows the same rule — one heading and body scale held as shared styles rather than set per screen, so a heading is the same size wherever it appears, and changing it once changes it everywhere. Spacing comes from a single scale too: every margin, padding and component gap is a step on that scale, which is why screens built months apart still line up without anyone measuring. Every colour token was checked against WCAG AA/AAA contrast when it was created, not audited later. When Accessly was built, it inherited the same components, so a second product didn't mean a second UI, and one designer could keep both consistent while the team grew from 3 developers to 20."
         },
-
-        pending("Design system — thumbnail", "Reserved for the design system image"),
 
         {
           type: "list",
@@ -836,25 +838,7 @@
         "A Figma plugin that finds WCAG 2.2 issues while the screen is still a design, fixes most of them in one click using the file's own colours, and hands every accessibility decision to developers as native Dev Mode annotations.",
 
       blocks: [
-        /* ── 2 · PROBLEM ──────────────────────────────────────────────── */
-        {
-          type: "text",
-          label: "THE PROBLEM",
-          heading: "Issues were born in design and paid for after launch",
-          body:
-            "Most accessibility issues start as design choices: colours, type sizes, tap targets, labels, heading structure. Our toolset caught them in development or after launch, where every fix is more expensive: a developer has to guess the intent, go back to the designer, and rebuild. Designers using Figma had plugins, but they either checked or documented, never both in one flow, and none fixed an issue using the team's own design system. So the cheapest stage to fix accessibility was the one stage our product line didn't reach."
-        },
-
-        /* ── 3 · VISUAL TEASE ─────────────────────────────────────────── */
-        shot({
-          file: "lens-cover.webp",
-          alt: "Cover: the words “Accessly Lens — accessibility audit tool, find and fix accessibility issues” beside the plugin in light and dark themes, showing the Audit tab with 20 issues: an image with no alt text, a button with no accessible name and a subtitle failing contrast at 2.56 to 1.",
-          caption: "Accessly Lens — a Figma plugin that finds, fixes and hands off accessibility issues before code",
-          width: "full",
-          standalone: true
-        }),
-
-        /* ── 4 · HOOK, OUTCOME AND CONTEXT ────────────────────────────── */
+        /* ── 2 · HOOK ─────────────────────────────────────────────────── */
         {
           type: "text",
           label: "THE MOMENT",
@@ -869,16 +853,22 @@
           attribution: "The line I kept coming back to on this project"
         },
 
+        /* ── 3 · VISUAL TEASE ─────────────────────────────────────────── */
+        shot({
+          file: "lens-cover.webp",
+          alt: "Cover: the words “Accessly Lens — accessibility audit tool, find and fix accessibility issues” beside the plugin in light and dark themes, showing the Audit tab with 20 issues: an image with no alt text, a button with no accessible name and a subtitle failing contrast at 2.56 to 1.",
+          caption: "Accessly Lens — a Figma plugin that finds, fixes and hands off accessibility issues before code",
+          width: "full",
+          standalone: true
+        }),
+
+        /* ── 4 · PROBLEM AND CONTEXT ──────────────────────────────────── */
         {
-          type: "outcomes",
-          heading: "What changed",
-          items: [
-            { value: "~70%", label: "of the issues we used to report after development are now caught and fixed in the design file" },
-            { value: "15", label: "WCAG 2.2 checks in one audit, returning in about 120 ms" },
-            { value: "1 click", label: "to fix most issues, inside the issue card" },
-            { value: "15 days", label: "from concept to a tested, working plugin, designed and built solo with AI-assisted development" }
-          ],
-          note: "The 70% is our team's estimate from using the plugin on real projects: the share of issues we usually report after development that are now resolved during design."
+          type: "text",
+          label: "THE PROBLEM",
+          heading: "Issues were born in design and paid for after launch",
+          body:
+            "Most accessibility issues start as design choices: colours, type sizes, tap targets, labels, heading structure. Our toolset caught them in development or after launch, where every fix is more expensive: a developer has to guess the intent, go back to the designer, and rebuild. Designers using Figma had plugins, but they either checked or documented, never both in one flow, and none fixed an issue using the team's own design system. So the cheapest stage to fix accessibility was the one stage our product line didn't reach."
         },
 
         shot({
@@ -900,6 +890,7 @@
           type: "meta",
           items: [
             { label: "PRODUCT", value: "Accessly Lens — a Figma plugin for WCAG 2.2 AA, running fully offline with no account and no network calls" },
+            { label: "SCOPE", value: "Concept exploration carried all the way to a shipped product: one plugin, 11 screens in two themes — not a redesign of an existing tool" },
             { label: "MY ROLE", value: "Solo product designer and builder: research, IA, interaction design, UI, prototype, and the build with AI-assisted development" },
             { label: "TIMELINE", value: "15 days, concept to tested plugin" },
             { label: "USERS", value: "UI designers (primary; know Figma deeply, not WCAG) · developers who receive the annotations · accessibility specialists who review" },
@@ -995,14 +986,6 @@
           caption: "Vision — deuteranopia, “about 1 in 12 men”"
         }),
 
-        {
-          type: "figma",
-          url: "https://www.figma.com/proto/jFU8GnV1TyqGUaZCWz5hph/Accessly-Lens?node-id=1-18&viewport=145%2C301%2C0.51&t=hBJND2oeNij9vXtI-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1",
-          title: "Try the journey yourself",
-          caption:
-            "The real plugin code running against a sample Figma file: run an audit, apply a fix and watch the canvas change, play the screen reader, or switch to dark mode. Alt+click selects a parent layer. A wide screen gives the best experience."
-        },
-
         /* ── 6 · DECISION STORIES ─────────────────────────────────────── */
         {
           type: "text",
@@ -1026,12 +1009,6 @@
             }
           ]
         },
-
-        shot({
-          file: "lens-structure.webp",
-          alt: "The structure, v1 to v4, as four cards. v1 · 13 tabs: thirteen chips read Contrast, Alt, Focus, Type, Target, Head, Form, Link, Color, Sense, Notes, Sim and Spec, noted “× 13 scope bars · × 13 Run buttons”. v2 · 5 categories: five tabs read Colour, Content, Structure, Interact and Notes above Grouped tabs ✓, Side rail and Dashboard, noted “still 13 tools · 13 Run buttons”. v3 · 3 tabs: Check, Inspect and Simulate, over a nested accordion of Colour · 5, Text contrast · 3, Heading 2, Content · 5 and Structure · 2, noted “3 clicks to see details · fix → other tab”. v4 · 4 tabs: Audit, Annotate, Screen reader and Vision, over two open issue cards with teal fix buttons, noted “1 click to filter · fix inside the card”.",
-          caption: "13 tabs → 5 categories → 3 tabs → 4 tabs, and why each one gave way"
-        }),
 
         {
           type: "decisions",
@@ -1078,17 +1055,53 @@
           ]
         },
 
+        /* Same placement as Accessly Internal: Stage 8.2 runs the tease
+           straight into the problem, so the numbers close the decisions
+           instead of interrupting the opening. */
+        {
+          type: "outcomes",
+          heading: "What changed",
+          items: [
+            { value: "~70%", label: "of the issues we used to report after development are now caught and fixed in the design file" },
+            { value: "15", label: "WCAG 2.2 checks in one audit, returning in about 120 ms" },
+            { value: "1 click", label: "to fix most issues, inside the issue card" },
+            { value: "15 days", label: "from concept to a tested, working plugin, designed and built solo with AI-assisted development" }
+          ],
+          note: "The 70% is our team's estimate from using the plugin on real projects: the share of issues we usually report after development that are now resolved during design."
+        },
+
         /* ── 7 · ITERATION ARCHIVE ────────────────────────────────────── */
         {
+          type: "text",
+          label: "ITERATION ARCHIVE",
+          heading: "Four versions, and the reason each one died",
+          body:
+            "The structure came before any of the polish: four builds, each held long enough to watch a designer work with it, each dropped for a reason rather than a preference. This is the order those reasons arrived in."
+        },
+
+        shot({
+          file: "lens-structure.webp",
+          alt: "The structure, v1 to v4, as four cards. v1 · 13 tabs: thirteen chips read Contrast, Alt, Focus, Type, Target, Head, Form, Link, Color, Sense, Notes, Sim and Spec, noted “× 13 scope bars · × 13 Run buttons”. v2 · 5 categories: five tabs read Colour, Content, Structure, Interact and Notes above Grouped tabs ✓, Side rail and Dashboard, noted “still 13 tools · 13 Run buttons”. v3 · 3 tabs: Check, Inspect and Simulate, over a nested accordion of Colour · 5, Text contrast · 3, Heading 2, Content · 5 and Structure · 2, noted “3 clicks to see details · fix → other tab”. v4 · 4 tabs: Audit, Annotate, Screen reader and Vision, over two open issue cards with teal fix buttons, noted “1 click to filter · fix inside the card”.",
+          caption: "13 tabs → 5 categories → 3 tabs → 4 tabs, and why each one gave way"
+        }),
+
+        {
           type: "list",
-          heading: "Iteration archive — the versions I threw away",
+          heading: "What each version cost the designer",
           items: [
             { text: "v1 · 13 tabs — one tab, one scope bar and one Run button per check. Thrown away: complete, but cluttered and too many clicks" },
             { text: "v2 · 5 categories — grouped tabs, chosen over a side rail and a dashboard. Thrown away: still 13 tools and 13 Run buttons underneath" },
             { text: "v3 · 3 tabs (Check, Inspect, Simulate) — organised around jobs, one Check button. Thrown away: issues three clicks deep in nested accordions, and fixes sent you to another tab" },
-            { text: "v4 · 4 tabs (Audit, Annotate, Screen reader, Vision) — flat open cards, fixes in the card. Kept" },
-            { text: "Colour swatches inside buttons — “I can't see the swatch in the button.” Thrown away for neutral one-line rows, each swatch with a light inner ring and a dark outer ring so any colour stays visible" }
+            { text: "v4 · 4 tabs (Audit, Annotate, Screen reader, Vision) — flat open cards, fixes in the card. Kept" }
           ]
+        },
+
+        {
+          type: "text",
+          label: "ITERATION · SWATCHES",
+          heading: "A swatch inside the button → a row you can read",
+          body:
+            "Every fix button started with its colour swatch drawn inside the button itself. Testing turned up the one line I kept coming back to: “I can't see the swatch in the button.” The chip was competing with its own label for the same few pixels. Rather than restyle the chip, I moved it out of the target: each fix is now a neutral one-line row, every swatch drawn with a light inner ring and a dark outer ring so the colour stays visible against either background."
         },
 
         {
@@ -1105,7 +1118,7 @@
           label: "UI SYSTEM",
           heading: "A panel that feels like Figma and passes its own audit",
           body:
-            "The UI is built on shadcn/ui and Radix primitives, with a Theme variable collection in Figma holding Light and Dark modes, so all 11 screens exist in both themes from the same tokens. The panel borrows Figma's own patterns (tab bar, segmented chips, a panel that follows the selection) so designers already know how to use it."
+            "The UI is built on shadcn/ui and Radix primitives, with a Theme variable collection in Figma holding Light and Dark modes, so all 11 screens exist in both themes from the same tokens. The panel borrows Figma's own type scale rather than inventing one, so it sits beside the canvas without a visual jump; the plugin refuses anything smaller than 12px of text and every issue card runs at a 150% line height so a long list stays readable. Spacing is one scale across cards, rows and controls — the 24px minimum target and the padding around each input are steps on that same scale, which is why four different tabs read as one panel. The panel also borrows Figma's own patterns (tab bar, segmented chips, a panel that follows the selection) so designers already know how to use it."
         },
 
         {
@@ -1148,6 +1161,14 @@
 
         /* ── 9 · REFLECTION AND FUTURE SCOPE ──────────────────────────── */
         {
+          type: "text",
+          label: "REFLECTION",
+          heading: "What I'd do differently, and what I'd keep",
+          body:
+            "The version I'm least happy about is the one that did the most: 13 tabs, every check reachable, and testers still calling it cluttered. I had confused covering the standard with helping the person using it, and watching someone click through it was the only thing that showed me. If I started again I'd change the order — settle what the designer is actually trying to do before writing a single check, because four tabs came from that question and no feature I added later came close. What I'd keep is the habit of putting every claim on screen where it can be tested: the audit states what it can't check, the contrast fix uses the file's own colours instead of a convenient hex, and the screen reader shows the real reading order rather than promising it works. AI got me to a tested plugin in 15 days, but none of those calls came from the model."
+        },
+
+        {
           type: "list",
           heading: "What I learned",
           items: [
@@ -1163,6 +1184,19 @@
           flush: "1",
           body:
             "Each next step comes from a gap the current version leaves: designers work in component variants and colour modes, so the audit should check every variant and mode at once, not one frame at a time; mobile designers need to see iOS Dynamic Type and Android text scaling, not just a minimum font size; and developers building native apps should get SwiftUI and Jetpack Compose snippets alongside HTML."
+        },
+
+        /* Closing CTA: the walkthrough ends by handing the reader the real
+           prototype, sitting directly above the footer that points at it.
+           Keeping it out of the front half is also what lets the first
+           Decision Story land inside the guide's Scan Audit "first half"
+           check — the cover already serves Stage 8.2's visual tease. */
+        {
+          type: "figma",
+          url: "https://www.figma.com/proto/jFU8GnV1TyqGUaZCWz5hph/Accessly-Lens?node-id=1-18&viewport=145%2C301%2C0.51&t=hBJND2oeNij9vXtI-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1",
+          title: "Try the journey yourself",
+          caption:
+            "The real plugin code running against a sample Figma file: run an audit, apply a fix and watch the canvas change, play the screen reader, or switch to dark mode. Alt+click selects a parent layer. A wide screen gives the best experience."
         }
       ],
 
