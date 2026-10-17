@@ -40,6 +40,7 @@ The HUD at the bottom shows speed, distance and the current exit, with buttons f
 1. **Accessly: 3 hours to 30 seconds.** An accessibility audit platform that replaced two 30-column spreadsheets. It became a SaaS used by 100+ paying customers.
 2. **Accessly Extension: 3 hours to 3 seconds.** A DevTools extension that tests logged-in pages a crawler can't reach and exports issues straight into Accessly.
 3. **Accessly Lens.** A Figma plugin that audits a frame against WCAG 2.2 and fixes most issues in one click using the file's own colours.
+4. **Accessly Components: accessible by default.** The Design System behind all three: 45 components and 849 variants where focus, error and disabled are designed states, built from small swappable parts with colour and spacing variables in Light and Dark.
 
 Each one opens as a full page over the road (`index.html#case-<id>`), with decisions, before/after comparisons, metrics and links to the live products. Visuals are NDA-safe.
 
