@@ -1387,7 +1387,7 @@ window.CASE_STUDIES = {
    "team": "CEO as product owner, 3 developers growing to 20",
    "platform": "Figma library: 45 components, Light and Dark",
    "color": "#998AFB",
-   "summary": "We audit other companies’ products for accessibility, so ours had to pass the same audit. I built Accessly Components, a Design System where every state a keyboard or screen-reader user can reach is a designed variant: 45 components, 849 variants, 65 colour tokens in two modes and an annotation kit that puts the accessibility spec on the canvas.",
+   "summary": "We audit other companies’ products for accessibility, so ours had to pass the same audit. I built Accessly Components, a Design System where every state a keyboard or screen-reader user can reach is a designed variant: 45 components, 849 variants, 65 colour tokens in two modes and an annotation kit that puts the accessibility spec on the canvas. Large components are built from small ones, with swappable icons and slots, so a fix in one place reaches everywhere.",
    "metric": {
     "value": "849",
     "label": "variants across 45 components"
@@ -1528,6 +1528,15 @@ window.CASE_STUDIES = {
      "result": "Roles, labels, focus order and landmarks travel with the design into handoff."
     },
     {
+     "type": "image",
+     "heading": "",
+     "body": "",
+     "src": "assets/img/a11y-select-annotated.webp",
+     "size": "panel",
+     "caption": "The Select spec on the canvas: combobox, listbox, option and group roles, and an accessible name for the clear-tags icon.",
+     "alt": "Select dropdowns annotated with role combobox, listbox with aria-multiselectable, option with aria-selected, group with aria-label, and role img on the clear icon."
+    },
+    {
      "type": "decision",
      "title": "Decision 4 · Why “compact” stops at 24px",
      "lead": "Dense tables needed smaller buttons. WCAG 2.2 sets the floor for how small.",
@@ -1536,6 +1545,42 @@ window.CASE_STUDIES = {
      "tradeoff": "Smaller saves space, but below 24 × 24px a target fails WCAG 2.2 (2.5.8) and gets hard to hit. Density had to stop where reachability starts.",
      "action": "I added spacing=compact at 24px next to default at 32px, for labelled and icon-only buttons, with the same property name across components.",
      "result": "Tables get the density they need without failing the audit we run for clients."
+    },
+    {
+     "type": "decision",
+     "title": "Decision 5 · Why big components are built from small ones, with a Placeholder you can swap",
+     "lead": "Accessly needed menus, selects, nav bars and dialogs, and each one repeats the same parts: an input, a button, an icon, a tag.",
+     "before": "Large components were drawn as one piece, so a fix to Button had to be repeated inside every menu and toolbar that contained a button.",
+     "options": "Draw each large component on its own, or build it from instances of the smaller components, with swap properties and a Placeholder for the parts that change.",
+     "tradeoff": "One-piece components are quicker to draw and easier to read in the layers panel. Nesting takes longer to set up and needs care with property names, but every fix flows upward.",
+     "action": "I built the large components out of the small ones. Select is Input, Button, Menu and Tag Group. Top Navbar is Logo, Input, Toggle, Button Menu and Avatar. Icons are 154 components, swapped into Button through iconBefore, iconAfter and iconOnly. Where content varies, a Placeholder or Slot component holds the space, so a designer swaps in any component without detaching.",
+     "result": "Focus, colour and spacing fixes made in Button or Input reach every Select, menu and nav bar that uses them. Designers swap content instead of detaching, so instances stay connected to the library."
+    },
+    {
+     "type": "gallery",
+     "heading": "",
+     "items": [
+      {
+       "src": "assets/img/a11y-select.webp",
+       "alt": "Select component in 32 variants: default, hover, focus, open, multi-select with tags, selected, error and disabled."
+      },
+      {
+       "src": "assets/img/a11y-top-navbar.webp",
+       "alt": "Top Navbar built from Logo, Toggle, icon buttons and Avatar, with the help icon annotated as role img with a title."
+      }
+     ],
+     "caption": "Select (32 variants) is built from Input, Button, Menu and Tag Group. Top Navbar reuses Logo, Toggle, icon buttons and Avatar, and carries its own accessibility notes.",
+     "cols": 1
+    },
+    {
+     "type": "metrics",
+     "heading": "What the library holds",
+    "items": [
+     {"value": "45", "label": "components, each on its own page"},
+     {"value": "849", "label": "variants, including focus, error and disabled"},
+     {"value": "154", "label": "icon components, swappable in any slot"},
+     {"value": "99.7%", "label": "of fills bound to colour variables (364 of 365 checked)"}
+    ]
     },
     {
      "type": "list",
@@ -1571,6 +1616,22 @@ window.CASE_STUDIES = {
      ],
      "caption": "The Purple ramp mirrored across modes, and the type scale in Light and Dark.",
      "cols": 3
+    },
+    {
+     "type": "gallery",
+     "heading": "Spacing and icons, ready to drop in",
+     "items": [
+      {
+       "src": "assets/img/a11y-spacing.webp",
+       "alt": "Spacing tokens from 0 to 20, in rem and px, from 0 to 80px."
+      },
+      {
+       "src": "assets/img/a11y-icons.webp",
+       "alt": "Grid of the icon components: arrows, checkboxes, actions, status and product icons."
+      }
+     ],
+     "caption": "14 spacing variables, in rem for developers and px for designers. 154 icons, each a component, so swapping one is a property change.",
+     "cols": 2
     },
     {
      "type": "list",
