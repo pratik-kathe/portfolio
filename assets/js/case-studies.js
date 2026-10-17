@@ -1375,6 +1375,220 @@ window.CASE_STUDIES = {
     }
    ],
    "headline": "Catching WCAG issues while the screen is still a design — Accessly Lens for Figma"
+  },
+  {
+   "id": "a11y-components",
+   "title": "A11yComponents: accessible by default",
+   "client": "BarrierBreak · Design System",
+   "category": "Design System",
+   "year": "",
+   "role": "Sole designer of the Design System",
+   "duration": "Built alongside Accessly, from v1 to the client version",
+   "team": "CEO as product owner, 3 developers growing to 20",
+   "platform": "Figma library: 45 components, Light and Dark",
+   "color": "#998AFB",
+   "summary": "We audit other companies’ products for accessibility, so ours had to pass the same audit. I built A11yComponents, a Design System where every state a keyboard or screen-reader user can reach is a designed variant: 45 components, 849 variants, 65 colour tokens in two modes and an annotation kit that puts the accessibility spec on the canvas.",
+   "metric": {
+    "value": "849",
+    "label": "variants across 45 components"
+   },
+   "lap": "45 components · 65 tokens × 2 modes · 13 annotation kits",
+   "cover": "assets/img/a11y-shot.webp?v=1",
+   "hero": "assets/img/a11y-cover.webp",
+   "sections": [
+    {
+     "type": "text",
+     "kicker": "The moment",
+     "heading": "An accessibility company can’t ship a missing focus state",
+     "body": "BarrierBreak’s whole job is finding accessibility issues in other people’s products. When we started building our own, Accessly, the bar was simple: it had to pass the audit we run for clients.\n\nThat meant focus, error, disabled and screen-reader behaviour couldn’t be something a developer remembered at the end. It had to be in the components before anyone built a screen."
+    },
+    {
+     "type": "image",
+     "heading": "",
+     "body": "",
+     "src": "assets/img/a11y-annotated-form.webp",
+     "caption": "A sign-up form built from the system, with its accessibility spec on the canvas: heading level, autocomplete, roles and label association.",
+     "size": "full",
+     "alt": "Create new account form with annotations: H2 heading, autocomplete email, role alert on the validation message, role img with title on icons, and an explicit label for the checkbox."
+    },
+    {
+     "type": "text",
+     "kicker": "The problem",
+     "heading": "Accessibility fixed screen by screen is paid for again on every screen",
+     "body": "When accessibility lives in QA, every fix lands after the screen is built, and every screen that copied it carries the same bug. For a product sold to accessibility-conscious clients, each of those bugs is also a credibility problem.\n\nThe product was growing fast: 300+ screens across two products, and a team going from 3 developers to 20. One designer couldn’t review every screen. The library had to carry the rules instead."
+    },
+    {
+     "type": "list",
+     "heading": "The project at a glance",
+     "items": [
+      "Product: A11yComponents, the Design System behind Accessly Internal, Accessly and the Accessly extension.",
+      "Scope: foundations (colour, type, spacing, grid, elevation, icons), 45 components and a 13-part accessibility annotation kit.",
+      "Users: designers building screens, and developers building from them without an accessibility specialist beside them.",
+      "Constraints: WCAG 2.2 AA as the floor, Light and Dark from one source, and naming developers could map straight to code."
+     ]
+    },
+    {
+     "type": "text",
+     "kicker": "Solution journey",
+     "heading": "A sign-up form, built and handed off without an accessibility review",
+     "body": "A designer has a sign-up form to ship this sprint. They know Figma well; they don’t know WCAG by number. Here’s what the system does for them along the way."
+    },
+    {
+     "type": "image",
+     "heading": "Step 1 · “Did I design every state?”",
+     "body": "They don’t have to remember. Input already holds default, hover, focus, typing, filled, disabled and invalid, with before and after slots for icons. Focus and invalid are variants in the panel, so they can’t be skipped.",
+     "src": "assets/img/a11y-input.webp",
+     "caption": "Input: every reachable state is a variant.",
+     "size": "full",
+     "alt": "Input component variants across default, hover, focus, typing, filled, disabled and invalid states."
+    },
+    {
+     "type": "image",
+     "heading": "Step 2 · “Will the error make sense without colour?”",
+     "body": "The Message component pairs colour with an icon and words, for both valid and error states, so the meaning never depends on red or green alone (WCAG 1.4.1). The same form is shown empty, valid and with an error.",
+     "src": "assets/img/a11y-form-states.webp",
+     "caption": "One form, three states, all from the same components.",
+     "size": "panel",
+     "alt": "Create new account form shown empty, with a valid password message, and with an email error saying the email is already taken.",
+     "notes": [
+      {
+       "x": 14,
+       "y": 52.3,
+       "side": "l",
+       "text": "Valid: a check icon and words, not just green."
+      },
+      {
+       "x": 14,
+       "y": 79.6,
+       "side": "l",
+       "text": "Error: an icon, words and a red border, so colour is never the only signal."
+      }
+     ]
+    },
+    {
+     "type": "image",
+     "heading": "Step 3 · “How does the developer know what to build?”",
+     "body": "They drag annotations from the kit onto the frame: label association, the action button’s accessible name, the disabled attribute. The developer reads the spec where they already look, on the design.",
+     "src": "assets/img/a11y-annotated-input.webp",
+     "caption": "Annotations from the kit, placed on an Input.",
+     "size": "full",
+     "alt": "Input states annotated: explicit label association, contains action button, role img with title, and disabled attribute."
+    },
+    {
+     "type": "decision",
+     "title": "Decision 1 · Why focus became a state in every component, drawn from one Focus Ring",
+     "lead": "Focus is the state keyboard users depend on most, and the one designers forget most.",
+     "before": "Focus outlines were drawn by hand where someone remembered them, so colour, offset and width varied.",
+     "options": "An effect style, a stroke set per component, or one Focus Ring component nested in every interactive variant.",
+     "tradeoff": "An effect style is quick but can’t hold offset and radius. A stroke per component is precise but means 45 copies to keep in sync. One component costs more setup and gives one source of truth.",
+     "action": "I built a 2px Focus Ring component and added a focus state to Button, Input, Select, Checkbox, Radio Button, Range, Tabs, Tag and more. Tag even has its own focus state for the remove icon.",
+     "result": "Focus looks the same everywhere, and changing it is one edit, not 45."
+    },
+    {
+     "type": "image",
+     "heading": "",
+     "body": "",
+     "src": "assets/img/a11y-button.webp",
+     "caption": "Button: 5 appearances × default, hover, pressed, focus, selected and disabled, in two sizes, with and without a label. 120 variants.",
+     "size": "panel",
+     "alt": "Grid of 120 button variants across filled, outline, text, warning and danger appearances.",
+     "notes": [
+      {
+       "x": 58,
+       "y": 19,
+       "side": "c",
+       "text": "Focus is its own column, not an afterthought."
+      },
+      {
+       "x": 90,
+       "y": 19,
+       "side": "c",
+       "text": "Disabled is designed too, so it never gets improvised."
+      }
+     ]
+    },
+    {
+     "type": "decision",
+     "title": "Decision 2 · How I got Dark mode from one palette instead of two",
+     "lead": "Dark mode was coming, and two palettes would have meant making every colour decision twice.",
+     "before": "Colours were picked per screen, so a theme would have meant repainting.",
+     "options": "A separate dark palette with full control, or mirroring each ramp so the light end of Light mode becomes the dark end of Dark mode.",
+     "tradeoff": "A separate palette is flexible but doubles maintenance and lets the two themes drift. Mirroring keeps every contrast pair the same distance apart in both modes, at the cost of a few shades that need hand-tuning.",
+     "action": "I built six ramps (Purple, Red, Yellow, Green, Blue, Neutral) from 50 to 950 and mirrored them: Purple/600 #5928ED in Light holds #998AFB in Dark. 65 variables, two modes, and every component bound to them.",
+     "result": "Switching the mode re-themes a whole screen with no detached fills. The primary purple measures 7.1:1 on white."
+    },
+    {
+     "type": "decision",
+     "title": "Decision 3 · Why the accessibility spec lives on the canvas, not in a document",
+     "lead": "A spec that sits in another file is a spec that drifts from the design.",
+     "before": "Accessibility notes were written separately from the frames they described.",
+     "options": "A thorough written spec per feature, or annotations placed directly on the design.",
+     "tradeoff": "A document can say more, but nobody opens it at build time. Annotations say less and get read every time, because they’re on the thing being built.",
+     "action": "I built a 13-part annotation kit: Templates, Elements, Arrows, Headings, Links, Buttons, Multimedia, Labels, Responsive, Landmarks, Skip Link, States and Order.",
+     "result": "Roles, labels, focus order and landmarks travel with the design into handoff."
+    },
+    {
+     "type": "decision",
+     "title": "Decision 4 · Why “compact” stops at 24px",
+     "lead": "Dense tables needed smaller buttons. WCAG 2.2 sets the floor for how small.",
+     "before": "One button height, 32px, which made toolbars and table rows feel heavy.",
+     "options": "Shrink buttons freely for density, or add a compact size that stops at the target-size minimum.",
+     "tradeoff": "Smaller saves space, but below 24 × 24px a target fails WCAG 2.2 (2.5.8) and gets hard to hit. Density had to stop where reachability starts.",
+     "action": "I added spacing=compact at 24px next to default at 32px, for labelled and icon-only buttons, with the same property name across components.",
+     "result": "Tables get the density they need without failing the audit we run for clients."
+    },
+    {
+     "type": "list",
+     "heading": "Iteration · auditing my own system",
+     "items": [
+      "Placeholders: 22 component sets still had Figma’s default “Property 1” name. Renamed, and Progress Bar now says what it means: state = default | complete.",
+      "A duplicated name: text-2xl Medium was saved as text-2xl/font-normal. Fixed, so the scale reads cleanly in the picker.",
+      "Contrast checked against usage: green body text uses Green/900, which passes. Lighter greens are kept for icons and fills, where 3:1 applies."
+     ]
+    },
+    {
+     "type": "text",
+     "kicker": "UI system",
+     "heading": "Named like code, checked like an audit",
+     "body": "Type is Poppins in 8 sizes and 3 weights, 24 styles named on a t-shirt scale (text-sm 12px to text-5xl 40px), so designers and developers say the same word. Spacing is 14 tokens on a 4px base, from 4 to 80px.\n\nComponent properties read like code props: isDisabled, isInvalid, isSelected, hasTabs, spacing, state. A developer can map a variant to a prop without asking."
+    },
+    {
+     "type": "gallery",
+     "heading": "Both themes, one set of tokens",
+     "items": [
+      {
+       "src": "assets/img/a11y-colors-purple.webp",
+       "alt": "Purple ramp from 50 to 950 with Light and Dark values side by side"
+      },
+      {
+       "src": "assets/img/a11y-type-light.webp",
+       "alt": "Type scale in Light mode"
+      },
+      {
+       "src": "assets/img/a11y-type-dark.webp",
+       "alt": "Type scale in Dark mode"
+      }
+     ],
+     "caption": "The Purple ramp mirrored across modes, and the type scale in Light and Dark.",
+     "cols": 3
+    },
+    {
+     "type": "list",
+     "heading": "What I learned",
+     "items": [
+      "Accessibility scales when it’s a variant, not a reminder. Once focus sat in the properties panel, nobody had to be told to design it.",
+      "Naming is an interface. Props that match code did more for handoff than any spec page.",
+      "Build the semantic layer first. Components point at raw shades like Purple/600, so a rebrand still touches many bindings."
+     ]
+    },
+    {
+     "type": "text",
+     "kicker": "Future scope",
+     "heading": "Next: semantic tokens, Code Connect and a real Table",
+     "body": "A semantic layer (surface, text/danger, border/focus) on top of the primitives, so themes and rebrands change one layer.\n\nCode Connect, so every component opens its real code. And a full Table component with sorting, keyboard navigation and proper header semantics, which is still built from frames today."
+    }
+   ],
+   "headline": "Making accessibility the default, not a ticket — 45 components where every reachable state is designed"
   }
  ]
 };
