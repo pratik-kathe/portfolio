@@ -1377,8 +1377,8 @@ window.CASE_STUDIES = {
    "headline": "Catching WCAG issues while the screen is still a design — Accessly Lens for Figma"
   },
   {
-   "id": "a11y-components",
-   "title": "A11yComponents: accessible by default",
+   "id": "accessly-components",
+   "title": "Accessly Components: accessible by default",
    "client": "BarrierBreak · Design System",
    "category": "Design System",
    "year": "",
@@ -1387,14 +1387,14 @@ window.CASE_STUDIES = {
    "team": "CEO as product owner, 3 developers growing to 20",
    "platform": "Figma library: 45 components, Light and Dark",
    "color": "#998AFB",
-   "summary": "We audit other companies’ products for accessibility, so ours had to pass the same audit. I built A11yComponents, a Design System where every state a keyboard or screen-reader user can reach is a designed variant: 45 components, 849 variants, 65 colour tokens in two modes and an annotation kit that puts the accessibility spec on the canvas.",
+   "summary": "We audit other companies’ products for accessibility, so ours had to pass the same audit. I built Accessly Components, a Design System where every state a keyboard or screen-reader user can reach is a designed variant: 45 components, 849 variants, 65 colour tokens in two modes and an annotation kit that puts the accessibility spec on the canvas.",
    "metric": {
     "value": "849",
     "label": "variants across 45 components"
    },
    "lap": "45 components · 65 tokens × 2 modes · 13 annotation kits",
-   "cover": "assets/img/a11y-shot.webp?v=1",
-   "hero": "assets/img/a11y-cover.webp",
+   "cover": "assets/img/a11y-shot.webp?v=2",
+   "hero": "assets/img/a11y-cover.webp?v=2",
    "sections": [
     {
      "type": "text",
@@ -1421,7 +1421,7 @@ window.CASE_STUDIES = {
      "type": "list",
      "heading": "The project at a glance",
      "items": [
-      "Product: A11yComponents, the Design System behind Accessly Internal, Accessly and the Accessly extension.",
+      "Product: Accessly Components, the Design System behind Accessly Internal, Accessly and the Accessly extension.",
       "Scope: foundations (colour, type, spacing, grid, elevation, icons), 45 components and a 13-part accessibility annotation kit.",
       "Users: designers building screens, and developers building from them without an accessibility specialist beside them.",
       "Constraints: WCAG 2.2 AA as the floor, Light and Dark from one source, and naming developers could map straight to code."
