@@ -2,7 +2,7 @@
 (() => {
 
 /* ============ CONFIG: contact links, chapters, route, toolkit, dashboard ============ */
-const CFG = { email:'kathepratik29@gmail.com', linkedin:'https://www.linkedin.com/in/pratik-kathe-86763b1b9/', resume:'https://drive.google.com/file/d/10RfNOyI53MfQLk3_Z3cHW1KXzABaLdvg/view?usp=sharing' };
+const CFG = { email:'kathepratik29@gmail.com', linkedin:'https://www.linkedin.com/in/pratik-kathe-86763b1b9/', resume:'https://drive.google.com/file/d/1OFUPWHKLve9S3miJKZAtej3Qni5cs2Tk/view?usp=sharing' };
 const CH = [
   {id:'ignition', exit:'START', name:'Ignition', sub:'Hello'},
   {id:'origins', exit:'EXIT 01', name:'Origins', sub:'Where it started'},
