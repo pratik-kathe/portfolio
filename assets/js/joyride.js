@@ -2,7 +2,7 @@
 (() => {
 
 /* ============ CONFIG: contact links, chapters, route, toolkit, dashboard ============ */
-const CFG = { email:'kathepratik29@gmail.com', linkedin:'https://www.linkedin.com/in/pratik-kathe-86763b1b9/', resume:'Pratik-Kathe-Resume.pdf' };
+const CFG = { email:'kathepratik29@gmail.com', linkedin:'https://www.linkedin.com/in/pratik-kathe', resume:'Pratik-Kathe-Resume.pdf' };
 const CH = [
   {id:'ignition', exit:'START', name:'Ignition', sub:'Hello'},
   {id:'origins', exit:'EXIT 01', name:'Origins', sub:'Where it started'},
