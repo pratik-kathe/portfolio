@@ -29,8 +29,8 @@ const TOOLS = [
 ];
 const GAUGES = [
   {n:'Years designing', max:10, v:4.5, unit:'yrs', step:1, dec:1},
-  {n:'Screens shipped', max:400, v:300, unit:'+', step:100},
-  {n:'Paying customers (Accessly)', max:150, v:100, unit:'+', step:50}
+  {n:'Screens shipped', max:6000, v:5000, unit:'+', step:1000},
+  {n:'Paying customers (Accessly)', max:2500, v:2000, unit:'+', step:500}
 ];
 
 const CARS = [
