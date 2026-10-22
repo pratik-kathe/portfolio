@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sitare prototype · Pratik Kathe</title>
+<meta name="robots" content="noindex">
+<style>
+html,body{margin:0;height:100%;background:#0c0a1c;overflow:hidden}
+.wrap{height:100%;display:grid;place-items:center}
+.phone{border-radius:13%/6%;padding:2.6%;background:linear-gradient(160deg,#2a2650,#121027 60%);border:1px solid #29254d;box-sizing:border-box}
+#p{position:relative;overflow:hidden;width:100%;border-radius:11%/5%;background:#000}
+.load{position:absolute;inset:0;display:grid;place-items:center;color:#9a95c6;font:500 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="phone" id="ph"><div id="p"><div class="load">Loading…</div></div></div></div>
+<script src="../player.js?v=1"></script>
+<script>
+(function () {
+  const ph = document.getElementById('ph');
+  const size = () => { const h = innerHeight - 8, w = innerWidth - 8; const pw = Math.min(w, h * 393 / 852 / 1.052); ph.style.width = pw + 'px'; };
+  size(); addEventListener('resize', size);
+  const atlases = [0, 1, 2, 3, 4, 5, 6].map(i => 'si_atlas' + i + '.webp');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SPLASH = '32:31912';
+  const TOUR = [
+    { tap: '32:31069', wait: 4300 }, { tap: '32:31484', wait: 2300 }, { tap: '32:32419', wait: 2300 },
+    { tap: '32:20911', wait: 2500 }, { tap: '32:20971', wait: 2300 }, { tap: '32:21029', wait: 2300 },
+    { tap: '32:29141', wait: 4400 }, { tap: '32:29233', wait: 2300 }, { tap: '32:29003', wait: 2300 },
+    { tap: '32:22044', wait: 2300 }, { wait: 5000 }
+  ];
+  Promise.all([fetch('si_runtime.json').then(r => r.json()), ...atlases.map(u => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = u; }))]).then(([data]) => {
+    const P = new ProtoPlayer(document.getElementById('p'), data, { start: SPLASH, device: [393, 852], atlases, keys: false, wheel: false });
+    if (!reduce) P.autopilot(TOUR, SPLASH);
+    document.getElementById('p').addEventListener('pointerdown', () => P.stopPilot());
+    document.addEventListener('visibilitychange', () => document.hidden ? P.pause() : P.resume());
+  });
+})();
+</script>
+</body>
+</html>

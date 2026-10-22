@@ -1,6 +1,6 @@
 /* Case studies shown on the site, in order. Each project has card fields, a header image,
    and a list of sections. Section types: text, image, gallery, beforeafter, metrics,
-   process, quote, list, decision, link. Image sections can carry `notes` (numbered pins on the
+   process, quote, list, decision, link, video, embed. Image sections can carry `notes` (numbered pins on the
    screenshot: x/y in % of the image, side l|r|t|b|c places the pin
    left of, right of, above, below, or centred on that point). Images live in assets/img/. */
 window.CASE_STUDIES = {
@@ -1650,6 +1650,284 @@ window.CASE_STUDIES = {
     }
    ],
    "headline": "Making accessibility the default, not a ticket — 45 components where every reachable state is designed"
-  }
+  },
+  {
+  "id": "fuzzybox",
+  "title": "FuzzyBox: a website cut like a film",
+  "headline": "A media studio site where every scroll is a camera move and every component runs on its own clock",
+  "client": "FuzzyBox Media",
+  "category": "Motion design",
+  "role": "UI and motion design",
+  "platform": "Website, desktop and mobile",
+  "color": "#FF3B30",
+  "summary": "FuzzyBox Media makes films, reels and branded content, so the website had to feel like their work. I designed it as one long take: the page never scrolls, a fixed 900px window moves over the folds like a camera, and the hero, gallery, creators and contact form all keep moving while you watch. The whole thing was prototyped in Figma with Smart Animate, and it plays below.",
+  "metric": {
+   "value": "669",
+   "label": "Smart Animate transitions, prototyped in Figma"
+  },
+  "lap": "90 frames · 34 live components · 6 timing curves",
+  "cover": "assets/img/fuzzybox-shot.webp?v=1",
+  "hero": "assets/img/fuzzybox-cover.webp",
+  "sections": [
+   {
+    "type": "text",
+    "kicker": "The idea",
+    "heading": "Scrolling should feel like a cut, not a page jump",
+    "body": "A studio that sells moving pictures can't have a website that sits still. FuzzyBox shoots films, reels and branded content, and the site needed to show that before anyone read a word.\n\nSo the site is one long take. A 1440 by 2700 canvas slides behind a fixed 900px window. Each press of the arrow keys, each scroll and each swipe is a 0.8 second ease-in-out camera move to the next fold, while the elements inside the fold arrive on their own timing."
+   },
+   {
+    "type": "embed",
+    "heading": "Play the prototype",
+    "body": "This is the Figma prototype itself, rebuilt to run in the browser with the same timings, springs and triggers. It plays on its own. Click it to take the wheel, then scroll or use the arrow keys to move between folds.",
+    "src": "motion/fuzzybox/play.html",
+    "ratio": "16/10",
+    "title": "FuzzyBox website prototype",
+    "caption": "Live prototype. Intro on Gentle and Bouncy springs, then 0.8s ease-in-out cuts between the ten folds."
+   },
+   {
+    "type": "metrics",
+    "heading": "The prototype in numbers",
+    "items": [
+     {
+      "value": "669",
+      "label": "Smart Animate transitions"
+     },
+     {
+      "value": "463",
+      "label": "timed triggers"
+     },
+     {
+      "value": "336",
+      "label": "hover states"
+     },
+     {
+      "value": "249",
+      "label": "component variants"
+     }
+    ]
+   },
+   {
+    "type": "gallery",
+    "heading": "Ten folds, one take",
+    "cols": 3,
+    "items": [
+     {
+      "src": "assets/img/fb-fold-hero.webp",
+      "alt": "Hero fold: Live from FuzzyBox Media, with a 3D character on a red sofa"
+     },
+     {
+      "src": "assets/img/fb-fold-stories.webp",
+      "alt": "Stories fold: We live stories, on hot pink with a column of piano keys"
+     },
+     {
+      "src": "assets/img/fb-fold-viewfinder.webp",
+      "alt": "Viewfinder fold: a camera frame with REC, battery and a running timecode"
+     },
+     {
+      "src": "assets/img/fb-fold-product.webp",
+      "alt": "Product fold: a mosaic of black and white photos around the word Product"
+     },
+     {
+      "src": "assets/img/fb-fold-gallery.webp",
+      "alt": "Gallery fold: video thumbnails with titles and category tags"
+     },
+     {
+      "src": "assets/img/fb-fold-gossip.webp",
+      "alt": "Gossip Gazette fold on orange, with two columns of images"
+     },
+     {
+      "src": "assets/img/fb-fold-creators.webp",
+      "alt": "Creators fold: a strip of creator portraits and an audio level meter"
+     },
+     {
+      "src": "assets/img/fb-fold-brands.webp",
+      "alt": "Brands fold: two film strips of brand logos crossing each other"
+     },
+     {
+      "src": "assets/img/fb-fold-collaborate.webp",
+      "alt": "Collaborate fold: Just send it, a contact form written as a sentence"
+     }
+    ],
+    "caption": "Each fold has its own colour and its own loop, so the site changes mood with every cut."
+   },
+   {
+    "type": "text",
+    "kicker": "The loops",
+    "heading": "Every moving part keeps its own time",
+    "body": "Nothing waits for the visitor. Each fold carries interactive components that run on timers, so a fold that sits on screen still moves.\n\nI matched the curve to what the thing is. Physical objects get springs, anything that should feel like film running through a gate gets linear timing, and the cuts between folds get ease-in-out so the camera never jolts."
+   },
+   {
+    "type": "list",
+    "heading": "The component inventory",
+    "items": [
+     "Lights, camera, create: the hero clapper, spotlight and projector trade places every 0.6s on a 1.25s Slow spring while the script line recolours word by word.",
+     "Piano keys: 14 hover states on a 0.74s Quick spring, so running the cursor down the column plays it.",
+     "Social dock: icons swell on hover over 1.25s, and the FUuN / BORE switch flips the whole site palette on a 1.02s Gentle spring.",
+     "Film cut: two strips of brand logos run in opposite directions, 8s linear per pass.",
+     "Gossip columns and creator reel: image columns drift up and down at 2s linear steps, so no step ever settles.",
+     "Level meter: 30 variants at 0.8s linear under Creators.",
+     "Typed form: the contact form types its own copy one 0.2s variant per letter, with a blinking cursor."
+    ]
+   },
+   {
+    "type": "video",
+    "heading": "Desktop, start to finish",
+    "body": "The full scroll from the intro to the footer, recorded from the live prototype.",
+    "src": "assets/video/fuzzybox-desktop.mp4",
+    "poster": "assets/video/fuzzybox-desktop-poster.webp",
+    "caption": "53 seconds, every fold in order.",
+    "alt": "Screen recording of the FuzzyBox website prototype scrolling through all folds"
+   },
+   {
+    "type": "video",
+    "size": "panel",
+    "heading": "The same reel, 360px wide",
+    "body": "The mobile flow keeps the cut-based scroll and re-times the loops for a narrow frame. Swipes replace the arrow keys, the gallery steps every 0.1 to 0.2 seconds with 0.3 second smart animate, and the film strip and columns keep their linear clocks.",
+    "src": "assets/video/fuzzybox-mobile.mp4",
+    "poster": "assets/video/fuzzybox-mobile-poster.webp",
+    "alt": "Screen recording of the FuzzyBox mobile prototype"
+   },
+   {
+    "type": "text",
+    "kicker": "Timing",
+    "heading": "Six curves run the whole site",
+    "body": "Slow spring at 1.25s is used 237 times, mostly for icon swells and the hero illustration. Quick spring at 0.74s drives the piano keys. Linear carries the loops and tickers, ease-in-out at 0.8s carries the cuts between folds, and Gentle and Bouncy springs land the intro.\n\nKeeping it to six curves is what makes 669 transitions feel like one piece of film rather than 669 separate effects."
+   },
+   {
+    "type": "link",
+    "heading": "See every loop running",
+    "body": "The full motion study has the live prototype, each component running on its own, the six timing curves and the mobile flow, all in the browser.",
+    "url": "https://pratik-kathe.github.io/portfolio/motion/fuzzybox/",
+    "label": "Open the motion study"
+   }
+  ]
+ },
+  {
+  "id": "sitare",
+  "title": "Sitare: an app that moves like the night sky",
+  "headline": "An astrology app for customers, matchmaking and astrologers, with 162 screens wired into one tappable prototype",
+  "client": "Sitare",
+  "category": "Motion design",
+  "role": "UI and motion design",
+  "platform": "iOS app: customer, Soul Sitare and astrologer",
+  "color": "#D9B76C",
+  "summary": "Sitare connects people with astrologers, kundli reports and compatible matches. I designed the UI and motion for three apps in one: the customer app, Soul Sitare for matchmaking, and the astrologer's own app. Every screen is wired in a single Figma prototype, with smart animate inside screens, slides between them and quiet timers for the moments that should play themselves.",
+  "metric": {
+   "value": "162",
+   "label": "screens in one tappable prototype"
+  },
+  "lap": "1,161 tap targets · 504 variant swaps · 45 timers",
+  "cover": "assets/img/sitare-shot.webp?v=1",
+  "hero": "assets/img/sitare-cover.webp",
+  "sections": [
+   {
+    "type": "text",
+    "kicker": "The idea",
+    "heading": "Calm, deep and a little bit magical",
+    "body": "Astrology is personal and a bit mysterious, so the app should feel calm rather than busy. I set it in a deep indigo night with violet for actions and a soft gold for the moments that matter, like a premium plan or a match.\n\nMotion follows the same rule. Most of the app moves in a short, quiet 0.3 seconds, and the slow springs are saved for reveals."
+   },
+   {
+    "type": "embed",
+    "size": "panel",
+    "heading": "Tap through the app",
+    "body": "This is the Figma prototype itself, rebuilt to run in the browser. It starts on the splash screen and runs a guided tour through the walkthrough, sign up and home. Tap anywhere to stop the tour and explore on your own.",
+    "src": "motion/sitare/play.html",
+    "ratio": "393/880",
+    "title": "Sitare app prototype",
+    "caption": "Live prototype. All 162 screens are wired."
+   },
+   {
+    "type": "metrics",
+    "heading": "The prototype in numbers",
+    "items": [
+     {
+      "value": "1,161",
+      "label": "tap targets wired"
+     },
+     {
+      "value": "611",
+      "label": "screen transitions"
+     },
+     {
+      "value": "504",
+      "label": "variant swaps inside screens"
+     },
+     {
+      "value": "45",
+      "label": "timed triggers"
+     }
+    ]
+   },
+   {
+    "type": "gallery",
+    "heading": "Three apps, one night sky",
+    "cols": 4,
+    "items": [
+     {
+      "src": "assets/img/si-w6.webp",
+      "alt": "Walkthrough: talk to our astrologers, with tilted astrologer portraits"
+     },
+     {
+      "src": "assets/img/si-home.webp",
+      "alt": "Customer home: today's horoscope, quick kundli and live astrologers"
+     },
+     {
+      "src": "assets/img/si-soul.webp",
+      "alt": "Soul Sitare subscription with gold Sitare Prime plan"
+     },
+     {
+      "src": "assets/img/si-match.webp",
+      "alt": "Match reveal: three matched profiles and Congratulations"
+     },
+     {
+      "src": "assets/img/si-profile.webp",
+      "alt": "Match profile with a photo carousel and details"
+     },
+     {
+      "src": "assets/img/si-astro.webp",
+      "alt": "Astrologer dashboard with an incoming chat request"
+     },
+     {
+      "src": "assets/img/si-w5.webp",
+      "alt": "Walkthrough: uncover your fortune, with a zodiac wheel"
+     }
+    ],
+    "caption": "Customer app, Soul Sitare matchmaking and the astrologer app share one set of colours, type and motion."
+   },
+   {
+    "type": "text",
+    "kicker": "Motion",
+    "heading": "Moments that play themselves",
+    "body": "Some scenes run on timers so the app feels alive without asking for a tap. On the astrologer dashboard a chat request drops in from the top after two seconds. The Soul Sitare paywall cycles its backdrop every 1.6 seconds on a 1.25 second Slow spring. Match cards reshuffle, profile photos rotate, and in a live chat the timer turns red and a low balance warning slides in.\n\nInside screens, smart animate does the work: tabs, dropdowns, toggles and the compatibility test all change in place, so you never lose your spot."
+   },
+   {
+    "type": "list",
+    "heading": "The transition grammar",
+    "items": [
+     "Smart animate, 0.3s ease-in-out: 353 transitions, for anything that changes inside a screen.",
+     "Slide in and slide out, 0.3s: 142 transitions, for moving forward and back between screens.",
+     "Move in and move out, 0.3s: 52 transitions, for sheets and overlays that sit on top.",
+     "Slow spring, 1.25s: 50 transitions, saved for reveals like the paywall, matches and the compatibility test.",
+     "Back always reverses the transition that brought you in, so the way out mirrors the way in."
+    ]
+   },
+   {
+    "type": "video",
+    "size": "panel",
+    "heading": "The tour, recorded",
+    "body": "Onboarding, sign up, home, the Soul Sitare paywall, the match reveal, the profile carousel and the compatibility test, recorded from the live prototype.",
+    "src": "assets/video/sitare-tour.mp4",
+    "poster": "assets/video/sitare-tour-poster.webp",
+    "alt": "Screen recording of the Sitare app prototype"
+   },
+   {
+    "type": "link",
+    "heading": "See every moment running",
+    "body": "The full motion study has the tappable app, eight timed moments running side by side and the transition grammar, all in the browser.",
+    "url": "https://pratik-kathe.github.io/portfolio/motion/sitare/",
+    "label": "Open the motion study"
+   }
+  ]
+ }
  ]
 };

@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FuzzyBox Motion Reel · Pratik Kathe</title>
+<meta name="description" content="UI and motion case study of the FuzzyBox Media website. The Figma Smart Animate prototype, rebuilt to play live in the browser.">
+<meta name="theme-color" content="#0b0a0a">
+<link rel="icon" href="../../favicon.ico" sizes="48x48">
+<link rel="icon" href="../../assets/img/favicon-32x32.png" type="image/png" sizes="32x32">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FuzzyBox Motion Reel · Pratik Kathe">
+<meta property="og:description" content="UI and motion case study of the FuzzyBox Media website. The Figma Smart Animate prototype, rebuilt to play live in the browser.">
+<meta property="og:image" content="https://pratik-kathe.github.io/portfolio/assets/img/fuzzybox-cover.webp">
+<meta property="og:url" content="https://pratik-kathe.github.io/portfolio/motion/fuzzybox/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}.pk-back{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));padding-top:calc(12px + env(safe-area-inset-top,0px));font:500 13px/1.2 system-ui,sans-serif;background:#0b0a0a;border-bottom:1px solid rgba(255,255,255,.08)}.pk-back a{color:#d8d4ef;text-decoration:none}.pk-back a:hover,.pk-back a:focus-visible{color:#ff3b30}</style>
+<style>
+/* Layout: a screening room. One wide "projector" stage up top, then a slate-labelled inventory of every animated component, then the curves. */
+:root {
+  --bg: #0b0a0a;
+  --panel: #151313;
+  --line: #2a2524;
+  --fg: #f1ece9;
+  --muted: #958c88;
+  --accent: #ff3b30;
+  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased }
+.wrap { max-width: 1280px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+a { color: inherit }
+.mono { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted) }
+
+/* slate header */
+header.top { padding-block: 22px 0 }
+.slate { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 2px solid var(--fg); border-bottom: 1px solid var(--line) }
+.slate > div { padding: 10px 12px 12px 0; display: flex; flex-direction: column; gap: 2px; min-width: 0 }
+.slate b { font-family: var(--mono); font-weight: 500; font-size: 13px; color: var(--fg); letter-spacing: .02em; text-transform: none }
+.hero-title { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 32px; padding-block: 28px 22px }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(64px, 13vw, 184px); line-height: .82; letter-spacing: -.01em; margin: 0; text-transform: uppercase }
+h1 .dot { color: var(--accent) }
+.lede { max-width: 30ch; margin: 0; font-size: 18px; color: var(--fg); text-wrap: balance }
+.lede span { color: var(--muted) }
+
+/* projector */
+.screen { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #000; position: relative }
+.chrome { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--line); background: var(--panel) }
+.chrome i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: block }
+.chrome .url { flex: 1; min-width: 0; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.pp-host { position: relative; overflow: hidden; width: 100%; background: #000 }
+.stage-load { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; pointer-events: none; transition: opacity .4s }
+.loaded .stage-load { opacity: 0 }
+.deck { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding-block: 14px 0 }
+.btn { font: 500 13px/1 var(--body); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 10px 14px; cursor: pointer; display: inline-flex; gap: 8px; align-items: center }
+.btn:hover { border-color: var(--muted) }
+.btn:focus-visible, .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.btn[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.btn kbd { font-family: var(--mono); font-size: 12px }
+.readout { margin-left: auto; display: flex; gap: 18px; flex-wrap: wrap }
+.readout span b { color: var(--fg); font-weight: 500 }
+.tc { font-variant-numeric: tabular-nums }
+
+section { padding-block: 72px 0 }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px 48px; align-items: end; padding-bottom: 22px; border-bottom: 1px solid var(--line); margin-bottom: 26px }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 6vw, 76px); line-height: .9; margin: 0; text-transform: uppercase; text-wrap: balance }
+.sec-head p { margin: 0; color: var(--muted); max-width: 60ch }
+.sec-head p strong { color: var(--fg); font-weight: 500 }
+
+/* folds strip */
+.folds { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 13px/1 var(--body); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 9px 12px; cursor: pointer; display: inline-flex; gap: 8px; align-items: baseline }
+.chip small { font-family: var(--mono); font-size: 11px; color: var(--muted) }
+.chip.on { color: var(--fg); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent) }
+
+/* numbers */
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 26px }
+.facts div { padding: 18px 16px 18px 0; border-right: 1px solid var(--line) }
+.facts div:last-child { border-right: 0 }
+.facts b { display: block; font-family: var(--display); font-weight: 800; font-size: 54px; line-height: 1; font-variant-numeric: tabular-nums }
+
+/* component inventory */
+.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px }
+.card { grid-column: span 4; display: flex; flex-direction: column; gap: 12px; min-width: 0 }
+.card.w6 { grid-column: span 6 }
+.card.w8 { grid-column: span 8 }
+.card.w12 { grid-column: span 12 }
+.card .frame { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #000; position: relative }
+.card .frame.pad { padding: 18px; display: grid; place-items: center }
+.card .frame.pad > .pp-host { max-width: 100% }
+.card h3 { margin: 0; font-size: 17px; font-weight: 600; display: flex; justify-content: space-between; gap: 12px; align-items: baseline }
+.card h3 span { font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--muted); letter-spacing: .04em; white-space: nowrap }
+.spec { display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; margin: 0; font-family: var(--mono); font-size: 12px }
+.spec dt { color: var(--muted); text-transform: uppercase; letter-spacing: .04em }
+.spec dd { margin: 0; color: var(--fg) }
+.hint { font-size: 13px; color: var(--muted); margin: 0 }
+
+/* curves */
+.curves { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px }
+.curve { border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0 }
+.curve svg { width: 100%; height: auto; display: block; overflow: visible }
+.curve h4 { margin: 0; font-size: 15px; font-weight: 600 }
+.curve .ball { fill: var(--accent) }
+.curve .axis { stroke: var(--line); fill: none }
+.curve .path { stroke: var(--fg); fill: none; stroke-width: 2 }
+.curve .use { font-family: var(--mono); font-size: 12px; color: var(--muted) }
+.curve .use b { color: var(--fg); font-weight: 500 }
+
+/* mobile */
+.mobile { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 32px 64px; align-items: center }
+.phone { width: min(360px, 100%); margin: 0 auto; border-radius: 44px; padding: 12px; background: #1b1918; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.6) }
+.phone .pp-host { border-radius: 32px }
+.mobile ul { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 0; border-top: 1px solid var(--line) }
+.mobile li { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15px }
+.mobile li span { font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; padding-top: 2px }
+
+footer { padding-block: 80px 48px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap }
+
+@media (max-width: 900px) {
+  .card, .card.w6, .card.w8 { grid-column: span 12 }
+  .curves { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+  .sec-head, .mobile { grid-template-columns: minmax(0, 1fr) }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .facts div:nth-child(2) { border-right: 0 }
+  .slate { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .readout { margin-left: 0 }
+}
+@media (max-width: 520px) { .curves { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+@media (prefers-reduced-motion: reduce) { .stage-load { transition: none } }
+</style>
+</head>
+<body>
+<nav class="pk-back"><a href="../../#case-fuzzybox">&larr; Pratik Kathe &middot; Portfolio</a><a href="../../#pits">All case studies</a></nav>
+<header class="top wrap">
+  <div class="slate">
+    <div><span class="mono">Production</span><b>FuzzyBox Media</b></div>
+    <div><span class="mono">Scene</span><b>Website · desktop + mobile</b></div>
+    <div><span class="mono">Role</span><b>UI &amp; motion design</b></div>
+    <div><span class="mono">Camera</span><b>Figma Smart Animate</b></div>
+    <div><span class="mono">Take</span><b>90 frames · 34 live components</b></div>
+  </div>
+  <div class="hero-title">
+    <h1>FuzzyBox<span class="dot">.</span></h1>
+    <p class="lede">A media studio website that scrolls like a film reel. <span>Every fold is a cut, every component is a loop. Rebuilt here from the Figma prototype, frame by frame.</span></p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="screen">
+      <div class="chrome"><i></i><i></i><i></i><div class="url">fuzzybox.live</div><span class="mono tc" id="tc">00:00:00</span></div>
+      <div id="hero" class="pp-host"><div class="stage-load">Loading the reel…</div></div>
+    </div>
+    <div class="deck">
+      <button class="btn" id="auto" aria-pressed="true" type="button">Autoplay</button>
+      <button class="btn" id="up" type="button"><kbd>↑</kbd> Previous fold</button>
+      <button class="btn" id="down" type="button"><kbd>↓</kbd> Next fold</button>
+      <button class="btn" id="again" type="button">Replay intro</button>
+      <div class="readout mono"><span>Frame <b id="fname">—</b></span><span>Cut <b id="fcut">—</b></span></div>
+    </div>
+    <p class="hint" style="margin-top:10px">Scroll, swipe or press the arrow keys over the screen. It is the same interaction as the original prototype: ↓ and ↑ trigger a 0.8s ease-in-out Smart Animate between folds.</p>
+  </div>
+
+  <section class="wrap" id="folds">
+    <div class="sec-head">
+      <h2>Ten folds, one long take</h2>
+      <p>The page never scrolls. A 1440 × 2700 canvas slides behind a fixed 900px window while each fold's elements arrive on their own timing, so a key press reads as a <strong>camera move</strong> rather than a page jump. Jump to any fold below.</p>
+    </div>
+    <div class="folds" id="foldchips"></div>
+    <div class="facts">
+      <div><span class="mono">Smart Animate transitions</span><b>669</b></div>
+      <div><span class="mono">Auto timers</span><b>463</b></div>
+      <div><span class="mono">Hover states</span><b>336</b></div>
+      <div><span class="mono">Component variants</span><b>249</b></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="components">
+    <div class="sec-head">
+      <h2>The loops</h2>
+      <p>Every moving part is an interactive component with its own clock. These run live from the same variant data, with the triggers and curves set in Figma. Hover the piano keys, the social dock and the send button.</p>
+    </div>
+    <div class="grid" id="cards"></div>
+  </section>
+
+  <section class="wrap" id="curves">
+    <div class="sec-head">
+      <h2>Six curves</h2>
+      <p>The whole site runs on six timing curves. Springs carry the characters and type, linear carries anything that should feel like film running through a gate, and ease-in-out handles the cuts between folds.</p>
+    </div>
+    <div class="curves" id="curvegrid"></div>
+  </section>
+
+  <section class="wrap" id="mobile">
+    <div class="mobile">
+      <div class="phone"><div id="mob" class="pp-host" style="background:#000"><div class="stage-load">Loading…</div></div></div>
+      <div>
+        <div class="sec-head" style="grid-template-columns:minmax(0,1fr);margin-bottom:0;border-bottom:0;padding-bottom:0">
+          <h2>Same reel, 360px wide</h2>
+          <p>The mobile flow keeps the cut-based scroll and re-times the loops for a narrow frame. Swipe on the phone, or let it play.</p>
+        </div>
+        <ul>
+          <li><span>Intro</span>Logo, character and headline land on Gentle and Bouncy springs, 0.96–1.02s</li>
+          <li><span>Folds</span>Swipe up or down for a 0.8s ease-in-out cut</li>
+          <li><span>Gallery</span>Cards step every 0.1–0.2s with 0.3s smart animate, then hand back to the scroll</li>
+          <li><span>Loops</span>Film strip at 8s linear, gossip columns at 2s linear</li>
+        </ul>
+        <div class="deck"><button class="btn" id="mup" type="button"><kbd>↑</kbd></button><button class="btn" id="mdown" type="button"><kbd>↓</kbd></button><button class="btn" id="mauto" aria-pressed="true" type="button">Autoplay</button><button class="btn" id="mintro" type="button">Replay intro</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap"><span>FuzzyBox Media · UI &amp; motion case study</span><span class="mono">Rebuilt from the Figma prototype · no video, every frame is live</span></footer>
+
+<script src="../player.js?v=1"></script>
+<script>
+(function () {
+  const FOLDS = [
+    ['Hero', '1:21436'], ['Stories', '1:21524'], ['Viewfinder', '1:21717'], ['Product', '1:23518'], ['Service', '1:23596'],
+    ['Gallery', '1:21072'], ['Gossip', '1:23998'], ['Creators', '1:24191'], ['Brands', '1:24477'], ['Collaborate', '1:24685'], ['Footer', '1:25007']
+  ];
+  const FOLD_OF = {}; FOLDS.forEach(([n, id], i) => FOLD_OF[id] = i);
+  const atlases = [0, 1, 2, 3].map(i => 'fb_atlas' + i + '.webp');
+  const $ = s => document.querySelector(s);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function preload() { return Promise.all(atlases.map(u => new Promise(r => { const im = new Image(); im.onload = im.onerror = r; im.src = u; }))); }
+
+  function wrapMany(data, key, w, h, items) {
+    data.scenes[key] = { n: 'wrap', i: key, w, h, k: items.map(([vid, x, y]) => Object.assign({}, data.scenes[vid], { m: [1, 0, 0, 1, x, y], v: vid, _vid: vid, set: undefined, i: undefined, I: 1 })) };
+    return key;
+  }
+  function watch(players) {
+    const io = new IntersectionObserver(es => es.forEach(e => { const p = e.target._player; if (!p) return; if (e.isIntersecting) p.resume(); else p.pause(); }), { threshold: 0.05 });
+    players.forEach(p => { p.host._player = p; io.observe(p.host); });
+  }
+
+  Promise.all([fetch('fb_runtime.json').then(r => r.json()), preload()]).then(([data]) => {
+    // ---------- hero ----------
+    let heroVisible = true, auto = !reduce, t0 = performance.now();
+    const hero = new ProtoPlayer($('#hero'), data, {
+      start: '1:21264', device: [1440, 900], atlases, keyGate: () => heroVisible,
+      onscene: (id) => { const s = data.scenes[id]; $('#fname').textContent = s ? s.n : id; if (id in FOLD_OF) mark(FOLD_OF[id]); }
+    });
+    $('#hero').parentElement.parentElement.classList.add('loaded');
+    new IntersectionObserver(es => es.forEach(e => heroVisible = e.intersectionRatio > 0.45), { threshold: [0, .45, 1] }).observe($('#hero'));
+    // report the cut currently playing
+    const origGo = hero.go.bind(hero);
+    hero.go = (id, tr, back) => { if (tr) $('#fcut').textContent = (tr.y === 'SMART_ANIMATE' ? 'Smart · ' : '') + (tr.d || 0) + 's ' + (tr.e || '').toLowerCase().replace(/_/g, ' '); return origGo(id, tr, back); };
+    setInterval(() => { const s = Math.floor((performance.now() - t0) / 1000); $('#tc').textContent = [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60].map(v => String(v).padStart(2, '0')).join(':'); }, 500);
+
+    const setAuto = v => { auto = v; $('#auto').setAttribute('aria-pressed', v); };
+    let idle = 0;
+    setInterval(() => {
+      if (!auto || hero.busy || hero.paused || !heroVisible) return;
+      idle += 400; if (idle < 3600) return; idle = 0;
+      if (hero.hasKey(40)) hero.press(40); else if (!hero.keyReactions().length) return; else { hero.restart('1:21264'); t0 = performance.now(); }
+    }, 400);
+    ['keydown', 'wheel', 'touchstart'].forEach(ev => $('#hero').addEventListener(ev, () => setAuto(false), { passive: true }));
+    window.addEventListener('keydown', e => { if ((e.keyCode === 38 || e.keyCode === 40) && heroVisible) setAuto(false); });
+    $('#auto').onclick = () => setAuto(!auto);
+    $('#down').onclick = () => { setAuto(false); hero.press(40); };
+    $('#up').onclick = () => { setAuto(false); hero.press(38); };
+    $('#again').onclick = () => { hero.restart('1:21264'); t0 = performance.now(); idle = 0; };
+
+    // ---------- fold chips ----------
+    const chips = FOLDS.map(([name, id], i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.innerHTML = '<small>' + String(i + 1).padStart(2, '0') + '</small>' + name;
+      b.onclick = () => { setAuto(false); hero.go(id, { y: 'SMART_ANIMATE', d: 0.8, e: 'EASE_IN_AND_OUT' }); $('#hero').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); };
+      $('#foldchips').appendChild(b); return b;
+    });
+    function mark(i) { chips.forEach((c, j) => c.classList.toggle('on', i === j)); }
+
+    // ---------- component cards ----------
+    const CARDS = [
+      { t: 'Lights · camera · create', w: 'w6', scene: ProtoPlayer.wrapVariant(data, '111:2715'), dev: [600, 500], pad: true, spec: [['Trigger', 'After delay 0.6s'], ['Motion', 'Smart animate · Slow spring'], ['Duration', '1.25s'], ['Variants', '3, looping']], note: 'Hero illustration. Clapper, spotlight and projector trade places while the script line recolours word by word.' },
+      { t: 'Piano keys', w: 'w6', scene: '1:21524', dev: [1440, 900], crop: [760, 120, 560, 520], spec: [['Trigger', 'Hover'], ['Motion', 'Smart animate · Quick spring'], ['Duration', '0.74s'], ['Keys', '14 instances']], note: 'Hover the keys. Each one dips and springs back, so running the cursor down the column plays it.' },
+      { t: 'Social dock', w: 'w12', scene: '1:21436', dev: [1440, 900], crop: [500, 786, 940, 100], spec: [['Trigger', 'Hover · click'], ['Motion', 'Smart animate · Slow spring'], ['Duration', '1.25s'], ['Switch', 'Gentle spring 1.02s']], note: 'Each icon swells on hover. The FUuN / BORE switch flips the whole site palette.' },
+      { t: 'Film cut', w: 'w8', scene: ProtoPlayer.wrapVariant(data, '210:5016'), dev: [1440, 780], crop: [0, 0, 1440, 560], spec: [['Trigger', 'After delay 0s'], ['Motion', 'Smart animate · Linear'], ['Duration', '8s per pass'], ['Variants', '4, endless']], note: 'Two strips of brand logos run in opposite directions like film through a gate.' },
+      { t: 'Gossip columns', w: 'w4', scene: wrapMany(data, 'gossip', 728, 900, [['1:15290', 0, 0], ['1:15331', 374, 0]]), dev: [728, 900], spec: [['Trigger', 'After delay 0s'], ['Motion', 'Linear, 2s per step'], ['Columns', 'Up and down, offset']], note: 'Two image columns drift in opposite directions, so the Gossip Gazette fold keeps moving while it sits still.' },
+      { t: 'Creator reel', w: 'w12', scene: ProtoPlayer.wrapVariant(data, '1:15372'), dev: [2518, 480], spec: [['Trigger', 'After delay 0s'], ['Motion', 'Smart animate · Linear'], ['Duration', '2s per step'], ['Variants', '16']], note: 'The creator portraits travel across the fold in sixteen steps. Linear timing means no step ever settles.' },
+      { t: 'Level meter', w: 'w4', scene: ProtoPlayer.wrapVariant(data, '1:16157', 12), dev: [373, 68], pad: true, spec: [['Trigger', 'After delay 0s'], ['Motion', 'Linear 0.8s'], ['Variants', '30']], note: 'An audio level meter under Creators, thirty variants long.' },
+      { t: 'Typed form', w: 'w8', scene: '1:24685', dev: [1440, 900], crop: [120, 140, 1200, 640], spec: [['Trigger', 'After delay 0.2s per letter'], ['Motion', 'Instant swap'], ['Fields', 'Name, message, email, phone'], ['Send', 'Hover · linear 0.3s']], note: 'The contact form types its own placeholder copy, one 0.2s variant per character, with a blinking cursor.' }
+    ];
+    const players = [];
+    CARDS.forEach(c => {
+      const el = document.createElement('article'); el.className = 'card ' + (c.w || '');
+      el.innerHTML = '<div class="frame' + (c.pad ? ' pad' : '') + '"><div class="pp-host"></div></div><h3>' + c.t + '<span>' + (c.crop ? 'In context' : 'Component') + '</span></h3><p class="hint">' + c.note + '</p><dl class="spec">' + c.spec.map(([a, b]) => '<dt>' + a + '</dt><dd>' + b + '</dd>').join('') + '</dl>';
+      $('#cards').appendChild(el);
+      const host = el.querySelector('.pp-host');
+      if (c.pad) host.style.width = '100%';
+      players.push(new ProtoPlayer(host, data, { start: c.scene, device: c.dev, crop: c.crop, atlases, keys: false, wheel: false }));
+    });
+    watch(players);
+
+    // ---------- curves ----------
+    const CURVES = [
+      ['Slow', 'SLOW', 1.25, 237, 'Icon swells, hero illustration'],
+      ['Quick', 'QUICK', 0.74, 157, 'Piano keys'],
+      ['Linear', 'LINEAR', 2, 113, 'Loops, film, tickers'],
+      ['Ease in-out', 'EASE_IN_AND_OUT', 0.8, 99, 'Fold-to-fold cuts'],
+      ['Gentle', 'GENTLE', 1.02, 60, 'Intro, theme switch'],
+      ['Bouncy', 'BOUNCY', 0.96, 3, 'Character drop-in']
+    ];
+    const SPR = { GENTLE: [1, 100, 15], QUICK: [1, 300, 20], BOUNCY: [1, 600, 15], SLOW: [1, 80, 20] };
+    function sample(e, dur) {
+      const pts = [];
+      if (SPR[e]) { const f = ProtoPlayer.spring(SPR[e][0], SPR[e][1], SPR[e][2]); for (let i = 0; i <= 60; i++) pts.push([i / 60, i === 60 ? 1 : f(i / 60 * dur)]); }
+      else if (e === 'LINEAR') { pts.push([0, 0], [1, 1]); }
+      else { const b = [0.42, 0, 0.58, 1]; for (let i = 0; i <= 60; i++) { const s = i / 60, x = 3 * (1 - s) * (1 - s) * s * b[0] + 3 * (1 - s) * s * s * b[2] + s * s * s, y = 3 * (1 - s) * (1 - s) * s * b[1] + 3 * (1 - s) * s * s * b[3] + s * s * s; pts.push([x, y]); } }
+      return pts;
+    }
+    CURVES.forEach(([name, e, dur, uses, where]) => {
+      const pts = sample(e, dur), W = 120, H = 90, top = 18;
+      const P = pts.map(([x, y]) => (x * W).toFixed(1) + ',' + (top + (1 - y) * (H - top - 6)).toFixed(1));
+      const div = document.createElement('div'); div.className = 'curve';
+      div.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + name + ' easing curve"><line class="axis" x1="0" y1="' + (H - 6) + '" x2="' + W + '" y2="' + (H - 6) + '"/><line class="axis" x1="0" y1="' + top + '" x2="' + W + '" y2="' + top + '" stroke-dasharray="2 3"/><polyline class="path" points="' + P.join(' ') + '"/><circle class="ball" r="4" cx="0" cy="' + (H - 6) + '"/></svg><h4>' + name + '</h4><div class="use"><b>' + dur + 's</b> · used <b>' + uses + '</b>×<br>' + where + '</div>';
+      $('#curvegrid').appendChild(div);
+      if (!reduce) {
+        const ball = div.querySelector('.ball'); const total = dur * 1000;
+        let start = performance.now();
+        const step = now => { const t = ((now - start) % (total + 900)) / total; const p = Math.min(1, t); const i = Math.min(pts.length - 1, Math.round(p * (pts.length - 1)));
+          const xy = e === 'LINEAR' ? [p, p] : pts[i]; ball.setAttribute('cx', (xy[0] * W).toFixed(1)); ball.setAttribute('cy', (top + (1 - xy[1]) * (H - top - 6)).toFixed(1)); requestAnimationFrame(step); };
+        requestAnimationFrame(step);
+      }
+    });
+
+    // ---------- mobile ----------
+    let mauto = !reduce, midle = 0;
+    const mob = new ProtoPlayer($('#mob'), data, { start: '210:6324', device: [360, 800], atlases, keys: false });
+    $('#mob').parentElement.classList.add('loaded'); $('#mob').classList.add('loaded');
+    const setM = v => { mauto = v; $('#mauto').setAttribute('aria-pressed', v); };
+    setInterval(() => { if (!mauto || mob.busy || mob.paused) return; midle += 400; if (midle < 3400) return; midle = 0; if (mob.hasKey(40)) mob.press(40); else if (mob.keyReactions().length) mob.restart('210:6241'); }, 400);
+    $('#mintro').onclick = () => { setM(true); midle = 0; mob.restart('210:6241'); };
+    $('#mup').onclick = () => { setM(false); mob.press(38); };
+    $('#mdown').onclick = () => { setM(false); mob.press(40); };
+    $('#mauto').onclick = () => setM(!mauto);
+    ['wheel', 'touchstart'].forEach(ev => $('#mob').addEventListener(ev, () => setM(false), { passive: true }));
+    watch([mob]);
+  });
+})();
+</script>
+</body>
+</html>

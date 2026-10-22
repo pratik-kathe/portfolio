@@ -467,7 +467,7 @@ document.addEventListener('keydown', e => {
    CASE STUDIES
    All projects live in the JSON block with id "cs-data" near the end of
    the page. Edit them with the in-page editor (owner only) or by hand.
-   Section types: text, image, gallery, beforeafter, metrics, process, quote.
+   Section types: text, image, gallery, beforeafter, metrics, process, quote, list, decision, link, video, embed.
    ====================================================================== */
 let W = window.CASE_STUDIES || {projects:[]};
 if (!Array.isArray(W.projects)) W.projects = [];
@@ -526,6 +526,16 @@ function secHTML(s){
     case 'beforeafter': return `<section class="sec">${H}<div class="ba"><div class="a">${pic(s.after, s.afterLabel || 'After', '16/10')}</div><div class="b">${pic(s.before, s.beforeLabel || 'Before', '16/10')}</div><span class="tagb l">${esc(s.beforeLabel || 'Before')}</span><span class="tagb r">${esc(s.afterLabel || 'After')}</span><input type="range" min="0" max="100" value="50" aria-label="Drag to compare ${esc(s.beforeLabel || 'before')} and ${esc(s.afterLabel || 'after')}"><span class="hd"><i></i></span></div>${cap}</section>`;
     case 'metrics': return `<section class="sec">${H}<div class="mets">${(s.items||[]).map(m => `<div class="met"><b>${esc(m.value)}</b><span>${esc(m.label)}</span></div>`).join('')}</div></section>`;
     case 'process': return `<section class="sec">${H}<ol class="steps">${(s.steps||[]).map((st,k) => `<li><span class="sn">${pad(k+1)}</span><div><b>${esc(st.title)}</b><p>${esc(st.body)}</p></div></li>`).join('')}</ol></section>`;
+    case 'video': { const sz = s.size === 'panel' ? 'panel' : 'full';
+      const vid = s.src ? `<video src="${esc(src(s.src))}"${s.poster ? ` poster="${esc(src(s.poster))}"` : ''} ${RM ? '' : 'autoplay '}muted loop playsinline controls preload="metadata" aria-label="${esc(s.alt || s.caption || 'Project video')}"></video>` : pic('', 'Video');
+      const fig = `<figure class="vid">${vid}${s.caption ? `<figcaption>${esc(s.caption)}</figcaption>` : ''}</figure>`;
+      const txt = (s.heading || s.body) ? `<div class="sec-copy">${s.heading ? `<h3 class="sh3">${esc(s.heading)}</h3>` : ''}${paras(s.body)}</div>` : '';
+      return sz === 'panel' ? `<section class="sec split">${txt}<div class="panelfig">${fig}</div></section>` : `<section class="sec img-full">${txt}${fig}</section>`; }
+    case 'embed': { const sz = s.size === 'panel' ? 'panel' : 'full', ok = /^(motion\/|https:\/\/)/.test(s.src || '');
+      const fr = ok ? `<div class="embed" style="--r:${esc(s.ratio || (sz === 'panel' ? '393/880' : '16/10'))}"><iframe src="${esc(s.src)}" title="${esc(s.title || s.heading || 'Interactive prototype')}" loading="lazy" allow="autoplay; fullscreen"></iframe></div>` : pic('', 'Interactive prototype');
+      const fig = `<figure>${fr}${s.caption ? `<figcaption>${esc(s.caption)}</figcaption>` : ''}</figure>`;
+      const txt = (s.heading || s.body) ? `<div class="sec-copy">${s.heading ? `<h3 class="sh3">${esc(s.heading)}</h3>` : ''}${paras(s.body)}</div>` : '';
+      return sz === 'panel' ? `<section class="sec split">${txt}<div class="panelfig">${fig}</div></section>` : `<section class="sec img-full">${txt}${fig}</section>`; }
     case 'quote': return `<section class="sec"><figure class="quote"><blockquote>${esc(s.text)}</blockquote><figcaption><b>${esc(s.name)}</b>${s.role ? ' · ' + esc(s.role) : ''}</figcaption></figure></section>`;
   }
   return '';
@@ -558,7 +568,7 @@ function openCase(id){
   setTimeout(() => $('#csBack').focus({preventScroll:true}), 80);
 }
 function closeCase(){
-  if (!openId) return; openId = null; csEl.classList.remove('show'); csEl.setAttribute('aria-hidden','true'); document.documentElement.classList.remove('cs-open');
+  if (!openId) return; openId = null; csIn.querySelectorAll('video').forEach(v => v.pause()); csIn.querySelectorAll('iframe').forEach(f => f.remove()); csEl.classList.remove('show'); csEl.setAttribute('aria-hidden','true'); document.documentElement.classList.remove('cs-open');
   lenis && lenis.start(); try { history.replaceState(null, '', '#pits'); } catch(e){}
   const c = lastCard && $(`.ccard[data-id="${CSS.escape(lastCard)}"]`); if (c) c.focus({preventScroll:true});
 }

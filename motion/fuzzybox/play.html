@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FuzzyBox prototype · Pratik Kathe</title>
+<meta name="robots" content="noindex">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden}
+#p{position:relative;overflow:hidden;width:100%;background:#000}
+.cue{position:absolute;left:12px;bottom:12px;display:flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,10,.72);color:#f1ece9;font:600 12px/1 system-ui,sans-serif;letter-spacing:.02em;cursor:pointer;transition:opacity .3s}
+.cue b{color:#ff3b30}
+.cue:focus-visible{outline:2px solid #ff3b30;outline-offset:2px}
+.on .cue{opacity:.55}
+.load{position:absolute;inset:0;display:grid;place-items:center;color:#958c88;font:500 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="p"><div class="load">Loading the reel…</div></div>
+<button class="cue" id="cue" type="button">Click to take the wheel · <b>scroll</b> or <b>↓ ↑</b></button>
+<script src="../player.js?v=1"></script>
+<script>
+(function () {
+  const atlases = [0, 1, 2, 3].map(i => 'fb_atlas' + i + '.webp');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  Promise.all([fetch('fb_runtime.json').then(r => r.json()), ...atlases.map(u => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = u; }))]).then(([data]) => {
+    let driving = false, auto = !reduce, idle = 0;
+    const P = new ProtoPlayer(document.getElementById('p'), data, { start: '1:21264', device: [1440, 900], atlases, wheel: false, keyGate: () => driving });
+    const take = () => { driving = true; auto = false; P.o.wheel = true; document.body.classList.add('on'); document.getElementById('cue').innerHTML = 'Driving · <b>scroll</b> or <b>↓ ↑</b> to change fold'; };
+    document.getElementById('cue').onclick = take;
+    document.getElementById('p').addEventListener('pointerdown', take);
+    setInterval(() => {
+      if (!auto || P.busy) return; idle += 400; if (idle < 3600) return; idle = 0;
+      if (P.hasKey(40)) P.press(40); else if (P.keyReactions().length) P.restart('1:21264');
+    }, 400);
+    document.addEventListener('visibilitychange', () => document.hidden ? P.pause() : P.resume());
+  });
+})();
+</script>
+</body>
+</html>
