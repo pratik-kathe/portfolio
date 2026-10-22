@@ -467,7 +467,7 @@ document.addEventListener('keydown', e => {
    CASE STUDIES
    All projects live in the JSON block with id "cs-data" near the end of
    the page. Edit them with the in-page editor (owner only) or by hand.
-   Section types: text, image, gallery, beforeafter, metrics, process, quote, list, decision, link, video, embed.
+   Section types: text, image, gallery, beforeafter, metrics, process, quote, list, decision, link, video, embed, motion.
    ====================================================================== */
 let W = window.CASE_STUDIES || {projects:[]};
 if (!Array.isArray(W.projects)) W.projects = [];
@@ -536,11 +536,21 @@ function secHTML(s){
       const fig = `<figure>${fr}${s.caption ? `<figcaption>${esc(s.caption)}</figcaption>` : ''}</figure>`;
       const txt = (s.heading || s.body) ? `<div class="sec-copy">${s.heading ? `<h3 class="sh3">${esc(s.heading)}</h3>` : ''}${paras(s.body)}</div>` : '';
       return sz === 'panel' ? `<section class="sec split">${txt}<div class="panelfig">${fig}</div></section>` : `<section class="sec img-full">${txt}${fig}</section>`; }
+    case 'motion': return `<section class="sec sec-mo">${s.kicker ? `<span class="kicker">${esc(s.kicker)}</span>` : ''}${H}${s.body ? `<div class="sec-copy">${paras(s.body)}</div>` : ''}<div class="mo" data-part="${esc(s.part)}"></div>${cap}</section>`;
     case 'quote': return `<section class="sec"><figure class="quote"><blockquote>${esc(s.text)}</blockquote><figcaption><b>${esc(s.name)}</b>${s.role ? ' · ' + esc(s.role) : ''}</figcaption></figure></section>`;
   }
   return '';
 }
 const csEl = $('#cs'), csIn = $('#csIn');
+/* Motion case studies load their live prototypes (motion/player.js + motion/app.js) only when opened. */
+let motionReady = null;
+const loadScript = u => new Promise((ok, no) => { const s = document.createElement('script'); s.src = u; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+function mountMotion(){
+  if (window.MOTION) window.MOTION.destroyAll();
+  if (!csIn.querySelector('.mo')) return;
+  motionReady = motionReady || loadScript('motion/player.js?v=2').then(() => loadScript('motion/app.js?v=2')).catch(e => { motionReady = null; throw e; });
+  motionReady.then(() => window.MOTION.mountAll(csIn)).catch(() => csIn.querySelectorAll('.mo').forEach(m => m.innerHTML = '<p class="mo-load">The prototype could not load. Reload the page to try again.</p>'));
+}
 function renderCase(id){
   const i = W.projects.findIndex(p => p.id === id); if (i < 0) return false;
   const p = W.projects[i], nx = W.projects[(i+1) % W.projects.length];
@@ -558,6 +568,7 @@ function renderCase(id){
       <button class="allx" type="button" data-all>All case studies</button>
     </nav>`;
   $('#csExit').textContent = `PIT ${pad(i+1)} / ${pad(W.projects.length)}`;
+  mountMotion();
   return true;
 }
 function openCase(id){
@@ -568,7 +579,7 @@ function openCase(id){
   setTimeout(() => $('#csBack').focus({preventScroll:true}), 80);
 }
 function closeCase(){
-  if (!openId) return; openId = null; csIn.querySelectorAll('video').forEach(v => v.pause()); csIn.querySelectorAll('iframe').forEach(f => f.remove()); csEl.classList.remove('show'); csEl.setAttribute('aria-hidden','true'); document.documentElement.classList.remove('cs-open');
+  if (!openId) return; openId = null; csIn.querySelectorAll('video').forEach(v => v.pause()); csIn.querySelectorAll('iframe').forEach(f => f.remove()); if (window.MOTION) window.MOTION.destroyAll(); csEl.classList.remove('show'); csEl.setAttribute('aria-hidden','true'); document.documentElement.classList.remove('cs-open');
   lenis && lenis.start(); try { history.replaceState(null, '', '#pits'); } catch(e){}
   const c = lastCard && $(`.ccard[data-id="${CSS.escape(lastCard)}"]`); if (c) c.focus({preventScroll:true});
 }

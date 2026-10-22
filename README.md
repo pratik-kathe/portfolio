@@ -41,12 +41,12 @@ The HUD at the bottom shows speed, distance and the current exit, with buttons f
 2. **Accessly Extension: 3 hours to 3 seconds.** A DevTools extension that tests logged-in pages a crawler can't reach and exports issues straight into Accessly.
 3. **Accessly Lens.** A Figma plugin that audits a frame against WCAG 2.2 and fixes most issues in one click using the file's own colours.
 4. **Accessly Components: accessible by default.** The Design System behind all three: 45 components and 849 variants where focus, error and disabled are designed states, built from small swappable parts with colour and spacing variables in Light and Dark.
-5. **FuzzyBox: a website cut like a film.** UI and motion for a media studio site where every scroll is a camera move. 669 Smart Animate transitions; the prototype plays live in the case study.
+5. **FuzzyBox: a website cut like a film.** UI and motion for a media studio site where every scroll is a camera move. 669 Smart Animate transitions; the prototype, its loops and its curves play live in the case study.
 6. **Sitare: an app that moves like the night sky.** UI and motion for an astrology app in three parts (customer, Soul Sitare matchmaking, astrologer). 162 screens in one tappable prototype.
 
 Each one opens as a full page over the road (`index.html#case-<id>`), with decisions, before/after comparisons, metrics and links to the live products. Visuals are NDA-safe.
 
-The two motion case studies also have standalone pages, `motion/fuzzybox/` and `motion/sitare/`, where the Figma prototypes run live. They use a small player (`motion/player.js`) that rebuilds Smart Animate from exported layer data (`*_runtime.json`) and sprite sheets (`*_atlas*.webp`). `motion/<name>/play.html` is the bare prototype, embedded in the case study overlay.
+The two motion case studies run their Figma prototypes live inside the case study, through `motion` sections. `motion/player.js` rebuilds Smart Animate from exported layer data (`motion/<name>/*_runtime.json`) and sprite sheets (`*_atlas*.webp`); `motion/app.js` builds the interactive parts. Both load only when one of these case studies opens. `motion/fuzzybox/` and `motion/sitare/` redirect to the case studies.
 
 ## Run it locally
 
@@ -96,6 +96,7 @@ Add an object to `projects` in `assets/js/case-studies.js`. Projects appear in t
 | `link` | `heading`, `body`, `url`, `label`, `url2`, `label2` (https links only) |
 | `video` | `heading`, `body`, `src` (mp4), `poster`, `caption`, `alt`, `size`: `full` or `panel`. Plays muted on a loop, paused for reduced motion |
 | `embed` | `heading`, `body`, `src` (a `motion/…` page or an https URL), `ratio`, `title`, `caption`, `size`: `full` or `panel` |
+| `motion` | `kicker`, `heading`, `body`, `part` (`fb-stage`, `fb-loops`, `fb-curves`, `fb-mobile`, `si-stage`, `si-moments`, `si-grammar`), `caption`. A live prototype part from `motion/app.js` |
 
 Card thumbnails follow the site's look: a dusk-to-night sky with stars, a road with yellow dashes, and the product UI centred in a thin grey frame with square corners. No text, 1600×1000 WebP, named `<id>-thumb.webp`.
 
@@ -107,8 +108,7 @@ assets/css/joyride.css     all styles; colour and font tokens on :root
 assets/js/joyride.js       behaviour: road, car, HUD, roadside stops, case study renderer
 assets/js/case-studies.js  all case study content
 assets/img/                images, icons and the social preview image
-assets/video/              looping screen recordings for the motion case studies
-motion/                    live prototype pages (FuzzyBox, Sitare) and their player
+motion/                    live prototypes for the motion case studies: player, parts and data
 case-study.html, work.html redirects so older links still open the right case study
 404.html                   not-found page
 serve.py                   local dev server with no-cache headers
