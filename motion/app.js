@@ -10,7 +10,7 @@
     sitare: { json: 'sitare/si_runtime.json', atlases: [0, 1, 2, 3, 4, 5, 6].map(i => 'sitare/si_atlas' + i + '.webp') },
     bento: { json: 'sitare/sb_runtime.json', atlases: ['sitare/sb_atlas0.webp'] }
   };
-  const DATA_V = '20261023b';
+  const DATA_V = '20261023c';
   const cache = {};
   const img = u => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = u; });
   function load(app) {
