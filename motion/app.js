@@ -10,12 +10,13 @@
     sitare: { json: 'sitare/si_runtime.json', atlases: [0, 1, 2, 3, 4, 5, 6].map(i => 'sitare/si_atlas' + i + '.webp') },
     bento: { json: 'sitare/sb_runtime.json', atlases: ['sitare/sb_atlas0.webp'] }
   };
+  const DATA_V = '20261023b';
   const cache = {};
   const img = u => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = u; });
   function load(app) {
     if (cache[app]) return cache[app];
     const a = APPS[app], atlases = a.atlases.map(u => BASE + u);
-    cache[app] = Promise.all([fetch(BASE + a.json).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }), ...atlases.map(img)])
+    cache[app] = Promise.all([fetch(BASE + a.json + '?v=' + DATA_V).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }), ...atlases.map(img)])
       .then(([data]) => ({ data, atlases }))
       .catch(e => { delete cache[app]; throw e; });
     return cache[app];
