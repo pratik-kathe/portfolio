@@ -548,7 +548,7 @@ const loadScript = u => new Promise((ok, no) => { const s = document.createEleme
 function mountMotion(){
   if (window.MOTION) window.MOTION.destroyAll();
   if (!csIn.querySelector('.mo')) return;
-  motionReady = motionReady || loadScript('motion/player.js?v=2').then(() => loadScript('motion/app.js?v=2')).catch(e => { motionReady = null; throw e; });
+  motionReady = motionReady || loadScript('motion/player.js?v=2').then(() => loadScript('motion/app.js?v=3')).catch(e => { motionReady = null; throw e; });
   motionReady.then(() => window.MOTION.mountAll(csIn)).catch(() => csIn.querySelectorAll('.mo').forEach(m => m.innerHTML = '<p class="mo-load">The prototype could not load. Reload the page to try again.</p>'));
 }
 function renderCase(id){

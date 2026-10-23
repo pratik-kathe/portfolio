@@ -1788,7 +1788,7 @@ window.CASE_STUDIES = {
    "value": "162",
    "label": "screens in one tappable prototype"
   },
-  "lap": "1,161 tap targets · 504 variant swaps · 45 timers",
+  "lap": "1,161 tap targets · 504 variant swaps · 13 live loops",
   "cover": "assets/img/sitare-shot.webp?v=1",
   "hero": "assets/img/sitare-cover.webp",
   "sections": [
@@ -1832,6 +1832,14 @@ window.CASE_STUDIES = {
     "part": "si-moments",
     "heading": "Moments that play themselves",
     "body": "Some scenes run on timers so the app feels alive without asking for a tap: a request sliding in after two seconds, match cards reshuffling, a paywall cycling its backdrop. Each phone runs one of them on a loop, with the timing pulled straight from the Figma file."
+   },
+   {
+    "type": "motion",
+    "part": "si-bento",
+    "kicker": "The showcase",
+    "heading": "One layout, thirteen loops",
+    "body": "For the launch I built one animated bento layout that sums up the whole app. Every tile is its own component set on a timer: the guna matching wheel turns, the astrologer leaderboard reshuffles, hearts float up the live stream, match cards swap, the Soul Sitare script writes itself in, chat bubbles arrive and the earnings bars grow.\n\nThe tiles run on different clocks, from 0.3 second linear hearts to a 4.17 second Slow spring image fade, so the layout never repeats the same frame twice in a row. The same pieces restack into a 393px mobile version.",
+    "caption": "Live from the Figma file. Desktop 1440 × 900 and mobile 393 × 2872; the store badges answer hover on a 0.74s Quick spring."
    },
    {
     "type": "motion",

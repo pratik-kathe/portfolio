@@ -1,13 +1,14 @@
 /* Motion case studies: mounts the live Figma prototypes (ProtoPlayer, motion/player.js) into
    `motion` sections of the case study overlay. Parts: fb-stage, fb-loops, fb-curves, fb-mobile,
-   si-stage, si-moments, si-grammar. Exposes window.MOTION = { mountAll(root), destroyAll() }. */
+   si-stage, si-moments, si-grammar, si-bento. Exposes window.MOTION = { mountAll(root), destroyAll() }. */
 (function () {
   'use strict';
   const BASE = 'motion/';
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const APPS = {
     fuzzybox: { json: 'fuzzybox/fb_runtime.json', atlases: [0, 1, 2, 3].map(i => 'fuzzybox/fb_atlas' + i + '.webp') },
-    sitare: { json: 'sitare/si_runtime.json', atlases: [0, 1, 2, 3, 4, 5, 6].map(i => 'sitare/si_atlas' + i + '.webp') }
+    sitare: { json: 'sitare/si_runtime.json', atlases: [0, 1, 2, 3, 4, 5, 6].map(i => 'sitare/si_atlas' + i + '.webp') },
+    bento: { json: 'sitare/sb_runtime.json', atlases: ['sitare/sb_atlas0.webp'] }
   };
   const cache = {};
   const img = u => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = u; });
@@ -39,7 +40,7 @@
     io = new IntersectionObserver(es => es.forEach(e => { const p = e.target._player; e.target._vis = e.isIntersecting; if (!p) return; e.isIntersecting ? p.resume() : p.pause(); }), { threshold: 0.05 });
     root.querySelectorAll('.mo[data-part]').forEach(el => {
       const part = el.dataset.part, fn = PARTS[part]; if (!fn) return;
-      const app = part.startsWith('fb') ? 'fuzzybox' : 'sitare';
+      const app = part === 'si-bento' ? 'bento' : part.startsWith('fb') ? 'fuzzybox' : 'sitare';
       el.innerHTML = '<div class="mo-load">Loading the prototype…</div>';
       load(app).then(ctx => { if (!el.isConnected) return; el.innerHTML = ''; fn(el, ctx); })
         .catch(() => { if (el.isConnected) el.innerHTML = '<p class="mo-load">The prototype could not load. Reload the page to try again.</p>'; });
@@ -220,6 +221,30 @@
     el.appendChild(h(`<div class="mo-bars">${B.map(([a, b, n, g]) => `<div class="mo-bar"><div><b>${a}</b><small>${b}</small></div><div class="tr"><i class="${g ? 'g' : ''}" style="width:${(n / max * 100).toFixed(1)}%"></i></div><span>${n}</span></div>`).join('')}</div>`));
   }
 
-  const PARTS = { 'fb-stage': fbStage, 'fb-loops': fbLoops, 'fb-curves': fbCurves, 'fb-mobile': fbMobile, 'si-stage': siStage, 'si-moments': siMoments, 'si-grammar': siGrammar };
+
+  // Bento showcase: one animated layout, desktop 1440x900 and mobile 393x2872, every tile a looping component set.
+  function siBento(el, ctx) {
+    const box = h(`<div class="mo-bento">
+      <div class="mo-tabs" role="tablist" aria-label="Choose a layout">
+        <button class="mo-btn" type="button" role="tab" data-v="desk" aria-selected="true" aria-pressed="true">Desktop</button>
+        <button class="mo-btn" type="button" role="tab" data-v="mob" aria-selected="false" aria-pressed="false">Mobile</button>
+        <span class="mo-read">Hover the store badges · <b>13</b> looping components</span>
+      </div>
+      <div class="mo-view" data-v="desk"><div class="mo-screen"><div class="mo-chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url">sitare.app</span><span class="tc">1440 × 900</span></div><div class="mo-host"></div></div></div>
+      <div class="mo-view" data-v="mob" hidden><div class="mo-phone big"><div class="mo-host mo-scroll"></div></div><p class="mo-now" style="text-align:center">Scroll inside the phone</p></div></div>`);
+    el.appendChild(box);
+    const q = s => box.querySelector(s);
+    const desk = player(q('[data-v="desk"] .mo-host'), ctx, { start: '4078:5714', device: [1440, 900] });
+    let mob = null;
+    box.querySelectorAll('[role="tab"]').forEach(b => b.onclick = () => {
+      const v = b.dataset.v;
+      box.querySelectorAll('[role="tab"]').forEach(x => { const on = x === b; x.setAttribute('aria-selected', on); x.setAttribute('aria-pressed', on); });
+      box.querySelectorAll('.mo-view').forEach(x => x.hidden = x.dataset.v !== v);
+      if (v === 'mob' && !mob) mob = player(q('[data-v="mob"] .mo-host'), ctx, { start: '4078:7697', device: [393, 852] });
+      if (v === 'mob') { desk.pause(); mob && mob.resume(); } else { mob && mob.pause(); desk.resume(); }
+    });
+  }
+
+  const PARTS = { 'fb-stage': fbStage, 'fb-loops': fbLoops, 'fb-curves': fbCurves, 'fb-mobile': fbMobile, 'si-stage': siStage, 'si-moments': siMoments, 'si-grammar': siGrammar, 'si-bento': siBento };
   window.MOTION = { mountAll, destroyAll };
 })();

@@ -96,7 +96,7 @@ Add an object to `projects` in `assets/js/case-studies.js`. Projects appear in t
 | `link` | `heading`, `body`, `url`, `label`, `url2`, `label2` (https links only) |
 | `video` | `heading`, `body`, `src` (mp4), `poster`, `caption`, `alt`, `size`: `full` or `panel`. Plays muted on a loop, paused for reduced motion |
 | `embed` | `heading`, `body`, `src` (a `motion/…` page or an https URL), `ratio`, `title`, `caption`, `size`: `full` or `panel` |
-| `motion` | `kicker`, `heading`, `body`, `part` (`fb-stage`, `fb-loops`, `fb-curves`, `fb-mobile`, `si-stage`, `si-moments`, `si-grammar`), `caption`. A live prototype part from `motion/app.js` |
+| `motion` | `kicker`, `heading`, `body`, `part` (`fb-stage`, `fb-loops`, `fb-curves`, `fb-mobile`, `si-stage`, `si-moments`, `si-grammar`, `si-bento`), `caption`. A live prototype part from `motion/app.js` |
 
 Card thumbnails follow the site's look: a dusk-to-night sky with stars, a road with yellow dashes, and the product UI centred in a thin grey frame with square corners. No text, 1600×1000 WebP, named `<id>-thumb.webp`.
 

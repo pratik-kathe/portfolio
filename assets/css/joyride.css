@@ -876,3 +876,7 @@ html.cs-open,html.cs-open body{overflow:hidden}
   .mo-bar{grid-template-columns:110px minmax(0,1fr) 36px}
   .mo-spec div{grid-template-columns:80px minmax(0,1fr)}
 }
+
+.mo-tabs{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:16px}
+.mo-tabs .mo-btn[aria-pressed="false"]{color:var(--muted)}
+.mo-view[hidden]{display:none!important}
