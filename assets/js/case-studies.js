@@ -1667,7 +1667,7 @@ window.CASE_STUDIES = {
   },
   "lap": "90 frames · 34 live components · 6 timing curves",
   "cover": "assets/img/fuzzybox-shot.webp?v=1",
-  "hero": "assets/img/fuzzybox-shot.webp?v=1",
+  "hero": "assets/img/fuzzybox-cover.webp?v=2",
   "sections": [
    {
     "type": "text",
@@ -1790,7 +1790,7 @@ window.CASE_STUDIES = {
   },
   "lap": "1,161 tap targets · 504 variant swaps · 13 live loops",
   "cover": "assets/img/sitare-shot.webp?v=1",
-  "hero": "assets/img/sitare-shot.webp?v=1",
+  "hero": "assets/img/sitare-cover.webp?v=2",
   "sections": [
    {
     "type": "text",
