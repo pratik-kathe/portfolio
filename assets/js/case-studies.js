@@ -1838,8 +1838,8 @@ window.CASE_STUDIES = {
     "part": "si-bento",
     "kicker": "The showcase",
     "heading": "One layout, thirteen loops",
-    "body": "For the launch I built one animated bento layout that sums up the whole app. Every tile is its own component set on a timer: the guna matching wheel turns, the astrologer leaderboard reshuffles, hearts float up the live stream, match cards swap, the Soul Sitare script writes itself in, chat bubbles arrive and the earnings bars grow.\n\nThe tiles run on different clocks, from 0.3 second linear hearts to a 4.17 second Slow spring image fade, so the layout never repeats the same frame twice in a row. The same pieces restack into a 393px mobile version.",
-    "caption": "Live from the Figma file. Desktop 1440 × 900 and mobile 393 × 2872; the store badges answer hover on a 0.74s Quick spring."
+    "body": "For the launch I built one animated bento layout that sums up the whole app. Every tile is its own component set on a timer: the guna matching wheel turns, the astrologer leaderboard reshuffles, hearts float up the live stream, match cards swap, the Soul Sitare script writes itself in, chat bubbles arrive and the earnings bars grow.\n\nThe tiles run on different clocks, from 0.3 second linear hearts to a 4.17 second Slow spring image fade, so the layout never repeats the same frame twice in a row.",
+    "caption": "Live from the Figma file, 1440 × 900. Hover the store badges: they answer on a 0.74s Quick spring."
    },
    {
     "type": "motion",

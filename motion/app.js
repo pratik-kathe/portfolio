@@ -225,26 +225,11 @@
 
   // Bento showcase: one animated layout, desktop 1440x900 and mobile 393x2872, every tile a looping component set.
   function siBento(el, ctx) {
-    const box = h(`<div class="mo-bento">
-      <div class="mo-tabs" role="tablist" aria-label="Choose a layout">
-        <button class="mo-btn" type="button" role="tab" data-v="desk" aria-selected="true" aria-pressed="true">Desktop</button>
-        <button class="mo-btn" type="button" role="tab" data-v="mob" aria-selected="false" aria-pressed="false">Mobile</button>
-        <span class="mo-read">Hover the store badges · <b>13</b> looping components</span>
-      </div>
-      <div class="mo-view" data-v="desk"><div class="mo-screen"><div class="mo-chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url">sitare.app</span><span class="tc">1440 × 900</span></div><div class="mo-host"></div></div></div>
-      <div class="mo-view" data-v="mob" hidden><div class="mo-phone big"><div class="mo-host mo-scroll"></div></div><p class="mo-now" style="text-align:center">Scroll inside the phone</p></div></div>`);
+    const box = h(`<div class="mo-bento"><div class="mo-screen"><div class="mo-chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url">sitare.app</span><span class="tc">1440 × 900</span></div><div class="mo-host"></div></div></div>`);
     el.appendChild(box);
-    const q = s => box.querySelector(s);
-    const desk = player(q('[data-v="desk"] .mo-host'), ctx, { start: '4078:5714', device: [1440, 900], cw: true });
-    let mob = null;
-    box.querySelectorAll('[role="tab"]').forEach(b => b.onclick = () => {
-      const v = b.dataset.v;
-      box.querySelectorAll('[role="tab"]').forEach(x => { const on = x === b; x.setAttribute('aria-selected', on); x.setAttribute('aria-pressed', on); });
-      box.querySelectorAll('.mo-view').forEach(x => x.hidden = x.dataset.v !== v);
-      if (v === 'mob' && !mob) mob = player(q('[data-v="mob"] .mo-host'), ctx, { start: '4078:7697', device: [393, 852], cw: true });
-      if (v === 'mob') { desk.pause(); mob && mob.resume(); } else { mob && mob.pause(); desk.resume(); }
-    });
+    player(box.querySelector('.mo-host'), ctx, { start: '4078:5714', device: [1440, 900], cw: true });
   }
+
 
   const PARTS = { 'fb-stage': fbStage, 'fb-loops': fbLoops, 'fb-curves': fbCurves, 'fb-mobile': fbMobile, 'si-stage': siStage, 'si-moments': siMoments, 'si-grammar': siGrammar, 'si-bento': siBento };
   window.MOTION = { mountAll, destroyAll };
