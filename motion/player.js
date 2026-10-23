@@ -95,6 +95,20 @@
   const IDM = [1, 0, 0, 1, 0, 0];
   const mat = m => 'matrix(' + (m || IDM).map(v => +(+v).toFixed(4)).join(',') + ')';
 
+
+  // Rotation-aware keyframes: Figma smart animate turns a layer around its centre by angle.
+  // Returns [from, to] transform strings, or null when the rotation does not change.
+  function rotFrames(an, bn, cw) {
+    const dec = n => { const m = n.m || IDM, a = m[0], b = m[1], c = m[2], d = m[3], w = Math.max(n.w, 0), h = Math.max(n.h, 0);
+      const sx = Math.hypot(a, b) || 1, sy = (a * d - b * c) / sx, ang = Math.atan2(b, a) * 180 / Math.PI;
+      return { ang, sx, sy, cx: m[4] + (a * w + c * h) / 2, cy: m[5] + (b * w + d * h) / 2, w, h }; };
+    const A = dec(an), B = dec(bn);
+    let d = B.ang - A.ang; if (Math.abs(d) < 0.5) return null;
+    if (cw) { while (d <= 0) d += 360; } else { while (d > 180) d -= 360; while (d < -180) d += 360; }
+    const f = (o, ang) => 'translate(' + o.cx.toFixed(2) + 'px,' + o.cy.toFixed(2) + 'px) rotate(' + ang.toFixed(3) + 'deg) scale(' + o.sx.toFixed(4) + ',' + o.sy.toFixed(4) + ') translate(' + (-o.w / 2).toFixed(2) + 'px,' + (-o.h / 2).toFixed(2) + 'px)';
+    return [f(A, A.ang), f(B, A.ang + d)];
+  }
+
   // ---------- player ----------
   class ProtoPlayer {
     constructor(host, data, opts) {
@@ -367,6 +381,7 @@
       const all = [];
       for (const [a, b, cross] of pairs) {
         const fs = this.animatableStyle(a._n), ts = this.animatableStyle(b._n);
+        const rf = rotFrames(a._n, b._n, this.o.cw); if (rf) { fs.transform = rf[0]; ts.transform = rf[1]; }
         const kf0 = {}, kf1 = {}; let any = false;
         for (const k in ts) { if (fs[k] !== ts[k] && fs[k] != null) { kf0[k] = fs[k]; kf1[k] = ts[k]; any = true; } }
         if (any) all.push(b.animate([kf0, kf1], opt));
@@ -439,6 +454,7 @@
           continue;
         }
         const fs = this.animatableStyle(a._n), ts = this.animatableStyle(b._n);
+        const rf = rotFrames(a._n, b._n, this.o.cw); if (rf) { fs.transform = rf[0]; ts.transform = rf[1]; }
         const kf0 = {}, kf1 = {}; let any = false;
         for (const k in ts) if (fs[k] !== ts[k] && fs[k] != null) { kf0[k] = fs[k]; kf1[k] = ts[k]; any = true; }
         if (any) b.animate([kf0, kf1], opt);

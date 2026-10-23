@@ -234,13 +234,13 @@
       <div class="mo-view" data-v="mob" hidden><div class="mo-phone big"><div class="mo-host mo-scroll"></div></div><p class="mo-now" style="text-align:center">Scroll inside the phone</p></div></div>`);
     el.appendChild(box);
     const q = s => box.querySelector(s);
-    const desk = player(q('[data-v="desk"] .mo-host'), ctx, { start: '4078:5714', device: [1440, 900] });
+    const desk = player(q('[data-v="desk"] .mo-host'), ctx, { start: '4078:5714', device: [1440, 900], cw: true });
     let mob = null;
     box.querySelectorAll('[role="tab"]').forEach(b => b.onclick = () => {
       const v = b.dataset.v;
       box.querySelectorAll('[role="tab"]').forEach(x => { const on = x === b; x.setAttribute('aria-selected', on); x.setAttribute('aria-pressed', on); });
       box.querySelectorAll('.mo-view').forEach(x => x.hidden = x.dataset.v !== v);
-      if (v === 'mob' && !mob) mob = player(q('[data-v="mob"] .mo-host'), ctx, { start: '4078:7697', device: [393, 852] });
+      if (v === 'mob' && !mob) mob = player(q('[data-v="mob"] .mo-host'), ctx, { start: '4078:7697', device: [393, 852], cw: true });
       if (v === 'mob') { desk.pause(); mob && mob.resume(); } else { mob && mob.pause(); desk.resume(); }
     });
   }
